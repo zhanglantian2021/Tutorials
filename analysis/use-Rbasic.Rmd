@@ -1,0 +1,41 @@
+---
+title: "use-Rbasic"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+## R版本更新及R包迁移
+1. 在安装R包的过程中，有时候会提醒R版本不够等情况，当需要更新R版本，又需要保证旧版本安装的R包可以完整迁移到新版本R时，可通过**“installr”**包实现。
+2. 在RGui中运行以下代码，==注意不要再Rstudio中运行。==或者在此之前在RGui的顶部菜单栏点击installr选择updateR来检查现在的版本以及最新的版本。==在安装的过程中会问是否将旧版本的R包复制到新版本中，一定要选择是。问是否保留旧版本中R包的信息也要选择是，问是否将旧版本的配置信息复制到新版本中也要选择是。==
+    ```
+    install.packages("installr")
+    library(installr)
+    updateR()
+    ````
+3. 由于之前在vscode中搭建了r环境所以需要打开设置检查r.rpath是否是r最新版本的路径。
+
+## R包的下载与安装
+1. 检查r包安装路径`.libpaths()`
+2. 检查包的安装路径：
+`packageVersion("包名")`
+3. 更新所有的包`update.packages(repos = "https://mirrors.ustc.edu.cn/CRAN/",ask='graphics',checkBuilt=TRUE)`
+4. 当下载包显示包不可用时，`chooseCRANmirror()`,这行代码用来重新选择镜像。
+
+
+

@@ -1,0 +1,236 @@
+---
+title: "use-markdown"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+在markdown文件顶部写`[TOC]`,可以显示出各级目录结构了，而且每一个标题都是一个锚点
+
+ScreenTo Gif 一款制作免费开源的软件
+1.  先要知道按 Ctrl+K送掉马上按v可以叫出功能强大的 MPE 预览窗口
+
+1.前面带有一个#表示一级标题，几个#表示几级标题，记住后面都有空格，示例如下：
+```
+# 一级标题 
+## 二级标题
+```
+
+2. 代码的写入
+  1. 代码块用上下两行的```框出，如果你写的代码是某种语言，那么可以在第一行末尾加上这个语言的名字，代码块内的代码就会执行对应的高亮语法，而且后面写上`{.line-numbers}`后会显示代码快的行数是多少。示例如下：
+  ```
+    r {.line-numbers}
+  ```
+  2..在正文中的代码则需要用``框出来，示例如下：`Lmfit<-lm(mpg~wtdata=mtcars)`这个同上也是执行一个回归，但是是会在一个对象中保存结果。是通过赋值语句创建了ige名为lmfit的列表对象，虽然在屏幕上没有显示任何输出，但包含了大量信息。
+  3. 打开设置中的enable script exception就可以运行笔记中的代码块了。我们也可以选中编辑器中的某段代码，然后打开命令面板，运行“在活动终端中运行所选文本”（Run Selected Text In Active Terminal），这段代码就会在终端中执行。
+  ```
+  ```R{cmd="D:\note\note-code\test-plot.r"}
+  h <- c(1, 2, 3, 4, 5, 6)
+  M <- c("A", "B", "C", "D", "E", "F")
+  barplot(h,
+  names.arg = M, xlab = "X", ylab = "Y",
+  col = "#00cec9", main = "Chart", border = "#fdcb6e"
+  )
+  ```
+  ```
+  
+
+4.有序列表，输入数字，加一个句点，然后空格即可；可以缩进空置多级列表;无序列表，输入 - ,然后空格,示例如下：
+有序列表
+1. fahljkh
+2. dsfhgal
+   1. ==为什么二级标题无法显示成罗马数字==
+   
+无序列表：
+- faklfj
+  - faklfa
+    - fhahjkahjk
+
+5.文字效果如下：
+*斜体*;**粗体**；***斜粗体***； ~~删除线~~；~~***斜粗体删除线***~~；`文字高亮`；<mark>marked</mark>；<font color=red>字体变红</font>
+6.Windows 上是 “Ctrl+Shift+P”) 打开，命令面板，它是 VS Code 快捷键的主要交互界面。
+7.换行：一排文字直接回车是不换行的，要输入两个空格后回车，比如fjaklh  
+8.图片的显示：![alt](URL title)，alt表示图片显示失败时的替换文本。title表示鼠标悬停在图片时的显示文本（注意这里要加引号）。alt和title即对应HTML中的alt和title属性（都可省略）
+![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")
+![](http://www.baidu.com/img/bdlogo.gif )
+
+9.复选框列表
+- [x] 需求分析
+- [x] 系统设计
+- [x] 详细设计
+- [ ] 编码
+- [ ] 测试
+- [ ] 交付复选框列表
+
+10.外部的链接：
+[Google](http://www.google.com/ "Google")
+[Google](http://www.google.com/)
+<http://www.baidu.com/>
+
+==为什么以下参考式链接无法使用？==
+[教程][jc]
+[jc]：https://markdown.com.cn/basic-syntax/links.html (教程)
+
+1.  内部的连接：点击文件，选择打开文件夹到工作区，选择那个想要在文档里连接的本地文本所在的文件夹，因为只有在工作区的文件才能被连接，然后就是[名字](./../../academic%20resources/国科大上课资料春/作业/R语言作业(第七组张依雪).docx)括号内打的应该是./再加文件所在文件夹的名字就可以自动搜索，然后选择即可。
+
+==图片链接：？==
+
+<br>11.文字的
+:可以是多级结构
+> 梦里花落知多少第一章：
+> fjalkjflkdjalkfj
+>>第二章：
+fhalkfhlafhkajhf
+
+<br>12.展示一个文件内容的增加与删除或替换
+```diff
++新增加的内容
+-删除的内容
+
+```
+
+<br>13.锚点：
+* [目录1](#40)
+   * [标题1](#41)
+   * [标题2](#42)
+   * [标题3](#43)
+   * [标题4](#44)
+
+<h1 id="41">标题1</h1>
+    轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+<h2 id="42">标题2</h2>
+    正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+<h3 id="43">标题3</h3>
+    我轻轻的招手， 作别西天的云彩。
+<h2 id="44">标题4</h2>  
+  作别西天的云彩.  
+
+<br>14表格：
+  1. 表头下的虚线不加冒号左对齐，左右都加冒号中间对齐，右加冒号右对齐
+   
+  |名字|性别|年龄|国籍|
+  |---:|:----:|----|:---|
+  |张三1233|男|23|中国45666|
+  |小红|女|18|中国|
+  |Tom|男|46|美国|
+  2. 表格的单元格合并
+   需要在MPE中的插件设置中打开enableExtendedTableSyntax选项才能工作：
+
+   |a|b|c|
+   |--|--|--|
+   |1|>|2|
+   |1|2||
+   |1|2|3|
+   |^|4|5|
+  
+
+
+<br>15.表情的显示：
+:blush:
+<br>16.分割线的使用：
+123456
+***
+7890
+<hr>
+12345
+
+<br>16.图片的插入
+直接截图复制了图片之后按ctrl+alt+v可以了，例如
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/markdown-picture.png =100x200)
+链接后面需要一个空格才能写图片大小，用=和x
+
+<br>17.空格的编写
+半方大的空白&ensp;或&#8194;（用于英文）
+全方大的空白&emsp;或&#8195;（用于中文）
+不断行的空白格&nbsp;或&#160;（用于文中）
+
+<br>17. 内容的隐藏
+<details>
+<summary>展开查看</summary>
+<pre><code>
+fhakhfkj
+</code></pre>
+</details>
+或者是
+<details>
+fhkajlhfkj
+</details>
+fafaaf
+
+1.   目录的插入：
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=3 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [二级标题](#二级标题)
+- [问题的解决：](#问题的解决)
+
+<!-- /code_chunk_output -->
+输入的代码是：`<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=3 orderedList=false} -->`，后面的内容是自动生成的，在 MPE 里最简单的插入目录的方法就是在单独的行里使用 [TOC] 标记。这会在当前位置立即插入一个目录。但这种方式会直接将生成目录的Markdown 文本插入到文中。这样即使在不支持 [TOC] 标记的编辑器里也可以查看目录。
+
+1.  一些标注的使用：
+  1. 上标：30^th^
+  2. 下标：H~2~0
+  3. 脚注：（脚注的内容会在最后显示）
+  Content [^1]
+  [^1]: Hi! This is a footnote
+  4. 缩略：
+    _[HTML]: Hyper Text Markup Language
+    _[W3C]: World Wide Web Consortium
+    The HTML specification
+    is maintained by the W3C.
+
+20. 公式的编写：
+  1. $...$或者\(...\)中的数学表达式将在行内显示。
+  2. $$...$$或者\[...\]或者```math中的数学表达式将在块内显示
+  3. 你可以在插件设置中选择数学渲染引擎以及其他功能。
+  4. 将 LaTex 公式转换为图片
+使用 google chart api 可以生成 LaTex 公式图片，接口如下：
+`http://chart.googleapis.com/chart?cht=tx&chl=这里填写LaTex公式`
+
+
+##问题的解决：
+
+1. 当使用插件在md文件页面输出成pdf出现下面图片的问题：说明不能打开问题描述里面的那个网址
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/202204251600828.png)
+先找到该md文件中该url地址的位置：
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/202204251603164.png)
+然后应该按照下图一样在md文件中把该url连接的格式中的（）中的后一个）前一个加一个置换符
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/202204251605525.png)
+
+2. 当使用图床插入图片的时候，输出的格式为html的时候，图片的展示需要联网，如果是上传到github上还要打开vpn
+
+3. 冒号的问题：，比如在写链接的格式时候`[]()`如果前面有冒号要先按enter后再输入`[]()`；同样的是输入公式`$2$`前面有冒号要先按enter后再输入，否则链接或公式不能生成
+
+4. latex的在线语法转换网址：https://www.codecogs.com/latex/eqneditor.php或者https://www.latexlive.com/；latex在线转换成图片：https://latex.vimsky.com/；latex的公式计算：https://zhuanlan.zhihu.com/p/411848925
+
+5. 如果markdown文件输出html的latex公式无法很好展示可以使用以下代码在其中文件，就可以展示了
+```
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
+```
+
+markdown详细用法：https://zhuanlan.zhihu.com/p/366596107
+
+6. 控制markdown转换成html或pdf文件输出后的存储路径，如果是默认的则与md文件在同一个文件夹，要修改就要清楚进行转换的插件是"mardown PDF",查找该插件页面发现有说明，因此在设置的json文件中加入以下代码,`../`表示返回当前路径文件夹的上一级，然后去到文件夹docs，因此转换输出的pdf或html就会出现在docs文件夹中。
+```
+"markdown-pdf.outputDirectory": "../docs", 
+"markdown-pdf.outputDirectoryRelativePathFile":true,
+```

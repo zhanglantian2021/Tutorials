@@ -1,0 +1,456 @@
+---
+title: "use-VScode"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+# 一. 入门
+
+## 1.命令的使用
+
+   1. 打开命令面板：`Ctrl+Shift+P`，打开新终端可以通过命令代码直接进行操作
+   2. 在终端编写代码`code -r -g 试用.txt:2命令`，就可以打开 试用.txt 这个文件，然后自动跳转到 2 行，在 code 命令后添加参数 -r来进行窗口的复用（也就是使用已经打开的窗口来打开文件）。这个命令可以快速定位代码提示出现的错误。
+   3. 比如输入 `code -r -d a.txt b.txt`命令，就可以比较a.txt和b.txt两个文件的内容了。有了这个命令，你就可以既使用命令行运行脚本，也可以借助 VS Code 的图形化界面进行文件内容的对比了。
+   4. 可以把当前目录下所有的文件名都展示在编辑器里面，此时只需使用`ls | code -`命令。
+   5. 代码太长在屏幕装不下，可以在设置中搜索`editor.wordWrap`，然后选择on就可以了。
+
+## 2. 在vscode中键盘的使用
+1. 快捷键的使用
+- ctrl k + ctrl s：打开快捷键一览表。
+- ctrl+B：选中文本之后使用它可以使得文本加粗。鼠标点击左边面板后使用它可以关闭或开启面板。
+- ctrl+J：之间使用它可以关闭或开启下端的面板。
+- Ctrl + Shift + P：弹出命令窗口，输入命令并且回车则执行。
+- 在设置搜索editor.wordWrap，改成on就可以让代码长短随屏幕变
+2. 常用快捷键的设置
+把以下代码复制粘贴进键盘快捷键的json设置文件里（可以用命令面板打开这个特定json文件），以后就可以按alt+-就可以打出`<-`;按ctrl+shift+p
+就可以打出`%>%`;按ctrl+shift+i就可以打出chunk所需的符号
+
+```
+// assignment
+        {
+            "key": "alt+-",
+            "command": "type",
+            "when": "editorLangId == r || editorLangId == rmd && editorTextFocus",
+            "args": {
+                "text": " <- "
+            }
+        },
+        // Pipe
+        {
+            "key": "ctrl+shift+p",
+            "command": "type",
+            "when": "editorLangId == r || editorLangId == rmd && editorTextFocus",
+            "args": {
+                "text": " %>% "
+            }
+        },
+        // Insert a chunk
+        {
+            "key": "ctrl+shift+i",
+            "command": "type",
+            "when": "editorLangId == r || editorLangId == rmd && editorTextFocus",
+            "args": {
+                "text": "```{r}\n\n```"
+            }
+        }
+```
+
+
+## 3. 打开rprofile来增加代码来增加功能
+
+ `file.edit(file.path("~", ".Rprofile"))`,edit .Rprofile in HOME
+`file.edit(".Rprofile")`,edit project specific .Rprofile
+plot(1000:1)
+
+## 4. 网页动态绘图功能poltly
+
+- [教程](https://plotly.com/r/):下载包之后的一个例子如下
+`install.packages("plotly")`
+
+```r
+library(plotly)
+fig <- plot_ly(midwest, x = ~percollege, color = ~state, type = "box")
+fig
+```
+
+- 打开新的网页view
+`html <- htmltools::HTML("<b>hello</b>")htmltools::html_print(html)`
+- Interactive shiny apps can be displayed in VS Code. The following is an example created by
+ `shiny::runExample("01_hello")`
+
+## 5. View()
+
+ 这个函数可以查看各种表格列表文本，（前提是With R session watcher enabled）例如
+ `View(mtcars)`
+  
+## 6. git的使用
+- 在VScode中配置git bash终端：下载git bash后找到其路径，然后再VScode中用命令面板打开设置的json文件，放入以下代码
+```
+"GitBash": {
+            "path": "D:\\software\\Git\\bin\\bash.exe"
+        }
+```
+- 配置好git并且建立本地该仓库和远程仓库后，可见右边源代码管理器出现有过修改的文件，选择性点击➕是把它们放入暂存区，放入后点击建号也可以放回工作区。
+- 上面的输入框是提交的描述名，相当commit -m参数，然后点击上方的√（移动到√时会显示是commit stage暂存区还是commit all）即可，或者选择全部一次性提交。
+- 第一次提交后若文档再有修改，那么编辑框也会出现变化，左边代码行数旁出现蓝色竖线表示下面的内容有所变化，绿色竖线框住的内容表示新增加的内容,红色标记表示删除的内容。完成后从源代码管理器中点击进去看就可以是从git面板看到高亮部分，不同颜色代表不同变化。
+- 在源代码管理器每个有修改的文件中，选中有个旋转箭头符号，表示放弃更改，点中就会回到上一个commit的版本。
+
+# 二. 插件的推荐和使用
+
+## 1. TODO list
+
+## 2. Crossnote
+
+## 3. Polacode-2020
+
+   生成代码截图，可以把代码片段保存成美观的图片，主题不同，代码的配色方案也不同，也也可以自定义设置图片的边框颜色、大小、阴影。尤其是在我们做 PPT 分享时需要用到代码片段时，或者需要在网络上优雅地分享代码片段时，这一招很有用。
+
+## 4. Latex Sympy Calculator
+
+   以很方便地在 VSCode 中用 Latex 公式语法进行科学计算。即选中一段数学表达式，按下一个快捷键就能帮你计算出结果
+
+## 5. better comments
+
+## 6. Pangu-Markdown
+
+## 7. Marp
+
+## 8. Pandoc Citer
+
+   参考文献的快速插入
+
+## 9. PicGo
+
+- **简介：** 图床的使用，如果插入的是本地图片，那么在转换md格式为其他文件后图片可能会出现无法显示的问题，接受者还要配置本地环境与发送者图片路径一致才可看到。如果使用的是图床工具显示的是外链，可以「随时随地」查看，并不需一并发送图片，也无需自行配置本地环境。而PicGo:是一个用于快速上传图片并获取图片 URL 链接的工具。有了图床，我们可以将图片（或 GIF 等）返回一个 URL 链接，而不需要专门编辑、存放、管理众多杂乱无章的图片，直接复制，粘到 Markdown 编辑器里就能显示出来。
+- **安装和配置：** [配置手册](https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A):下载picgo后，去github和gitee建立新的仓库命名为picgo，然后去个人设置部分选择私人令牌选择获取token:`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`，==注意：token 只会明文出现一次，注意保密，尽量不要丢失，否则又要重新生成。==
+- **使用：** 使用时，拖放图片到主窗口或 mini 窗口（macOS 为顶部状态栏），PicGo 会自动上传至云服务器并返回链接到剪贴板，直接粘贴即可使用。
+  - 快捷上传：是支持用快捷键直接将剪贴板图片或 URL 一键上传。自己设定了ctrl+s是截图，ctrl+u是上传到图床（在复制图片或复制图片地址）
+  - 图片管理：打开「相册区」，可以看到当前图床中所有的图片集合。支持复制、修改 URL 和删除的操作，分别对应每张图片左下方的三个小按钮。同时，也支持批量复制、删除或全选操作。如果你同时使用多个图床，还可以单独显示每个图床的情况。
+  - 链接格：Markdown\HTML\URL\UBB。如果你都不喜欢，想要自定义链接格式，可以选择Custom，然后在PicGo设置里点击自定义链接格式，然后你可以配置自己想要的复制的链接格式。
+  - 插件：通过「插件设置」页面，搜索安装插件。安装完成后，可以点击插件右下方齿轮图标，进行更新、禁用、卸载、配置及使用等功能。注意：由于 PicGo 要使用 npm 来安装插件，所以用户必须先安装 Node.js。<mark>值得注意的是，「删除」操作仅仅删除本地数据，从而不在相册区展示，但不会影响图床存储。</mark>
+    - vs-picgo：在上文已经提到，VScode 中使用。
+    - picgo-plugin-super-prefix：自定义图像文件名和前缀。
+    - picgo-plugin-pic-migrater：Markdown 文件中图片的图床迁移。首先进入 PicGo 插件设置，文件名后缀设置为生成转换后的文件名后缀。比如，要转换 test.md，则当前目录下转换后的文件名为 test_nex.md；只包含 / 不包含：仅（不）转换包含自定义设置的图床链接；上传文件（文件夹）。等待转换完成，片刻即可在当前目录生成自定义文件名后缀的转换后的文件了。
+    - picgo-plugin-quick-capture：仅支持 2.2.0+ 版本的 PicGo，提供一键截图 + 上传的功能。
+    - gitee：因为PicGo 没有默认提供 Gitee 的图床选项，所以需要通过插件开启第三方服务。首先在插件市场打开搜索 Gitee，点击任意一个，即可完成安装和所有配置。
+  - **注意事项：**
+    - 图床设置：再次检查你的仓库名是否正确。仓库名不能出现空格，如果一定要有空格请用-来代替（因为GitHub中的空格默认换成-）。不要出现一些奇怪的符号！而且github是的仓库名是username/repo；而gitee中是repo。
+    - 还有配置的时候填写分支的名字，一般教程是master（github中）但实际上是main，所以应该看官方文档操作或者看清楚GitHub该仓库下分支的名字。
+    - 自定义域名一般是生成粘贴的图片的地址名前面部分，进行该处配置时最好空着让它根据图床类型自动生成避免出错。
+    - 上传的文件：同上，文件名不要包含空格！文件名不要包含奇怪的字符（加乘百分号等等）
+    - 间歇性上传失败：打开PicGo的设置-设置server，开了关退出重启或开了观退出重启。以及监听端口是3677。
+    - 图片后缀png上传不了，jpg可以。
+    - 上传出现问题的话可以查看picgo设置中的日志，例如“super-prefix conflict”就是这个super-prefix插件有问题，禁用就好了.
+    - 建立的github或gitee仓库应该要是公开的才可以在picgo的相册管理中可见，并且插入markdown中才可以显示，否则无法显示。
+  - vscode中picgo插件的使用：
+    - 安装picgo插件，然后再设置中进行配置，其中pic bed：current默认选择的是SMMS，但是可以更改为github或gitee。然后在进行pic bed下GitHub的配置，与上面客户端的几乎一致。
+    - 安装完成之后，即可使用快捷键 Ctrl+alt+U是上传剪贴板的，+e是上传本地文件夹里的，+o是用图片路径上传的。这与客户端几乎没区别。
+<br>
+
+## 10. settings sync的使用
+
+## 11.latex的使用
+
+- [教程一](https://zhuanlan.zhihu.com/p/38178015)
+- [教程二](https://zhuanlan.zhihu.com/p/144729565)
+<br>
+
+## 12. 其他一些小功能：
+1. 关于文件名字自动补全：下载插件`Path Intellisense `，然后查找设置并且改为以下选项`{ "typescript.suggest.paths": false };
+{ "javascript.suggest.paths": false };{ path-intellisense.extensionOnImport": true }`最后一个设置是把文件名的扩展名也补充出来。另外在键盘快捷键的json文件中添加以下设置`{ "key": ".", "command": "" }`，在r的文件中使用时候打出`"./"`就可以唤出文件选择。
+
+
+# 三. R环境的搭建
+
+## 1. 插件一
+
+   R support for Visual Studio Code安装完成后，便可以通过快捷键（默认为⌘+Enter）将编辑器中的所选行发送至R Console 运行，使用方法与RStudio 无异。但是单单安装这一个插件，却发现很多代码不能自动补全，尤其是来自第三方包的命令。这对强烈依赖第三方包的R 简直是致命的。这时就需要安装另外的一个插件radian。
+
+## 2. 插件二：Radian的安装
+
+- 先下载anaconda，并且配置好变量环境以及检验python环境是否配置从成功。在anaconda promt中输入radian后出现R version 4.1.1 (2021-08-10) -- "Kick Things"和Platform: x86_64-w64-mingw32 (64-bit)才算radian安装成功，一般来说就要更新R
+    ![hh](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-radian1.png)
+    ![gg](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-radian2.png)
+- 在C:\Users\zhang\AppData\Roaming\pip中（自建pip文件夹），然后创建一个pip.ini的文件，其中内容输入为
+
+      ```
+      [global]
+      trusted-host=mirrors.aliyun.com
+      index-url=http://mirrors.aliyun.com/pypi/simple/
+      ```
+
+## 3. R版本的更新
+
+- 在Rgui中输入以下代码：
+
+      ```
+      install.packages('installr')
+      library(installr)
+      updateR()
+      ```
+
+- 打开Rstudio，点击工具栏中Tools—Global Options，点击Change；选择安装的最新的版本。
+
+## 4. radian的配置
+
+- 在vs code中点击左下角的设置，在搜索栏查找r.rpath后选择windows的对应项，填上r最新版本可执行文件的路径`D:\software\R\R-4.1.1\bin\x64\R.exe`
+- 在上面设置的搜索栏中找到r.rterm，再找到对应的option一栏，删掉下面两栏的--no-save,--no-restore，再找到对应的window一栏，填入radian所在的路径`D:\software\Anaconda\Scripts\radian.exe`
+- 输入r.br，选中bracketed paste否则radian不会启动）
+- 输入r.sessionWatcher，勾选可以实现绘图IDE，查看dataframe。如果想用原生绘图，取消勾选即可。
+
+## 5. 搭阶LSP自动补全代码功能
+
+- 在vs code中打开一个R形式的文件，输入`install.packages("languageserver")`，按ctrl+enter运行，注意点击顶部菜单栏查看终端，终端的执行右边shell格式是R的才对。
+
+## 具体配置文件如下（含latex使用的配置）
+
+```json
+{
+    "r.rpath.windows": "D:\\software\\R\\R-4.1.1\\bin\\x64\\R.exe",
+    "r.rterm.windows": "D:\\software\\Anaconda\\Scripts\\radian.exe",
+    "r.bracketedPaste": true,
+    "r.rterm.option": [
+        "--no-site-file"
+    ],
+    
+    "latex-workshop.showContextMenu": true,
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.message.error.show": false,
+    "latex-workshop.message.warning.show": false,
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "XeLaTeX",
+            "tools": [
+                "xelatex"
+            ]
+        },
+        {
+            "name": "PDFLaTeX",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "BibTeX",
+            "tools": [
+                "bibtex"
+            ]
+        },
+        {
+            "name": "LaTeXmk",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "xelatex -> bibtex -> xelatex*2",
+            "tools": [
+                "xelatex",
+                "bibtex",
+                "xelatex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "pdflatex -> bibtex -> pdflatex*2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+    ],
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk"
+    ],
+    "latex-workshop.latex.autoClean.run": "onFailed",
+    "latex-workshop.latex.recipe.default": "lastUsed",
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "files.autoSave": "afterDelay",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "bracketPairColorizer.depreciation-notice": false,
+    //使用 SumatraPDF 预览编译好的PDF文件
+    // 设置VScode内部查看生成的pdf文件
+    "latex-workshop.view.pdf.viewer": "tab",
+    // PDF查看器用于在\ref上的[View on PDF]链接
+    "latex-workshop.view.pdf.ref.viewer":"auto",
+    // 使用外部查看器时要执行的命令。此功能不受官方支持。
+    "latex-workshop.view.pdf.external.viewer.command": "D:/software/SumatraPdf/SumatraPDF.exe", // 注意修改路径
+    // 使用外部查看器时，latex-workshop.view.pdf.external.view .command的参数。此功能不受官方支持。%PDF%是用于生成PDF文件的绝对路径的占位符。
+    "latex-workshop.view.pdf.external.viewer.args": [
+        "%PDF%"
+    ],
+    // 将synctex转发到外部查看器时要执行的命令。此功能不受官方支持。
+    "latex-workshop.view.pdf.external.synctex.command": "D:/software/SumatraPdf/SumatraPDF.exe", // 注意修改路径
+    // latex-workshop.view.pdf.external.synctex的参数。当同步到外部查看器时。%LINE%是行号，%PDF%是生成PDF文件的绝对路径的占位符，%TEX%是触发syncTeX的扩展名为.tex的LaTeX文件路径。
+    "latex-workshop.view.pdf.external.synctex.args": [
+        "-forward-search",
+        "%TEX%",
+        "%LINE%",
+        "-reuse-instance",
+        "-inverse-search",
+        "\"D:/software/Microsoft VS Code/Code.exe\" \"D:/software/Microsoft VS Code/resources/app/out/cli.js\" -r -g \"%f:%l\"", // 注意修改路径
+        "%PDF%"
+    ]
+}
+```
+
+## 6. R的快捷键的设置
+
+- R 语言有一些非常讨人厌的特性，比如赋值符号是<-。用两个字符赋值已经够繁琐了，按< 还需要去按Shift，搞不好下一个就按成_。RStudio 通过快捷键alt+-来输入它，我们可以通过VSCode 可以灵活自定义快捷键的特点，自己完成这一特性的实现。在vs code中打开快捷键设置（默认为ctrl+K ctrl+S）并转到搜索框下的keybindings.json，在右侧的自定义快捷键部分追加如下的设置:when是规定了快捷键何时生效，这里规定为editorTextFocus，即当编辑器成为焦点时。以后编写代码的时候按alt+-就自动生成赋值符号。
+
+      ```json
+      {
+      "key": "alt+-",
+      "command": "type",
+      "args": {
+         "text": " <- "
+      },
+      "when": "editorTextFocus"
+      }
+      ```
+
+- 更多VSCode 的快捷键设置可以参考[微软的官方文档](https://code.visualstudio.com/docs/getstarted/keybindings)，通过自定义快捷键让VSCode 更加得心应手。
+
+## 7. 如果想调用 View 等外部输出
+
+- 比如View(tmp2) 会弹出一个 R 默认终端的独立显示框，比如测试代码最后是print 一个 plotly 的绘图结果，那么它会自动调用你的默认浏览器进行输出。
+<br>
+
+# 四. Python的环境搭建
+
+<br>
+
+# 五.论文写作
+
+<mark>以下内容用latex的教程代替</mark>
+
+## 1.模板文档的建立
+
+- **下载**：pandoc的windows版本，它一般是用来进行各种类型文本之间的转换。用window键+r打开cmd，pandoc的使用都是通过命令在cmd或power shell中完成的，在cmd中更好，不然容易报错。在cmd中键入`pandoc -v`来检查是否正常安装以及存储地方，
+- **模板文件：** 然后输入`pandoc --print-default-data-file reference.docx > custom-reference.docx`在当前目录（也就是打开cmd窗口的c盘用户下，要把模板文件存储在其他文件要更改路径）生成并且打开word模板，文件名此处是custom-reference，也可以根据自己的需求更改。一般来讲，我们只需要在模板文件 custom-reference.docx 样式表右键 → 修改，调出样式修改菜单，更改字体、段落等信息就好了。绝大多数样式均可如此完成修改。但需要注意的是：
+- **图表的注明**：custom-reference.docx 默认模板文件没有图注、表注对应的样式，因此需要新建样式并自定义格式，默认图注在图片下方，而表注在表格上方（[动图演示](https://fig-lianxh.oss-cn-shenzhen.aliyuncs.com/20210417213052.gif)）。
+- **表格的格式**：经济学期刊论文的表格多以「三线表」为主，新建表格样式模板 demo_a（[动图演示](https://fig-lianxh.oss-cn-shenzhen.aliyuncs.com/20210417213053.gif)）。改好之后，使用 Pandoc 命令指定模板 DOCX 文件转换之后，还需要手动应用表格样式。
+- **指定模板样式文件ref.docx来转换**：`pandoc --reference-doc=ref.docx test_paper.md -o test_paper.docx`（基本格式是：pandoc -f 输入格式 -t 输出格式 输入文件名 -o 输出文件名，例如：`pandoc -f markdown -t docx test.md -o test.docx`，是把当前目录下 Markdown 文件转换为 DOCX 文件。简化的命令是：`pandoc test.md -o test.docx`是把当前目录下的markdown该文件转换为docx格式，而且文件名字变了。或者`pandoc test.docx -o test.pdf`）
+
+## 2.参考文献格式转换和引用
+
+- **引文的插入：** 下载zotero后，再在github上下载插件Better BibTeX，然后回到 Zotero 主程序，点击工具 → 插件 → 右上角小齿轮 → Install Add-on From File → 选择下载好的 .xpi 文件，即可完成插件的安装。Better BibTeX 可为每一条文献条目生成一个 ID 值 —— CitationKey。使用 CitationKey 就相当于告诉 Zotero 要在这里插入引文了。
+  - 首先引文的插入，需要遵循 Pandoc 语法：`[@CitationKey]`（句末引用）或 `@Citation`（句内引用）。但是这样很麻烦，所以在vs code中下载插件Citation Picker for Zotero，安装完成后，可使用快捷键 Alt+Shift+Z 呼出 Zotero 搜索框快速插入引文。<mark>注意：使用 Citation Picker for Zotero 时，应开启 Zotero 主程序，否则会报错。</mark>
+  - 使用上面方法还是比较慢，因为需要搜索框，然后选择文献，更快的是使用插件Pandoc Citer，可以直接打出关键字直接插入，具体用法看插件使用方法，其中 [] 为参考文献引文的路径（可以是相对路径）。MetaData 的语法格式为 YAML，以 --- 开头（开头的上一行写上`bibliography:[./ref.bib]`）和结尾，对象键值之间使用 : 隔开（注意冒号后面有一个空格），关于 YAML 的具体用法，可见[YAML教程](https://www.runoob.com/w3cnote/yaml-intro.html
+  )
+- **导出引文文件：** 在 Markdown 文件里插入了引文，使用 Pandoc 转换时，我们还得告诉 Pandoc 引文来自哪里。所以就需要将论文中用到的所有文献批量导出 .bib 文件，重命名为 ref.bib，[具体做法](https://fig-lianxh.oss-cn-shenzhen.aliyuncs.com/20210417213101.gif)
+- **下载 .csl 参考文献样式文件**：不同期刊对于参考文献的样式要求也大不相同。更多样式可在[Zotero Style Repository](https://www.zotero.org/styles)下载，下面以国标 GB/T 7714-2015 numeric为例。
+  - 处理参考文献的代码如下：
+
+         ```
+         pandoc --citeproc `
+         --bibliography=ref.bib`
+         --csl=china-national-standard-gb-t-7714-2015-numeric.csl `
+         -M reference-section-title="参考文献" -M link-citations=true `
+         test_paper.md -o test_paper.docx
+         ```
+  - 代码的说明：--citeproc：处理文献引用；--bibliography=ref.bib：指定引文文件为 ref.bib；--csl=china-national-standard-gb-t-7714-2015-numeric.csl：指定参考文献列表的样式为「国标 GB/T 7714-2015 numeric」格式；-M reference-section-title="参考文献"：文末生成参考文献列表的标题「参考文献」；-M link-citations=true：文中引用点击可实现跳转到底部参考文献该条目。
+
+## 3.编号：交叉引用
+
+- **pandoc:** 图表编号交叉引用这个硬骨头了。这就用得到 pandoc-crossref ，一个 Pandoc 过滤器，用于对数字、图片、表格和参考文献等进行编号。==注意：pandoc-crossref 必须与 Pandoc 版本相同，如果不一致，则会报错==。
+- **标签的使用**：label 指的是标签名称，可任意自定义，用来唯一标识某个标题、图片或公式等。如果没有明确的标签，将无法正确引用该 block。在待引用的地方使用 {#block_name:label} 告诉 Pandoc 需要进行编号以及将要被引用；在使用的地方就可[@block_name:label] 或 @block_name:label 来引用了。例如`Section {#sec:label}`，Pandoc-crossref 支持通过标题模板进行高级定制。模板被指定为 YAML 元数据变量，具体参见可见[自定义编号方案](https://lierdakil.github.io/pandoc-crossref/#custom-numbering-schemes) 。效果如下：
+   ![addfa](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-write-label.png)
+- **图片的使用：**代码格式是`![Caption](file path){#fig:label}`，file path 可以是本地图片地址或网络图片地址（或图床链接），最好是图床链接否则移动或更改了本地存储图片的文件将无法显示。==注意的是图片块和 {#fig:label} 之间不能有空格==。步骤如图：
+   ![fad](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-picturelayout.png)
+- 表格的使用：表注的代码是`: 表注 Caption {#tbl:label}`。表注 Caption 是以 : 开头，位于表体下方或上方，至少与表体有一空行的距离。表注 Caption 与 {#tbl:label} 之间 至少一个空格。步骤如图所示：
+   ![ffd](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-format.png)
+- **公式的使用：** 数学公式支持使用 LaTeX 语法。行内公式使用 $ 包裹、行间公式 $$ 包裹。
+  - 这是行内公式：$\int_{0}^{1} x dx = \left[ \frac{1}{2}x^2 \right]_{0}^{1} = \frac{1}{2}$
+  - 这是行间公式：$$e^x = \sum_{n=0}^\infty \frac{x^n}{n!} = \lim_{n\rightarrow\infty} (1+x/n)^n$$
+  - pandoc-crossref 语法对公式的应用如下：`$$ math $$ {#eq:label}`。公式块与标签 {#eq:label} 之间的空格可有可无。具体如下：![ff](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-formula.png)
+- 元数据的使用：
+  - 简介：Metadata（元数据）是描述数据的数据（Data that describes other data），最大的好处是，可使信息的描述和分类可以实现格式化，从而为机器处理创造了可能。在 Pandoc 和 pandoc-crossref 中，Metadata 以 YAML 的形式存储，可以放在文章的开头；或存储于 .yaml 文件中，使用 Pandoc 命令时加上 ref.yaml 即可，二者实现效果的相同。一般将作者、标题等Pandoc Metadata 放于文章开头，其余的 Metadata 信息放在 ref.yaml 文件中。![ff](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscode-metadata.png)
+  - 使用：这一块可以说是整套流程中最磨人的地方了，有不少细节值得注意。不过，仅实现常见的效果、也花费不了太多功夫。剩下的手动改改有时候也比自动化来的容易。具体内容可参见 这里[Pandoc-Metadata](https://pandoc.org/MANUAL.html#metadata-variables) 或这里[pandoc-crossref-Metadata](https://lierdakil.github.io/pandoc-crossref/#customization)。==注意：由于 pandoc-crossref 使用与 citeproc 相同的引用语法，因此必须在后者之前运行前者==。例如：`pandoc -F pandoc-crossref --citeproc file.md -o file.html`
+  - 例子：![fa](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/vscoede-metadata-use.png)
+
+-
+  
+<br>  
+
+# 六. PPT的制作
+
+<mark>ppt制作的内容用rmarkdown的xaringan教程代替</mark>

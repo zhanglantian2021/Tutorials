@@ -1,0 +1,365 @@
+---
+title: "use-Rmarkdown"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+## 基础知识
+
+1. 如果rmd文件输出成pdf出现问题的话，请查看该[方法](https://yihui.org/tinytex/r/#debugging)
+2. https://slides.yihui.org/2020-bearclub-rmarkdown.html#21
+3. 按照use-VScode中的R配置后，再把按照1.中的把各种包更新一下，下载缺少的包，不要下载插件R markdown all in one，因为那是给mac系统用的，下载了会导致knit不可用。
+4. 在rmarkdown中不可以直接输入不打其他符号如`来直接输入latex的语法否则会导致rmarkdown不能knit出来。
+5. 要保存文件以及关闭编辑器之后的编译出来的html文件中的代码结果才是可展示的，预览的html路径和编译出来的html文件路径是不一样的。
+6. 在开头加上以下代码，以下代码将不会显示，`cache=TRUE`表示缓存代码，那么会使得每次knit时不会从头编织起，而是从新添加的内容编织起，会加快输出速度，但是如果数据集有更改或者是加载包前后某个函数的背后运行方式不一样的时候（会导致显示结果不一样）最好是`cache=FALSE`
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE)
+```
+```
+
+## 文本表达
+1. 文字居中用的代码是：`<center>内容</center> `
+2. 文字高亮和变色用的分别代码是：`<mark>marked</mark>`; `<font color=red>字体变红</font>`
+3. 文字更改大小和颜色的代码：`<font color=gray size=6>内容</font>`，文字大小一般默认为3，一般大小值从1-7可选。
+4. 用以下代码可以在ppt底部插入引用的文献：`.footnote[引用的文献]`
+5. 用以下代码可以选择把框选的内容挪动位置：`.pull-left[内容]`或者是pull-right也可以。或者是用`.left-column[内
+容]`也可以
+6. 插入的图片的代码是`<img src="img/tree_dist.png" width="90%"/>`,img是同这个rmd文件的同一路径的专门放图片的文件夹。或者是`<img src="https://cdn-images-1.medium.com/max/800/1*3O597Dv2NGbNzg_dWRu2Hw.png"
+alt="phylo" width="180" />`或`knitr::include_graphics("https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/202204221412565.png")`（记得这个要用r代码框住），另外前者是本地图片后二者是网上图片。
+7. chunk内高亮：
+
+## 文章撰写
+
+1. 在.rmd文件的开头用两个---括住的是属于YMAL，表示对于整个文件一些功能或属性的设置。
+```
+---
+title: "Reproducible-Science"
+author: "Zhangyixue"
+document: ctexart
+bibliography: MyLibrary.bib
+output: 
+    html_document:
+        df_print: paged
+        fig_width: 10
+        fig_height: 9
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+```
+
+1.文献引用--zotero和Rmarkdown的联用：在zotero里面把可能要引用到这篇文章的所有文章导出成.bib格式的文件，最好是选择整个文库导出，并且把该文件MyLibrary放在和.rmd文件同一个文件夹下，而且在.rmd文件开头的YMAL处要写上`bibliography: MyLibrary.bib`和`csl：`
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmarkdown-41.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmarkdwon-42.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmarkdown-43.png)
+
+
+## presentation:
+1. 在YAML的metadata下应该指明output的方式是`ioslides_presentation`
+2. 两种方法使得幻灯片一张张分开：
+- 开头使用标题标签##或#（后面应该跟着标题内容），标题之下的其他内容也会展示在这张ppt后，除非后面出现新的##或#或---才会生成另外一张ppt
+- 开头使用三个短横线来表示以下内容是在下一张ppt上。
+3. 使用管道符号|连接在##或#标题内容后再添加内容表示的是副标题，看起来应该是这样：![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/Rmark-01.png)
+4. 在网页端展示幻灯片的时候，可以使用以下快捷键来对幻灯片进行不同的操作
+- `f`：使得全屏展示
+- `w`：使得展示的幻灯片是宽屏的
+- `o`：使得多张幻灯片呈可预览状态
+- `h`：使得幻灯片上的代码是高亮的
+- `p`：展示幻灯片上演示者的笔记
+- 其他如此图所示：![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmark-03.png)
+<br>
+
+5. 幻灯片内容的逐步展示：
+- 所有幻灯片都是先展示幻灯片的标题，按下按钮后才能展示幻灯片的内容需要在YAML的metadata下指明incremental是true，如下图所示：![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmark-02.png)
+- 如果上面的incremental参数不设置默认是标题内容一起展示的，如果需要指定单张的幻灯片是逐步展示内容，则需要在标题内容后加上参数，例如`## Get up{.build}`
+- 而每张幻灯片上需要按下按钮才弹出的内容需要加符号>,例如`> - eat eggs`
+<br>
+
+6. 在YAML的metadata下的`ioslides_presentation:`还有别的参数，如incremental这个参数一般控制不同功能，例如：
+- `widescreen：true`：使得幻灯片展示是宽屏的
+- `smaller`：使得每张幻灯片下除了标题外的内容要小一号，如果只是想指定某张幻灯片内容小点，可以在那张幻灯片标题内容后加smaller，例如`## Get up{.smaller}`
+- `transition: slower`或者`transition: faster`来改变幻灯片跳转速度
+
+7. 单独幻灯片的参数设置
+- 可以多个参数同时设置，例如例如`## Get up{.smaller .build}`
+- 更改幻灯片的背景,例如`## Getting up {data-background=foo.png data-background-size=cover}`
+<br>
+
+8. 在ppt中展示代码:
+- 需要使用代码框符号，如果需要对部分代码强调的话（展现的效果是加粗的），应该强调的代码段的前一行加`### <b>`;强调代码段的后一行加`### </b>`,注意这些都是写在符号```框住的代码框内
+<br>
+
+9. 在yaml的medata下的内容开头中写入以下代码是表示加选项child='文件名.Rmd'可以调入另一个.Rmd文件的内容。 如果有多个.Rmd文件依赖于相同的代码，可以用这样的方法。
+#```{r external, child="setup.Rmd", include=FALSE}
+#```
+
+而setup.rmd文件中的代码如下，用于所有PPT
+的RMD文件中：
+
+```
+#```{r load-pkgs}
+#Do not change the order of the first two chunks
+
+options(htmltools.dir.version = FALSE)
+library(knitr)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, fig.retina = 3)
+library(tidyverse)
+library(fontawesome) # from github: https://github.com/rstudio/fontawesome
+library(kableExtra)
+library(picante)
+library(entropart)
+library(patchwork)
+library(gganimate)
+#```
+
+#```{r setup-options}
+knitr::opts_chunk$set(
+  echo       = FALSE,
+  eval       = TRUE,
+  warning    = FALSE,
+  message    = FALSE,
+  tidy       = FALSE,
+  size       = 'normalsize',
+  background = '#F7F7F7',
+  comment    = ' ',
+  #dev        ='svg',
+  dev.args   = list(bg = 'transparent'),
+  cache      = FALSE,
+  cache.path ='cache/',
+  cache.vars = NULL,
+  cache.lazy = TRUE,
+  fig.path   ='figure/',
+  fig.align  ='center',
+  fig.show   ='hold',
+  fig.retina = 3
+)
+#options(crayon.enabled = TRUE)
+#this is necessary so that the code doesn't wrap
+options(width = 1000)
+
+largefontthm <- theme_bw() + theme(
+    axis.title        = element_text(size = 18),
+    axis.text         = element_text(size = 16),
+    strip.text        = element_text(size = 20),
+    plot.title = element_text(size = 22),
+    plot.subtitle = element_text(size = 18),
+    plot.caption = element_text(size = 14),
+    legend.text = element_text(size = 14),
+    legend.title = element_text(size = 16)
+    )
+
+invthm <- theme_minimal() +
+  theme(
+    panel.background  = element_rect(fill = 'transparent', colour = NA),
+    plot.background   = element_rect(fill = 'transparent', colour = NA),
+    legend.background = element_rect(fill = 'transparent', colour = NA),
+    legend.key        = element_rect(fill = 'transparent', colour = NA),
+    axis.title        = element_text(size = 18),
+    axis.text         = element_text(size = 16),
+    strip.text        = element_text(size = 20)
+  )
+
+voidthm <- theme_void() + 
+  theme(
+    panel.background  = element_rect(fill = 'transparent', colour = NA),
+    plot.background   = element_rect(fill = 'transparent', colour = NA),
+    legend.background = element_rect(fill = 'transparent', colour = NA),
+    legend.key        = element_rect(fill = 'transparent', colour = NA),
+    strip.text        = element_text(size = 20),
+    plot.title = element_text(size=28, face="bold")
+  )
+
+#theme_set(invthm)
+#theme_get()
+theme_set(largefontthm)
+#```
+```
+
+
+
+
+
+
+
+## 关于包'xaringan'的使用：
+
+1. 开头的设置
+- 在R中下载该包，然后在rmd的YAML的metadata下的基本设置应该如下：
+
+```
+---
+title: "Changing"
+author: ZhangYixue
+date: April 22, 2022
+output: 
+    xaringan::moon_reader: 
+        css: xaringan-themer.css  
+        nature: 
+            highlightStyle: github
+            highlightLines: true
+            ratio: 16:9
+            countIncrementalSlides: false
+---
+```
+- 其他风格的选择可以参考[以下网址](https://blog.csdn.net/qq_37379316/article/details/113175271)
+<br>
+
+- 在参数nature下还可以设置的参数是`autoplay: 30000`，表示每30秒自动播放一张ppt；`countdown: 60000`，表示每一张ppt都添加一个计时器，倒计时为60秒
+<br>
+
+- 在与参数nature下面同等级下加入代码行` seal: false`可以创建独立于YAML标题的标题幻灯片，也就是yaml的metadata不再作为开头ppt，而是自己设置的了。
+
+<br>
+
+2. 每张幻灯片参数设置
+应该写在每张幻灯片下，也就是符号```下一行，
+- 如`class: center, bottom, inverse`。与center同级的参数选项还有left和right；与bottom级别的参数选项还有top和middle；inverse表示的意思是幻灯片变为黑底白字。如果像以上标题页的位置不想每张设置，可以在YAML的metadata下的nature下中写入`titleSlideClass: ["left", "middle"]`
+- 如`background-image: url(图片网址)`
+<br>
+
+
+3. 幻灯片内容的逐步展示
+- 使用以下代码将会使得内容一点点出现，并且注意的是两个符号--框住的内容才是一个接一个出现的，并且每个--符号应该接的是换行符（也就是enter）而不是直接接内容。
+```
+---
+##慢慢出现内容
+--
+
+- 你
+--
+
+- 好
+--
+
+- 世界
+--
+
+```
+<br>
+
+4. 演示者模式：
+- 在每张ppt的代码中新的一行打入`???`，那么问号下面的内容就不会在ppt中展示，在网页界面按下按钮p，就可以看到注释的内容。
+- 可以将自己的计算机连接到第二个屏幕（例如投影仪）时，这样键c和p就会非常实用。在第二个屏幕上，可以显示正常的幻灯片，同时将幻灯片克隆到自己的计算机屏幕上并使用演示者模式。只有自己可以看到演示者模式，使得作为演讲者的你可以看到演示者笔记和时间，并预览下一张幻灯片.
+
+5. 交互模式的使用：
+- 交互地图的使用，使用以下代码:
+```
+---
+地图的展示
+
+#```{r map}
+library(leaflet)
+leaflet() %>% addTiles() %>% 
+setView(lat = 51.4975684,
+lng = -0.1306512, zoom = 20)
+```
+
+- 交互式表格的使用主要是用到DT包和datable函数，使用的是以下代码：
+```
+---
+#```{r echo=FALSE}
+library(DT)
+setwd("E:/academic_resources/AFFC-Xtraning2021.10/Kyle/Lesson 5 Parametric assumptions/Lesson 5 Parametric assumptions")
+getwd()
+data<- read.table(file="Leaf area thickness.csv",header=T,row.names=NULL,sep=",")
+datatable(data)
+```
+
+### 关于包'xaringanExtra'的使用：
+[中文教程](https://blog.csdn.net/qq_37379316/article/details/117002148)
+
+[官方教程](https://github.com/gadenbuie/xaringanExtra)
+
+1. 并列方式展示演示文稿
+- 在rmd文件中的yaml的metadata下面的代码块中写入以下代码，渲染后在演示的界面中看到幻灯片的预览模式，按O键即可得到以下多个slides界面，再按O键即可回到默认形式。
+
+```
+#```{R xaringan-tile-view, echo=FALSE}
+library("aringanExtra")
+xaringanExtra::use_tile_view()
+```
+
+
+2. 在线编辑演示文稿
+- 同样将以下代码加入代码内容中，选然后可以在在放映的幻灯片上直接书写内容，实时更新。
+```
+#```{r xaringan-editable, echo=FALS}
+xaringanExtra::use_editable(expires = 1)
+```
+
+- 在加入以下代码后，用代码`.can-edit[]`框住想要在ppt中编辑的内容，如果是要一大段都可编辑的话可以用以下形式：
+```
+.can-edit[
+- thing one
+- thing two
+]
+```
+- 如果要存储已编辑并使它们在浏览器会话之间持久存在可以为每个可编辑字段提供一个`.key- <NAME>`类字段，如`.can-edit.key-firstSlideTitle[Change this title and then reload the page]`
+
+3. 在演示幻灯片上进行涂鸦
+- 单击铅笔图标或按S键进行绘图。按S或启动绘图模式切换涂鸦工具箱。你也可以使用橡皮擦来删除线条或单击“清除（trash）”按钮清除当前幻灯片上的所有涂鸦。当要更改幻灯片时，点击s键退回到一般箭头出现，图纸将保持在每张幻灯片上。在绘图模式下不能更改幻灯片。事实上，你可以使用←和→键来撤消或重做您的图纸。如果想将幻灯片与涂鸦一起保存，最好的方法是从浏览器中打印演示文稿。
+```
+#```{r xaringan-scribble, echo=FALSE}
+xaringanExtra::use_scribble()
+```
+
+4. 幻灯片切换时有声音提示
+- 同样将以下代码加入代码内容中
+```
+#```{r xaringan-slide-tone, echo=FALSE}
+xaringanExtra::use_slide_tone()
+```
+
+5. 将选项卡面板加入幻灯片中
+- 同样将以下代码加入代码内容中。
+```
+#```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+- 然后，创建一个包含若干个.panel[]的.panelset [...]。 每个.panel []应该具有.panel-name []和想写的内容。
+```
+#```
+.panelset[
+.panel[.panel-name[R Code]
+内容代码1
+]
+.panel[.panel-name[Plot]
+内容代码2
+]
+]
+```
+
+6. 给幻灯片添加全局logo
+- 同样将以下代码加入代码内容中，需要注意的是使用图床的时候选择了markdown格式粘贴过来的地址需要做修改，比如去掉`![]()`这些符号变成url的格式才可以显示。
+```
+#```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "https://gitee.com/zhanglantian2021/picture/raw/master/images/202204261809130.png"
+)
+```
+
+
+

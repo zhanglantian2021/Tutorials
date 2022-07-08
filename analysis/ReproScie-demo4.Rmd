@@ -1,0 +1,22 @@
+# Workflowr
+```
+library("workflowr")
+getwd()
+setwd("E:/academic_resources/Tutorials")
+wflow_start("Tutorials")
+wflow_build()
+```
+
+```
+wflow_build()
+wflow_view()
+wflow_publish(c("analysis/ReproScie-slides.Rmd"), "first") 
+wflow_build()
+wflow_status()
+```
+
+```
+wflow_use_github("zhanglantian2021")
+wflow_git_push()
+
+```

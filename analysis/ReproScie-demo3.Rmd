@@ -1,0 +1,122 @@
+---
+title: "Reproducible-Science-demo3"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+# Git
+**Enter in the terminal**
+
+## configuration
+```
+#ssh
+#set account
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+#check
+git config --global --list
+```
+## Manipulate documents
+1. Checking
+```
+cd file-name
+cd ..
+clear
+ls
+mkdir file-name
+touch file-name.txt
+date
+vi file-name.txt
+```
+
+2. Tracking-local
+```
+git init
+git add .(git add file.txt)
+git commit -m"action-name"
+
+#compare1
+ls
+git ls-fiels
+#compare2
+rm fiel-name1.txt
+git rm fiel-name2.txt
+
+git checkout fiel-name1.txt
+git rm fiel-name1.txt fiel-name2.txt
+
+git status
+git reflog
+git show id
+git diff id1 id2
+```
+
+## Back up
+remote repository
+1. Tracking-remote
+```
+git remote add origin git@github.com:user-name/repo-name.git
+git push -u origin master
+git status
+git remote -v
+git branch
+git branch -r 
+git branch -a 
+```
+
+2. gitignore
+```
+*.pdf
+fig1.pdf
+git add .
+ls
+git ls-files
+```
+
+3. clone
+```
+git clone remote-SSH
+```
+
+4. conflict
+```
+git add$git commit$git push
+### conflict!!!
+git pull origin main(master!!)
+### edit 
+git add$git commit$git push
+### success!
+```
+
+## Roll back
+```
+git commit1
+git commit2
+git commit3
+git commit4
+git reflog
+
+#back 
+git checkout id
+
+#remote
+git push origin HEAD:main(master!!)
+
+#cherry-up
+git cherry-pick id
+```

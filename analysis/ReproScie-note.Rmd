@@ -1,0 +1,1051 @@
+---
+title: "Reproducible-Science-note"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+bibliography: E:/academic_resources/note-tutorial/data/format/MyLibrary.bib
+csl: E:/academic_resources/note-tutorial/data/format/journal-of-ecology.csl
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, fig.align="center", message=FALSE, warning=FALSE)
+```
+
+```{css include=FALSE}
+data/img { 
+      width: 10px;
+      text-align: center;
+      border: black solid 1px
+}
+```
+
+# 前言
+
+## 说明
+- 所有原始课件和代码都在课题组坚果云TREC Group\Statistics\202206_Reproducible-Science路径下。该笔记内容是基于个人理解上的中文笔记并且添加一些其他来源的资料补充，所以可能存在一些错误，有错误请与我联系：`zhanglantian2021@gmail.com`
+- 该笔记大部分内容来自dossa六月份的Reproducible-Science课程，额外的英文或中文的教程或补充资料如下：
+1. [Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
+2. [markdown语法教程](http://humoon.xyz/notes/Programming-Language/R/06-Rmarkdown/_book/markdown.html#%E6%AE%B5%E5%86%85%E6%8D%A2%E8%A1%8C)
+3. [Rmarkdown教程](https://cosname.github.io/rmarkdown-guide/rmarkdown-intro.html)
+4. [Tutorial of R markdown](https://bookdown.org/yihui/rmarkdown/#preface)
+5. [Tutorial of R uded in VScode](https://statnmap.com/2021-10-09-how-not-to-be-lost-with-vscode-when-coming-from-rstudio/)
+6. [Tutorial of git ](https://www.simplilearn.com/tutorials/git-tutorial)
+7. [Git used in Rstudio](https://inbo.github.io/git-course/course_rstudio.html#1_Setup)
+
+## 需要的工具
+1. 下载git；在github或gitee上申请账号
+2. 下载VScode（或者喜欢用Rstudio也可以）
+3. 下载r包knitr、tidyverse、lubridate、palmerpenguins、lubridate、datasets、xtable、car、citr、workflowr、rticles
+
+
+# Tidyverse
+在这之前要保持数据整洁性，也就是说列必须是变量名，行必须是测量的数据值（含计算公式的不算）
+
+```{r package, eval=FALSE}
+#需要用到的包
+install.packages(c("tidyverse", "sf", "emo", "janitor", "palmerpenguins", "usethis", "lubridate"))
+```
+
+## 下载数据
+```{r Lodadata, cache=TRUE}
+#给出下载数据的地址
+url<-"https://doi.org/10.1371/journal.pone.0166570.s001"
+#给下载下来的文件重命名为twitter_cit_data.csv，并且把该文件放入文件夹data下，需要指定是因为当前工作路径是data的上一级文件夹。以及读取该数据并且把里面的数据放入数据集destfile
+destfile <- "E:/academic_resources/note-tutorial/data/twitter_cit_data.csv"
+download.file(url, destfile)
+library(tidyverse)
+#读取文件(注意搜寻到工作路径文件夹的下一级文件夹)并且把放入数据集citations_raw
+citations_raw<-read_csv(file="E:/academic_resources/note-tutorial/data/twitter_cit_data.csv")
+```
+
+
+## 对列名进行更改
+```{r column}
+#使得列名字更简洁，使用对旧名字重新命名的方式（步骤A）
+library(tidyverse)
+citations_temp <- rename(citations_raw,
+journal = 'Journal identity',
+impactfactor = '5-year journal impact factor',
+pubyear = 'Year published',
+colldate = 'Collection date',
+pubdate = 'Publication date',
+nbtweets = 'Number of tweets',
+woscitations = 'Number of Web of Science citations')
+head(citations_temp,5,6)
+
+#快速使得列名字里的空格消失，并且用_来代替，大写字母改为小写，列名以数字开头的加上x？？
+janitor::clean_names(citations_raw)
+
+#更改列名的属性（步骤B）
+##注意在步骤A的citations_temp中，journal这个变量的属性是chr，但一般数据分析的时候需要把它设置为factor，可以进行以下操作
+citations <- mutate(citations_temp, journal = as.factor(journal))
+citations
+##把journal更改成factor就可以用levels函数来查看它有几个种类了
+levels(citations$journal)
+```
+
+## 对数据进行操作的快速方式
+- 使用pipe的方式使得电脑运行得更快，因为按以前得步骤，对数据操作得时候每一个步骤需要赋予一个新的变量名字A和B和C，用<-连接，这相当于每次都在存储数据集，但使用pipe就只需要一次赋予变量名C，就相当于完成前面得几个步骤（不需要赋予中间变量名字了），以下是把上面步骤A和B结合起来直接得到C得例子，使用pipe的方法的符号是%>%，它的意思就是then
+```{r pipe}
+#第一种完成各个操纵列名步骤后赋予最终变量citations的方式：
+citations <- citations_raw %>%
+  rename(journal = 'Journal identity',
+    impactfactor = '5-year journal impact factor',
+    pubyear = 'Year published',
+    colldate = 'Collection date',
+    pubdate = 'Publication date',
+    nbtweets = 'Number of tweets',
+    woscitations = 'Number of Web of Science citations') %>%
+  mutate(journal = as.factor(journal))
+head(citations)
+#第二种完成各个操纵列名步骤后赋予最终变量citations的方式：
+citations_raw %>%
+  rename(journal = 'Journal identity',
+  impactfactor = '5-year journal impact factor',
+  pubyear = 'Year published',
+  colldate = 'Collection date',
+  pubdate = 'Publication date',
+  nbtweets = 'Number of tweets',
+  woscitations = 'Number of Web of Science citations') %>%
+  mutate(journal = as.factor(journal))-> citations2
+head(citations2)
+```
+
+## 对具体行数据更改
+```{r row}
+#把Authors这列数据中的每个名字中的大写字母都改成小写字母
+citations %>%
+  mutate(authors_lowercase = str_to_lower(Authors)) %>%
+  select(authors_lowercase)
+
+#把Journal这列数据中的每个期刊的名字的空格都删除，注意与上面的select后的代码对比，此处还加了个unique函数，是指仅仅展示出期刊的种类名字，例如此处有20个，如果没有这个函数，那么将如上面一样展出1599个数据
+citations%>%
+  mutate(journal = str_remove_all(journal," ")) %>%
+  select(journal) %>%
+  unique() 
+```
+
+
+## 选择性的展示数据：
+```{r select}
+#选择三个变量展示（三列数据）
+citations %>%
+  select(journal, impactfactor, nbtweets)
+
+#选择三个变量不展示（删除掉这三列数据）
+citations %>%
+  select(-Volume, -Issue, -Authors)
+
+#根据Authors这个变量，筛选出所有作者大于三个的数据，注意原本数据有1599行，根据这个条件筛选后只有1280行
+citations %>%
+  filter(str_detect(Authors,'et al')) %>%
+  select(Authors)
+
+#根据Authors这个变量，筛选出所有作者小于三个的数据（注意与前面大于三个的代码做对比，此处用！代表非），注意原本数据有1599行，根据这个条件筛选后只有319行，select函数等于pull函数，但是前者只列出10个，后者则是319个数据全列出
+citations %>%
+  filter(!str_detect(Authors,'et al')) %>% 
+  select(Authors)
+
+#筛选出authors大于三个且IF小于5的数据。注意原本数据有1599行，根据这个条件筛选后只有77行
+citations %>%
+  filter(!str_detect(Authors,'et al'), impactfactor < 5)
+
+#选择journal这个变量其中三种期刊对应的数据
+citations_ecology <- citations %>%
+  mutate(journal = str_to_lower(journal)) %>% 
+  filter(journal %in%
+           c('journal of animal ecology','journal of applied ecology','ecology')) 
+head(citations_ecology)
+```
+
+## 对于时间变量数据的展示
+```{r time}
+#查看原本时间数据这一列是月/天/年的格式
+head(citations$pubdate)
+##使用separate函数把时间这一列数据拆分成年月日三列数据形式
+citations %>%
+  select(journal, impactfactor, nbtweets, pubdate)%>%
+  separate(pubdate,c('month','day','year'),'/')
+
+##R里面有个lubridate包是专门用来处理时间数据可读性的问题，比如把月/天/年的格式或者中文的数据全部一起转化成year-month-day的格式，或者单单展示某一列时间数据的年份：
+library(lubridate)
+citations %>%
+  mutate(pubdate = mdy(pubdate),
+  pubyear2 = year(pubdate),
+  colldate = mdy(colldate))%>%
+  select(journal,impactfactor, nbtweets, pubdate, pubyear2, colldate)
+```
+
+## 根据不同分组来计算
+```{r count}
+#计算Journal下每个分类水平出现了多少次，并且根据这个n次数进行排序（sort=true）
+citations %>%
+  count(journal, sort = TRUE)
+
+#计算Journal和pubyear下每个一一对应水平一起出现的次数
+citations %>%
+  count(journal, pubyear)
+
+#按Journal下的分类水平来分组，计算每一类期刊的nbtweets的总和
+citations %>%
+  count(journal, wt = nbtweets, sort = TRUE)
+##或者按以下方法也可以，同样的结果，但是结果的排序方式不一样。上面的代码是根据n大小排列，下面代码是先根据journal下分类水平名字首字母先排，再根据n（sum_tweets）大小排
+citations %>%
+  group_by(journal) %>%
+  summarise(sum_tweets = sum(nbtweets))
+
+#按Journal下的分类水平来分组，计算每一类期刊的nbtweets的平均，由于结果先根据journal下分类水平名字首字母先排，再根据n(avg_tweets)大小排，如果想要仅仅根据n(avg_tweets)来排序可以使用arrange函数
+citations %>%
+  group_by(journal) %>%
+  summarise(avg_tweets = mean(nbtweets)) %>%
+  arrange(desc(avg_tweets))-> arrangedat
+head(arrangedat, 10)
+
+#按Journal下的分类水平来分组，计算其他变量数值的平均
+citations %>%
+  group_by(journal) %>%
+  summarize(across(where(is.numeric), mean))
+```
+
+## 练习
+```{r execrise}
+library(palmerpenguins)
+library(tidyverse)
+#检查数据，一共有344个peguins
+penguins
+#该函数是查看数据结构，例如变量的均值、最大最小值等
+summary(penguins)
+#该函数可以查看数据结构内细节，例如变量的属性（因子还是整数？）以及变量名下的每个数据
+glimpse(penguins)
+
+
+#删掉变量sex中的na值并且把该数据放入新的数据集dat中
+dat <- penguins %>%
+  filter(!is.na(sex)) %>%
+  select(species, island, bill_length_mm, body_mass_g)
+head(dat)
+glimpse(dat)
+
+#计算每种物种下作为样本的企鹅的数量，每种岛屿下作为样本的企鹅的数量，任意一种物种和岛屿下作为样本的企鹅的数量（是过滤掉na数据之后的数据，因此一共都是333只企鹅）
+levels(dat$species)
+dat %>% count(species, sort=TRUE)
+levels(dat$island)
+dat %>% count(island)
+dat %>% count(species, island)
+
+#计算所有企鹅的平均重量
+library(lubridate)
+dat1 <- dat %>%
+  mutate(avg_mass=mean(body_mass_g), se_mass=sd(body_mass_g)/sqrt(n()))
+dat1
+
+#计算每个物种下所有企鹅的平均体重
+dat %>%
+  group_by(species) %>%
+  summarise(avg_mass = mean(body_mass_g)) %>%
+  arrange(desc(avg_mass))-> arrangedat 
+head(arrangedat, 10)
+
+#计算每个物种下所有企鹅的平均体重和平均脚蹼长度
+dat %>%
+  group_by(species) %>%
+  summarize(across(where(is.numeric), mean))
+##或者这个方法
+dat %>%
+  group_by(species) %>%
+  summarize(across(bill_length_mm:body_mass_g, mean))
+##或者是如果是原始数据包含了许多NA指，则需要指定na.rm=TRUE
+penguins %>% 
+  group_by(species) %>% 
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
+```
+
+# ggplot2
+## 引入数据
+
+```{r data, cache=TRUE}
+url <- "https://doi.org/10.1371/journal.pone.0166570.s001"
+destfile <- "E:/academic_resources/note-tutorial/data/twitter_cit_data.csv"
+download.file(url, destfile)
+library(tidyverse)
+citations_raw<-read_csv(file="E:/academic_resources/note-tutorial/data/twitter_cit_data.csv")
+citations <- citations_raw %>%
+  rename(journal = 'Journal identity',
+    impactfactor = '5-year journal impact factor',
+    pubyear = 'Year published',
+    colldate = 'Collection date',
+    pubdate = 'Publication date',
+    nbtweets = 'Number of tweets',
+    woscitations = 'Number of Web of Science citations') %>%
+  mutate(journal = as.factor(journal))
+citations_ecology <- citations %>%
+  mutate(journal = str_to_lower(journal)) %>% # all journals names lowercase
+  filter(journal %in%
+           c('journal of animal ecology','journal of applied ecology','ecology')) # filter
+head(citations_ecology)
+```
+
+## 点图
+```{r}
+#基础的点图
+scatterplot<-citations %>%
+  ggplot() +
+  aes(x = nbtweets, y =woscitations) +
+  #如果是geom_point()则是默认为黑色
+  geom_point(color = "red")
+scatterplot
+
+#点图按组分颜色
+scatter_spcol2<-citations %>%
+  ggplot() +
+  aes(x = nbtweets, y = woscitations, color = journal) +
+  geom_point()
+scatter_spcol2
+
+#点图按组分图形
+scatter_ecol<-citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets, y = woscitations, shape = journal) +
+  geom_point(size=2)
+scatter_ecol
+
+#给点图做线1
+scatter_line<-citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets, y = woscitations) +
+  geom_line() + #此行代码就是画线
+  scale_x_log10() #此行代码是对x坐标进行log转换
+scatter_line
+
+#给点图做线2，并且加上数据点
+scatter_line2<-citations_ecology %>%
+  arrange(woscitations) %>%
+  ggplot() +
+  aes(x = nbtweets, y = woscitations) +
+  geom_line() +
+  geom_point() +
+  scale_x_log10()
+scatter_line2
+
+#对数据点进行拟合，默认是多项式回归？可以强调用线性的方式拟合geom_smooth(method = "lm")
+scatter_line5<-citations_ecology %>%
+  arrange(woscitations) %>% 
+  ggplot() +
+  aes(x = nbtweets, y = woscitations) +
+  geom_point() +
+  geom_smooth() +
+  scale_x_log10()
+scatter_line5
+```
+
+## 直方图
+```{r hist}
+#直方图中用于映射作图的数据只有x的
+#最基础的直方图，如果写geom_histogram()则默认是黑色,其中的参数fill指填充的颜色，color指的是柱形的边框颜色。labs()函数是指给横坐标纵坐标和标题添加名字
+histo<-citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets) +
+  geom_histogram(fill="orange",color="black") +
+  labs(x = "Number of tweets",
+       y = "Count",
+       title = "Histogram of the number of tweets")
+histo
+
+#按组来或多个直方图
+histo2<-citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets) +
+  geom_histogram(fill = "orange", color = "brown") +
+  labs(x = "Number of tweets",
+       y = "Count",
+       title = "Histogram of the number of tweets") + 
+  facet_wrap(vars(journal))
+histo2
+```
+
+## 箱线图
+```{r boxplot}
+#箱线图中用于映射作图的只有y上的数据
+#最基本的箱线图，如果是geom_boxplot()则默认没有填充颜色
+boxpl<-citations_ecology %>%
+  ggplot() +
+  aes(x = "", y = nbtweets) +
+  geom_boxplot(fill="green") +
+  scale_y_log10()
+boxpl
+
+#按组来画箱线图
+boxp2 <- citations_ecology %>%
+  ggplot() +
+  aes(x = journal, y = nbtweets, fill = journal) +
+  geom_boxplot() +
+  scale_y_log10()
+boxp2
+
+#如果上面要使得横坐标的标签消失掉
+boxp3 <- citations_ecology %>%
+  ggplot() +
+  aes(x = journal, y = nbtweets, fill = journal) +
+  geom_boxplot() +
+  scale_y_log10() + 
+  theme(axis.text.x = element_blank()) +
+  labs(x = "")
+boxp3
+
+#如果上面要自己定义箱型图的颜色以及自己定义右边图注的名称
+boxp4 <- citations_ecology %>%
+  ggplot() +
+  aes(x = journal, y = nbtweets, fill = journal) +
+  geom_boxplot() +
+  scale_y_log10() +
+  scale_fill_manual(
+    values = c("red", "blue", "purple"), name = "Journal name",
+    labels = c("Ecology", "J Animal Ecology", "J Applied Ecology")) +
+  theme(axis.text.x = element_blank()) +
+  labs(x = "")
+boxp4
+```
+
+## 柱状图
+```{r barp}
+#不好的柱形图
+citations %>%
+  count(journal) %>%
+  ggplot() +
+  aes(x = journal, y = n) +
+  geom_col()
+
+#上面的情况调换横纵坐标会更清晰
+citations %>%
+  count(journal) %>%
+  ggplot() +
+  aes(x = n, y = journal) +
+  geom_col()
+
+#上面的情况使得数据从大排到小，并且使得纵坐标的标题名字消失会更加好
+citations %>%
+  count(journal) %>%
+  ggplot() +
+  aes(x = n, y = fct_reorder(journal, n)) +
+  geom_col() +
+  labs(x = "counts", y = "")
+```
+
+## 频率图
+```{r den}
+#最基础的，会发现部分被挡住了
+citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets, fill = journal) +
+  geom_density() +
+  scale_x_log10()
+
+#调整透明度会使得上面效果更好
+citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets, fill = journal) +
+  geom_density(alpha = 0.5) +
+  scale_x_log10()
+
+#改变上图的背景样式1，或者试试theme_bw()
+citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets, fill = journal) +
+  geom_density(alpha = 0.5) +
+  scale_x_log10() +
+  theme_bw()
+
+#改变背景样式2
+citations_ecology %>%
+  ggplot() +
+  aes(x = nbtweets, fill = journal) +
+  geom_density(alpha = 0.5) +
+  scale_x_log10() +
+  theme_classic()
+```
+
+
+## 练习
+
+```{r exercise}
+#按企鹅的种类来绘制其体重与数量关系，发现部分直方图被挡住了
+histo1 <- dat %>%
+  ggplot() +
+  aes(x = body_mass_g, fill=species) +
+  geom_histogram(alpha=0.5) +
+  scale_fill_manual(values = c(" darkorange"," purple","cyan4")) +
+  labs(x = "body mass(g)",
+  y = "Count", title = "Histogram of the body mass")+
+  theme_bw()
+histo1
+
+#通过调整fill=species填充的图层位置来调整透明度。
+histo2 <-penguins %>%
+  ggplot() +
+  aes(x = body_mass_g) + 
+  geom_histogram(aes(fill = species), 
+                 alpha = 0.5, 
+                 position = "identity") +
+  scale_fill_manual(values = c("darkorange","purple","cyan4")) +
+  theme_minimal() +
+  labs(x = "Body mass (g)",
+       y = "Frequency",
+       title = "Penguin body mass")
+histo2
+
+#相比于调整透明度，做密度分布图更清晰
+histo_den<-dat %>%
+  ggplot() +
+  aes(x = body_mass_g, fill=species) +
+  geom_density(alpha=0.5) +
+  scale_fill_manual(values = c(" darkorange"," purple","cyan4")) +
+  labs(x = "body mass(g)",
+  y = "frequency", title = "Histogram of the body mass",fill= "penguins in species") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_bw()
+histo_den
+
+#按企鹅性别分别作图，在facet_wrap()函数部分要强调 scales = "free_x"，才能根据本身数据调整x轴范围，否则会像下图histo4一般全部同一范围但是图片不好。
+histo3<-penguins %>%
+  ggplot() +
+  aes(x = body_mass_g, fill=species) +
+  geom_histogram(alpha=0.5) +
+  scale_fill_manual(values = c(" darkorange"," purple","cyan4")) +
+  labs(x = "body mass(g)",
+  y = "Count", title = "Histogram of the body mass")+
+  theme_bw() +
+  facet_wrap(~sex, scales = "free_x")
+histo3
+
+histo4<-penguins %>%
+  ggplot() +
+  aes(x = body_mass_g, fill=species) +
+  geom_histogram(alpha=0.5) +
+  scale_fill_manual(values = c(" darkorange"," purple","cyan4")) +
+  labs(x = "body mass(g)",
+  y = "Count", title = "Histogram of the body mass")+
+  theme_bw() +
+  facet_wrap(~sex)
+histo4
+
+#根据企鹅物种做体重和脚蹼长度关系的点图，数据点类型和颜色都区分开来。
+scatter_spcol <- dat %>%
+  ggplot() +
+  aes(x = bill_length_mm, y = body_mass_g, shape = species, color= species) +
+  geom_point(size=2, alpha=0.5) +
+  scale_color_manual(values = c("darkorange","purple", "cyan4")) +
+  labs(x = "length(mm)",
+  y = "body mass(g)", title = "scatter plot of body mass wither respect to flipper length") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+scatter_spcol
+```
+
+
+# Rmarkdown
+## markdown的基本语法
+```{r markdwon}
+# 注意以下的第一个#只是表示代码框内的注释。
+# # 一级标题
+# ## 二级标题
+# ## 三级标题
+# *斜体*;**粗体**；***斜粗体***； ~~删除线~~；~~***斜粗体删除线***~~
+# <mark>标注</mark>；<font color=red>字体变红</font>；<font color=gray size=6>内容</font>`（文字大小一般默认为3，一般大小值从1-7可选）；`代码高亮`
+# 插入外部链接，例如想要打开百度搜索页，那么应该写：[百度](www.baidu.com),在文本中仅仅显示“百度”二字，并且显示为蓝色字体，并且是可跳转的链接
+# 公式的行内展示：$y_i=\beta_0+\beta_1X_i+\varepsilon_i$ 
+# 公式的成段展示：$$y_i=\beta_0+\beta_1X_i+\varepsilon_i$$
+```
+以下为上面代码语法的展示：
+# 一级标题
+## 二级标题
+### 三级标题
+*斜体*;**粗体**；***斜粗体***； ~~删除线~~；~~***斜粗体删除线***~~；<mark>标注</mark>；<font color=red>字体变红</font>；</font>；<font color=gray size=6>内容</font>；`代码高亮`
+[百度](www.baidu.com)
+公式的行内展示：$y_i=\beta_0+\beta_1X_i+\varepsilon_i$ 
+公式的成段展示：$$y_i=\beta_0+\beta_1X_i+\varepsilon_i$$
+
+## YMAL的使用
+在.rmd文件的开头用两个---括住的是属于YAML，表示对于整个文件一些功能或属性的设置。例如rmd开头如下时：
+```
+---
+title: "Reproducible-Science"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+bibliography: data/format/MyLibrary.bib
+csl: data/format/journal-of-ecology.csl
+output: 
+    html_document:
+        code_download: true
+        code_folding: show
+        css: data/format/bootstrap.css
+        hightlight: tango
+        df_print: paged
+        fig_width: 10
+        fig_height: 9
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+```
+1. `titile`: 表示该rmd文件的主题
+2. `code_download: true`：表示生成的html文件右上角将有按钮显示可以下载编织出该html文件的源rmd文件
+2. `author`： 表示该rmd文件的作者
+3. `date`： 上面代码表示自动生成最后一次改动该文件的电脑时间
+4. `document`：定义document: ctexart是为了解决在输出pdf时候有中文的问题。
+5. `bibliography`：用于在该文档内引用参考文献，关于该MyLibrary.bib文件的生成和作用请参考##文献的引用部分
+6. `csl`： 用于设置引用参考文献的格式，关于该文件的journal-of-ecology.csl的生成和作用请参考##文献的引用部分
+7. `output`：表示该rmd在knit后生成的文件格式，有许多种，一般常用的是html格式，pdf格式，docx格式，在该例子中是输出成html格式，在html下面的代码表示对该html文件的一些设置
+  - `code_folding: show`:表示该文档所有代码框的原始代码都展示出来，但是右上角都有个hide的按钮来选择隐藏或再次展开显示，如果`code_folding: hide`则该文档内所有代码框的原始代码都是先隐藏的，然后再点击code就可以展开
+  - `css: bootstrap.css`：表示应用于输出文档外观的样式，可以在该[该网址](https://bootswatch.com/)选择不同样式的文件.css下载。或者该项设置用`theme：yeti`来代替，因为用自定义的css有时候不能正确显示原始代码，而theme还有的选择是 “cerulean”, “journal”, “flatly”, “darkly”,
+  “readable”, “spacelab”, “united”, “cosmo”, “lumen”, “paper”，“sandstone”,
+  “simplex”, “yeti”等。
+  - `hightlight: tango`表示代码高亮应用的样式是tango
+  - `df_print`：当df_print选项被设置为paged时，表格被打印为HTML表格，支持行和列的分页。
+  - `fig_width`和`fig_height`表示对该文档内所有输出图片规定宽度和高度
+  - `fig_caption`：表示是否使得图片的输出带有标题
+  -  `toc:true`表示生成目录；`number_sections: true`和`toc_depth: 3`表示生成目录以及生成目录的深度（也就是根据#生成目录，如果有###三级标题，那么目录会生成1，1.1和1.1.1）
+  - `toc_float`表示将目录浮动到html内容的左侧，并且即使滚动文档，浮动目录也始终可见。 `collapsed: FALSE`控制目录不可以折叠，默认的是可折叠的TRUE;`smooth_scroll: true`表示目录可以滚动
+**注意：在csl、bibliography、css后面都是文件的名字，并且包含了其扩展名，而且这些文件要与rmd在同一文件夹下,如果不是要写明路径，例如csl与rmd文件不在同一个文件夹中，那么需要写`data/format/xxx.csl`（因为工作路径到ReproducibleScience为止）,另外冒号是英文形式，且一定要有个空格后再写具体规定是什么**
+
+## chunk的使用
+
+### 代码框的全局控制
+1. 在rmd文件的YAML完成后在它下面写入以下图片中的代码：表示的是对于该文档内的所有代码框都设`echo=TRUE`，就是所有原始代码都可见（除非某个R代码框后又规定了`echo=FALSE`）,而`cache=TRUE`表示缓存所有代码块的结果。当启用缓存时，如果一个代码块之前被执行过且之后没有任何变化时，knitr 将跳过这个代码块的执行，从而大大缩短编译所需的时间。而当再次修改代码块时（如修改代码或块选项），之前的缓存将自动失效，并且 knitr 将再次运行并缓存该代码块。**但是需要谨慎使用，否则后面的结果会根据之前代码框运行的结果来运行**
+<br>
+![](E:/academic_resources/note-tutorial/data/img/setup-chunk.png)
+<br>
+
+2. 在rmd文件的YAML完成后在它下面写入以下代码：表示的是对于该文档内字体大小的规定，`p{}`规定的是标题下直接输入的文本内容大小；`body, td {}`规定的是序列号1.2.3.等下面内容的字体大小;`pre{}`规定的是原始代码以及代码输出结果的字体大小。data/img中表示规定插入的markdown图片宽度为9px（或80%）；图片居中；图片边框为黑色，粗1px
+
+```{css, eval=FALSE}
+p {
+  font-size: 22px;
+}
+body, td {
+   font-size: 22px;
+}
+pre {
+  font-size: 22px
+}
+data/img { 
+      width: 80%;
+      text-align: center;
+      border: black solid 1px;
+}
+```
+
+3. 文件的调用可以用以下代码形式（要运行的话#不放进代码框内只是表示注释，通常把一个rmd文件拆分成多个以方便管理查看和修改。
+```
+{r setup, child="文件的路径"}
+```
+
+
+
+### 单独代码框的形式
+
+```
+{r xxx, aaa ,bbb, ccc}
+在此其中写r可运行的代码，在用语法{r}规定该代码框后就会自动生成可运行的代码框，顶部写着run chun和run above，前者表示仅仅运行该代码框的内容，后者表示运行该代码框上面所有的代码框
+{r xxx, aaa ,bbb, ccc}:可以给该代码框规定标签和功能，xxx就是该代码框的名字，用来表示这个代码框的作用或运行的是什么内容，aaa，bbb，ccc表示规定该代码框输出的特定功能，见一下1.2.3.4.
+```
+
+1. `echo=FALSE`:表示该代码框内代码运行，结果可见，但原始代码不展示。
+2. `message=FALSE`:表示代码运行的message信息在结果中不展示。
+3. `eval=FALSE`:表示代码框内的原始代码展示出来，但不运行，因此结果也不会展示出来
+4. `include = FALSE`：表示代码块内容都运行，但所有原始代码和结果都不显示
+5. `results=hide`：表示结果运行但不显示
+6. `fig.show='hide'`：表示代码运行，但图形不展示出来
+7. `warning=FALSE`:表示代码运行的warning信息在结果中不展示。
+8. `fig_width=3, fig_height=5`:表示规定该代码框内输出图片的宽度和高度。
+9. `fig.align="center"`：表示所有输出图片都居中
+
+
+
+
+## 文本中使用代码结果
+
+### 时间和随机数的引用
+```{r computetime}
+time <- format(Sys.time(), "%a %b %d %X %Y")
+rand <- rnorm(1)
+```
+the current time is `r time`.my favorite random number is `r rand`.
+
+### 数据计算的展示
+```{r datap}
+#引入数据
+library(palmerpenguins)
+library(tidyverse)
+penguins %>% 
+  slice(1:10) %>%
+  knitr::kable()
+#在1展示部分实际代码如下（在文本中只显示结果了）：There are `r nrow(penguins)` penguins in dataset, and `r length(unique(penguins$species))` different species. The data were collected in `r length(unique(penguins$island))` islands of the Palmer archipelago in Antarctica. 
+```
+
+数据框架结构的展示：
+There are `r nrow(penguins)` penguins in the dataset, and `r length(unique(penguins$species))` different species. The data were collected in `r length(unique(penguins$island))` islands of the Palmer archipelago in Antarctica.
+
+### 图片的展示
+
+1. 文本中的展示：因为只要输出之后rmd文件自动会生成文件夹，包含了html或docx等各种数据的原始文件，例如所有图片都在其中自动生成的`note-ReproScie_files/figure-html`中，可以找到关于企鹅体重按物种分类的图片展示是`exercise-2.png`，所以要在文档中展示该本地图片则写`![](./note-ReproScie_files/figure-html/exercise-2.png)`即可
+![](E:/academic_resources/note-tutorial/docs/figure/ReproScie-note.Rmd/exercise-2.png)
+
+2. 另外生成pdf文件展示：r代码运行（例如hist函数）的结果想要以pdf形式（例如该结果文件叫firstHistogram.pdf）存于另一个文件夹（例如这个文件夹叫output）中，那么可以用一下代码，dev.off表示关闭绘图设备：
+```
+pdf(file = 'E:/academic_resources/note-tutorial/output/firstHistogram.pdf')
+hist(whales$SST)
+dev.off()
+```
+### 表格的展示
+其他多样的展示方式参考以下[链接](https://rmarkdown.rstudio.com/lesson-7.html)
+
+1. 以html的方式
+```{r fitmodel}
+library(datasets)
+data(airquality)
+fit <- lm(Ozone ~ Wind+Temp + Solar.R, data=airquality)
+```
+
+```{r showtable, results="asis"}
+library(xtable)
+xt <- xtable(summary(fit))
+print(xt, type="html")
+```
+
+2. 使用kable包
+```{r sheet2, message=FALSE, warning=FALSE}
+library(car)
+library(tidyverse)
+cars %>%
+  head(10) %>%
+  knitr::kable(format = "html", caption = "A kable table")
+```
+
+
+
+
+## 文献的引用
+
+### bibliography和csl的使用
+1. bibliography文件的生成:
+以zotero为例，使用其他文献管理器是同样的方法生成bib文件，在zotero里面把可能要引用到这篇文章的所有文章导出成.bib格式的文件，最好是选择整个文库导出,具体操作如图片所示：
+<br>
+![](E:/academic_resources/note-tutorial/data/img/zotero-bib1.png)
+<br>
+<br>
+![](E:/academic_resources/note-tutorial/data/img/zotero-bib2.png)
+<br>
+<br>
+![](E:/academic_resources/note-tutorial/data/img/zotero-bib3.png)
+<br>
+
+2. csl文件的生成：
+- 可以在网上选择特定期刊的csl文件下载，并放在该rmd的文件夹中。
+- 可以使用zotero找到特定的csl文件，并且把它复制粘贴到该rmd的文件夹中。如下图首先在zotero中下载插件[bitter bibtex](https://retorque.re/zotero-better-bibtex/)，然后在zotero中的顶部菜单点击编辑>首选项>Better Bibtex, 接着在窗口中选择特定的期刊引用参考文献样式，如果图一的列表中没有的话选择其中的➕，然后添加即可，再然后在首选项窗口中的顶部选择‘常规’，再选择文件和文件夹，复制数据存储的路径，在文件路径中如图三找到style文件夹，里面就是各类csl文件，找到需要到，把它复制粘贴到该rmd的文件夹中
+<br>
+<br>
+![](E:/academic_resources/note-tutorial/data/img/zotero-csl2.png)
+<br>
+<br>
+![](E:/academic_resources/note-tutorial/data/img/zotero-csl3.png)
+<br>
+<br>
+
+
+### citr包的使用
+1. 使用命令`install.packages("citr")`下载该包，如果提示该r版本不适用下载该包，那么使用以下命令`devtools::install_github("crsh/citr")`直接从github上下载。
+2. 如果使用的是rstudio的话那么运行框右上部会出现addins按钮，点击后选择insert citations后可以现在插入文献
+3. 下载该包后运行以下代码框的内容
+```{r citr, message=FALSE, warning=FALSE}
+library("citr")
+md_cite("Cuny 2015", bib_file = "E:/academic_resources/note-tutorial/data/format/MyLibrary.bib")
+```
+4. 运行上述代码后，会自动在MyLibrary中寻找cuny2015年的文章，然后把结果`[@cunyWoodyBiomassProduction2015]`复制粘贴到文本中，就会在文本中显示`(Cuny et al., 2015)`，并且也把该文章的所有信息列在最后的参考文献中，该样式都是根据yaml中csl文件产生的。
+5. 当你完成写作时候，最后参考文献的列表中可能有你不需要的文献信息（因为对写作时候有删除），以下代码框中的代码可以直接删除这些在最后列表中出现了但文章正文中没有引用的文献：注意此时你的rmd文件教report.rmd，用于放所有文献的文件叫references.bib
+```
+tidy_bib_file(
+  rmd_file = "report.Rmd"
+  , messy_bibliography = "references.bib"
+  , file = "tidy_references.bib"
+)
+```
+
+### rticles包
+1. 使用命令`install.packages("rticles")`下载该包
+2. 如果使用的是rstudio，那么在顶部菜单File -> New File -> R Markdown后在弹出窗口中选择`From template`后再选择样式即可
+3. 如果没有使用rstudio，那么需要按这个[操作](https://bookdown.org/yihui/rmarkdown-cookbook/install-pandoc.html)来下载[pandoc](https://pandoc.org/)后运行以下代码框中的命令来选择template,**注意的是先查看下当前路径是什么，因为template的文件会被创建在当下工作路径下，必要的时候要自己重设一下**
+```
+getwd()
+setwd("E:/academic_resources/note-tutorial/ReproducibleSicence/data/format")
+getwd()
+rmarkdown::draft(
+    "MyJSSArticle.Rmd", template = "jss", package = "rticles"
+)
+rmarkdown::draft(
+    "MyRJournalArticle", template = "rjournal", package = "rticles"
+)
+```
+4. 运行上述代码之后就会在note-tutorial/data/format文件中得到jss和rjournal的模板rmd文件，按找其中格式输入自己文章的文本内容和图片之后knit就会得到该期刊或出版社正确要求格式的文献的pdf和word格式，该包中提供的其他模板请参考[该链接](https://github.com/rstudio/rticles)
+- 如果想要自定义模板的样式，可以参考[该方法](https://rmarkdown.rstudio.com/articles_docx.html)
+
+## overleaf简介
+
+由于rticles中期刊格式的模板种类有限，因此也可以使用在线的模板，[overleaf](https://www.overleaf.com/latex/templates)提供了各种各样的模板，不单单是期刊的，还有各类书籍，报告等的，但是使用的语言是latex，不过也有即时预览功能，而且可以同样可以转换输出成pdf格式。可以在线编辑，也可以下载模板后使用。
+
+## Quarto简介
+- 其文件名扩展为.qmd
+- 功能几乎与rmarkdown一致但许多功能使用选择按钮即可完成
+- 具体教程如下：https://quarto.org/docs/guide/
+
+
+
+# Git&Github
+
+## 使用前的配置
+1. 下载[git bash](https://gitforwindows.org/)，以及创建[github](https://github.com/)账号。
+2. 如果觉得github不挂vpn不稳定，可以使用[gitee](https://gitee.com/)作为代替。
+3. 在git中用户名和地址的设定：
+- 在git设置自己的账号和用户名，账号就是用来创建github的账号，有两种方法:
+一是在git bash中输入以下代码
+```
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+```
+二是点开.git文件进入找到config文件，使用VScode打开，然后在最后一行添加以下文本内容（注意可以不用vscode打开，使用其他文本编辑器都可以，但是不要用windows自带记事本编辑文本文件不然会有很多问题）：
+```
+    [user]
+    email=zhanglantian2021@gmail.com
+    name=zhanglantian2021
+```
+4. 链接本地的git和远程的github：[ssh钥匙的设置](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)：
+- 创建SSH Key。在用户主目录下（也就是`C:\Users\用户`下），看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和id_rsa.pub这两个文件，如果已经有了，可直接跳到下一步。如果没有，打开Shell（Windows下打开Git Bash），使用以下的代码创建SSH Key：`ssh-keygen -t rsa -C "zhanglantian2021@gmail.com"`，你需要把邮件地址换成你用来创建github的邮件地址，然后一路回车，使用默认值即可，由于这个Key也不是用于军事目的，所以也无需设置密码。如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
+- 登陆GitHub，打开“Account settings”，“SSH Keys”页面：然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：点“Add Key”即可
+
+5. 了解git工作的大致原理:
+当前目录文件夹是叫做工作区working directory，而在该工作区下面隐藏的文件.git是叫做版本库repository，Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。因此只有用git add指令把文件添加到暂存区才可以进一不用git commit提交到本地仓库中，最后才能用指令git push推送到github上远程仓库中去。
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git1.png)
+<br>
+
+## Git bash的语法
+
+1. `cd file-name`: 表示进入名为file-name的文件
+2. `git init`: 表示对当前路径下的这个文件夹进行git的初始化。把这个当前目录变成Git可以管理的仓库。这个目录是Git来跟踪管理版本库的，没事千万不要手动修改这个目录里面的文件，不然改乱了，就把Git仓库给破坏了。如果你没有看到.git目录，那是因为这个目录默认是隐藏的，在git bash用`ls -ah`命令就可以看见。只有看到.git文件才是成功建立了仓库。
+3. `git add .`：表示把当前路径下所有文件都添加的暂存区去（.表示所有文件，如果git add 后面是具体文件名，那么就是只把那个文件添加到暂存区）
+4. `git commit -m"action-name"`：表示把当前暂存区的所有文件上交到本地的分支上去（一旦使用git push之后就会把该本地分支的内容推送到远程库的master或main上区）
+5. `git remote add origin git@github.com:user-name/repo-name.git`：表示把在github上创建的特定远程仓库（如何创建远程库请参考2）与当前的本地分支关联，一旦使用git push之后就会把该本地分支的所有内容提交到远程库上区
+6. `git push -u origin master`：一般用于头次推送，推送所有文件，后来可以使用`git push origin master`来进行推送到远程master库中
+7. `cd ReproducibleScience`：表示返回上一级文件夹。
+
+**重复1-7的步骤可以对多个文件夹进行追踪以及上传到github云端，以下是其他有可能用到的语法。**
+
+8. `pwd`:显示当前路径
+9. `clear`：清屏
+10. ` git config --global --list
+`：给出git和github相联系的用户名和邮件
+11. ` git remote -v`：表示查看当前这个路径下文件夹（如果已经进行了git init和git remote add origin的话）与哪个特定的远程库关联了
+
+12. `ls`：列出当前路径文件夹下所有文件
+13. `git ls-fiels`:得到当前文件夹中已经被添加到暂存区的文件
+14. `touch file-name.txt`：创建文件file-name.txt
+15. `mkdir file-name`:创建文件夹fiel-name
+16. `rm fiel-name1.txt`：删除该txt1，但是如果之前commit过，那么该文件依旧在暂存区
+17. `git checkout fiel-name1.txt`：把在当前文件夹删除了的txt1从暂存区中添加回到该文件夹（前提是之前有commit到暂存区中！！！）
+18. `git rm fiel-name2.txt`：同时在该文件夹和暂存区删除该txt2
+19. `git rm fiel-name1.txt fiel-name2.txt`：把文件名1改为2（在该文件夹和暂存区的都改）
+20. `date`：显示当前电脑时间
+21. `git status`：显示当前文件夹的暂存区里文件的状态
+22. `git log --oneline --decorate`：非常整齐的方式展示每一次commit，并且有对应的每次的一个id号码，但是这个只会展示
+23. `git reflog`展示每一次commit并且展示指针的次序，并且有对应的每次的一个id号码，而相较于上一个展示每一个commit的方法，该方法更好，因为会展示出版本退回或退回后又返回等等的操作记录
+25. `git show id`：显示某一次commit的具体操作和操作人
+26. `git diff id1 id2`比较两次commit操作的区别
+27. `vi file-name.txt`：进入改文件的文本编辑模式，修改完后如果要退出那么先按esc保证不在文本的编辑状态了，再打`:q`或`:q!`enter后强制退出，回到git bash
+28. `git clone remote-SSH（此处也就是别人仓库的ssh地址）`：克隆别人的仓库到自己电脑上。
+29. `git branch`表示查看当前本地的分支；`git branch -r`表示查看当前远程分支；
+
+## 远程库的建立
+1. 首先在github上建立，该repo名字最好与本地同步的文件夹名字一致，勾选read.me文件（read.me文件用于说明该仓库有什么内容，以及怎么使用等）
+2. 选择license的类型，关于license不同类型的作用，请查看该[链接](https://r-pkgs.org/license.html)
+3. 选定该仓库是可以公开还是私人的，公开的话所有人可见，如果私人的话则仅自己可见，如果私人的仓库想要让别人看见需要邀请合作者，具体如下。。。如果要把以前私人的仓库（例如文章内容数据等已经发表）转为公开，具体如下。。（**请注意如果仓库状态从私人转化为公开的话，只有从转换后的上传的内容非公开，以前的还是可以被别人看见，因此最好是整个远程库删除了，但是这个操作不会影响本地关联的文件夹**）
+4. 创建之后复制ssh或https的地址，用于git bash语法中的步骤5.
+
+## gitignore的使用
+在有.git文件夹中创建一个.gitignore文件，然后在里面一行行写上要忽视的文件，如果写的是`*.pdf`表示的是任何含有是pdf的文件都不会被git跟踪，也就是任何修改或者文件本身都不能推到远程库中去。同样也可以指定那个文件不跟踪，例如在里面只写入`fig1.pdf`,那么其他pdf文件都会跟踪，但是fig1.pdf就不会。同样可以用命令`ls`和`git ls-files`对比来看，会发现文件fig1.pdf即使在`git add .`所有文件之后都不会在暂存区看到fig1.pdf
+
+## 版本查看
+
+### 远程库的分支问题：
+- 如果本地分支只有一个（一般默认叫master），使用`git branch可以查看`。而远程分支有两个（main和master），使用`git branch -r`可以查看。使用`git branch -a`可以查看全部分支，绿色是本地分支以及指针位置，红色是远程库分支
+- 使用`git checkout origin/main`可以把指针指向远程分支的main上,然后提交信息的时候需要写`git push origin HEAD:main`;拉取该main远程分支的时候需要写`git pull origin main`
+- 可以使用`git checkout -b main`创造一个本地的分支main（如果创造一个dev然后`push orign dev`则又会创建一个叫dev的远程分支），然后把用`git pull origin main`把远程main上内容拉到本地新分支main上（此时指针在main上）,再使用`git merge master`使得本地master上的内容合并到本地main上，
+- 因为在github上main是默认的远程分支因此保留它，否则不能删除成功，始终有两个远程分支，或者在github上把默认分支转成master也可以。
+- 使用`git merge`后使用命令`git status`查看后再使用命令`git push origin main`把最新的该本地分支推送到远程库main中。
+- 在指针状态指着本地分支main时候进行以下指令：`git push origin --delete master`删除远程分支master才算最终合并成功。 `git branch -d master`删除本地的master后保证指针回到唯一的本地分支main上(要与远程库main同名)
+
+
+### 发生冲突的情况
+当远程库上的仓库发生了改变，且本地做了不一样的改变并且通过git add和git commit到了本地仓库，那么再git push的时候就出现如图的情况
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git2.png)
+<br>
+
+- 首先先`git pull`:表示从远程仓库拉取文件下来（如果是头次拉取或者是有冲突的时候最好使用`git pull origin main`,main就是远程仓库的分支名字，可以在github那个特定的远程仓库点进去就可以查看到）
+- 然后在git bash中输入`vi README.md`就会进入文本编辑和查看模式，如下图所示发现冲突如下，`<<<HEAD`和===之间的为本地仓库的内容；===和`>>>8f`之间的为远程仓库的内容，仅仅比较的是二者的不同指出
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git4.png)
+<br>
+
+- 进入vi的模式之后按下键i进入文字编辑模式，编辑成如下是表示本地和远程仓库的内容都保留了,然后按键esc，在底部输入`:wq`后enter则保存该修改并且退出vi编辑器重新回到git bash模式
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git5.png)
+<br>
+
+- 相较于用git bash进入vi模式编辑，更好的方式是使用vscode中的git，会出现如图所示的选择，第一个选择表示接受本地仓库的更改，第二个选择是接受远程仓库的更改，第三个选择是两个都接受，都接受的结果如第二张图片所示
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git3.png)
+<br>
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git6.png)
+<br>
+
+- 使用命令`git add .`和命令`git commit`后再`git push`就可以成功上传远程库了。因此最好的选择是每次本地要编辑的时候先`git pull`一下。
+
+### 版本的退回
+如下图的例子，每次添加一个图片都`git commit`一次，那么在使用`git reflog`的时候就会对每次操作都展示出来
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git9.png)
+<br>
+
+- `git reflog`: 查看每次提交的版本是什么
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git7.png)
+<br>
+
+- `git checkout 80bb63`：回到只加了一张图片的状态
+- `git checkout 58a4`：又回到加了三张图片的状态。(记住这是本地指针指着的状态，gitbash指令行末端括号绿色表示的就是指针的位置，显示的是main)
+- `git checkout a9d0`：回去加了两张图片的状态（gitbash指令行末端括号绿色表示的就是指针的位置，显示的a9d0）
+- `git push origin HEAD:main`：不可以直接写git push，因为现在指针位置不在本地main而是a9d0版本处，因此要特意使用该命令表示把当前指针所在版本提交到远程仓库main上。
+- 但是如果使用在当地分支在main上的时候使用`git cherry-pick a9d0`可以使得a9d0版本转移到现在当前分支main上。
+- `git checkout main`如果要再修改什么最好是回到本地分支main上做修改再做提交。
+- 使用vscode的插件git history会更加直观，而且每一次的更改都可以具体的预览出来
+<br>
+![](E:/academic_resources/note-tutorial/data/img/git8.png)
+<br>
+
+
+## 数据管理
+1. 数据的管理主要通过R包workflowr实现，[具体教程在此](https://workflowr.github.io/workflowr/)
+2. 该包最主要的三个作用是：使得数据有序（通过R markdown和自动创建的文件完成）；具有可重复性（通过R markdown和git实现）；具有分享性（通过网页的创建实现）
+3. 通过函数wflow_build()会建立已经组织好的能实现上述三项功能的各类文件
+- 子目录文件`analysis`是**必须，不能移除的**：这个目录包含了所有用于实现你的项目的数据分析的源R Markdown文件。它还包含一个特殊的R标记文件，`index.Rmd`，它不包含任何R代码，但将被用来生成`index.html`，即你用于分享的网站的主页。此外，这个目录包含重要的配置文件`_site.yml`，可以用它来编辑R Markdwon的Yaml部分，也就是关于主题、导航栏和其他网站美学，因此不要删除`index.Rmd`或`_site.yml`。
+- **关于—_site.yml文件内的内容可以看出规定网址的样式以及rmd格式的输出为html，可以自己进行更改，问题是如果analysis里的rmd文件有些是要输出slides模式的，那么应该删除output规定部分，只剩下以下代码部分，analysis内的其他各个形式的rmd的ymal部分自己规定(注意如果是输出其他格式由于yamal产生文件部分没有写workflowr会使得该文件不在Rproject管理下，因此其中所有路径都要写绝对路径而不是相对路径)，但是注意仍然是html格式输出时output的下面一行要写`workflowr::wflow_html:`而不是`html_document:`，否则的话所有代码运行产生的图片不会显示**
+```
+name: "note-tutorial"
+output_dir: ../docs
+navbar:
+  title: "note-tutorial"
+  left:
+  - text: Home
+    href: index.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+
+```
+- 子目录`code`：这个目录用于存放原始数据文件。可移除。
+- 子目录`data`：这个目录用来存放可能不适合用R Markdown格式收录的代码（例如，用于数据的预处理，或者用于长期运行的代码）。可移除。
+- 子目录`docs`是**必须的，不能删除**，这个目录包含了你网站的所有HTML文件。这些HTML文件是由子目录`analysis/`中的R Markdown文件建立的。此外，任何由R Markdown文件创建的图像都保存在这里。每张图都按照以下模式保存：docs/figure/<插入Rmd文件名>/<插入图块名>-#.png，其中#对应于该图块产生的图（因为一个图块可以产生任意数量的图）
+- 子目录`output`：这个目录用于处理数据文件和其他由代码和数据产生的输出。例如，code/中对data/中的原始数据文件进行预处理的脚本应该将处理后的数据文件保存在output/中。
+- 文件`_workflowr.yml`是工作流程专用的配置文件。它将在你所有的R Markdown文件中统一应用workflowr的可重复性检查。最关键的设置是 `knit_root_dir`，它决定了分析/中的文件将被执行的目录。默认情况是在`_workflowr.yml`所在的项目根目录下执行代码（即"."）。要从analysis/中执行代码，请将设置改为knit_root_dir："analysis"。更多细节请参见[wflow-html](https://workflowr.github.io/workflowr/reference/wflow_html.html)
+- 文件`.Rprofile`是一个常规的R脚本，在项目被打开时运行一次。它包含调用库（"workflowr"），确保每次打开workflowr-project时都能自动加载workflowr。 每次打开workflowr-project时，都会自动加载workflowr。
+- 文件`myproject.Rproj`,即使不使用 RStudio，也不要刪除此文件，因为工作流函数依赖它来确定项目的根目录。
+4. 注意事项：
+- 自己放进analysis文件夹的rmd文件最好不要有yaml了，要进行更改可以在`_site.yml`进行。
+- 记住因为生成的project文件夹中有rproject文件了，所以在新放入的rmd文件中有重新设定路径来读取数据的语句setwd()会无效了，因此需要把所有会读取的数据放入其中的data文件夹中
+- docs中的figure文件夹是在knit了analysis中的rmd文件后自动生成的文件夹，里面放了所有代码运行出来的图形结果，如果在rmd文件中本来有用本地路径插入的图片，需要重新把图片放入/data中（可在其中建立data/img文件夹）
+
+5. 通过运行以下代码来新建立project文件夹以及下面的各种数据结构。
+```
+#加载该包
+library("workflowr")
+#设置路径，如果要在academic_resources文件夹下建立项目则应该用以下语句
+setwd("E:/academic_resources")
+
+#开始一个新的 workflowr 
+project，并且把文件夹命名为workflor-test
+wflow_start("workflor-test")
+
+#使用以下语句，则会建立许多文件类型
+wflow_build()
+
+#对文件进行更改后，例如在analysis文件放入新的rmd文件后再次使用wflow_build()可以用来预览有什么改变。也就是仅仅针对新改动的rmd文件进行knit并且以网页方式来预览改rmd文件。
+wflow_build()
+
+#以下函数是用在不建立任何文件的情况下查看网站，可以运行wflow_view()，它默认显示docs/index.html文件。编辑index.Rmd、about.Rmd和license.Rmd文件来描述你的项目。然后运行wflow_build()来重新构建HTML文件，就可以在自己网页上看到变化
+wflow_view()
+
+#workflowr对已发布和未发布的R Markdown文件进行了重要区分。已发布的文件会被包含在网站的在线内容中；而未发布的R Markdown文件的HTML文件则只能在本地电脑上查看。由于该项目刚刚开始，所以没有公布的文件。要查看workflowr项目的状态，请运行wflow_status()。会发现所有文件都是untracked的状态，就是网页上不发布不可见，仅本地电脑可见。除了以下全部一个个指定外可以直接使用wflow_publish(c("workflowr"), "add all")发布所有文件
+wflow_status()
+wflow_publish(c("analysis/note-Reprocie.Rmd", "analysis/plotdata.Rmd", "analysis/data.Rmd", "data/bbmrodata.csv", "output/firstHistogram.pdf", "twitter_cit_data.csv"), "Publish the initial files for myproject") 
+wflow_build()
+
+#建立远程库已使得网页公开可见，输入以下语法后会让你做选项，最好自动建立一个与改本地project同名的远程仓库，因此选1，会弹出一个github页面要求把github和workflowr链接。输入密码后即建立了远程仓库
+wflow_use_github("zhanglantian2021")
+
+#以下第一函数是用来查看改wflow_git_push是在干什么，而第二个函数直接运行才是把文件发布到github远程库上,或者使用git bash终端直接运行`git push -u origin master`也是一样的效果
+wflow_git_push(dry_run = TRUE)
+wflow_git_push()
+
+#接着是利用github创建自己的project网页，去github： Settings -> GitHub Pages and choose “master branch docs/ folder” as the Source。需要注意的是要检查远程库docs文件夹中是否包含index.html文件，然后是要登录用来创建gihub的邮件账号去确认workflowr与github关联，只有两点都完成了才能出来正确的url地址，点开就是自己project网址。
+
+#尝试用以下代码建立一个空白rmd文件，运行后rmd文件的yaml已经生成，用自己喜欢编辑器打开编辑
+wflow_open("analysis/first-analysis.Rmd")
+
+#编辑完成保存后，可以使用knit编织出结果，也可以直接运行以下代码，一样的效果，运行后在docs中可以找到结果first-analysis.html，打开后可以看见顶部的workflowr按钮，点击可以查看各种信息，会发现这个文件没有提交到github的远程仓库上去。可以使wflow_publish()后再用wflow_git_push()做推送。
+wflow_build()
+
+#打开analysis/inde.rmd，在其底部输入`Click on this [link](first-analysis.html) to see my results.`，然后现在运行以下代码后在打开自己主页的home，可以看见`Click on this link to see my results.`，点击蓝色字的link可以跳转到first-analysis.html的结果展示。
+wflow_publish(c("docs"), "add link")
+wflow_git_push()
+```
+
+6. 运行代码时事项
+```
+#如果你正在更新你的网站的美学（例如，任何时候你对analysis/_site.yml进行了编辑）。在这种情况下，你要更新所有发布的HTML文件，不管它们对应的R Markdown文件是否已经更新。要重新发布每一个HTML页面，请运行wflow_publish()，republish = TRUE。这种行为只能在下面通过指定dry_run = TRUE来预览。
+wflow_publish("analysis/_site.yml", republish = TRUE, dry_run = TRUE)
+
+#另外一旦重新开启终端或输出部分，要重新设置路径的时候应该是直接链接到myproject，否则无法正常运行，可以用wflow_status()来查看是否已经连上该文件夹，并且各级文件状态。
+setwd("E:/academic_resources/myproject")
+wflow_status()
+```
+
+
+
+
+
+
+
+
+

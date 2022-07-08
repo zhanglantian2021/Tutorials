@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Zhangyixue" />
+
+
+<title>use-Rmarkdown</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/zhanglantian2021/Tutorials">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">use-Rmarkdown</h1>
+<h4 class="author">Zhangyixue</h4>
+<h4 class="date">This document was last updated on 周五 7月 08 2022 23:09:55</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-07-08
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Tutorials/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220708code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220708)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220708code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220708)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+</p>
+</div>
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div class="panel-body">
+The following chunks had caches available:
+<ul>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>use-Rmarkdown_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstree6777da8a6a29ea427a620fa2f4193a0a9a6528eatargetblank6777da8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/zhanglantian2021/Tutorials/tree/6777da8a6a29ea427a620fa2f4193a0a9a6528ea" target="_blank">6777da8</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstree6777da8a6a29ea427a620fa2f4193a0a9a6528eatargetblank6777da8a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/zhanglantian2021/Tutorials/tree/6777da8a6a29ea427a620fa2f4193a0a9a6528ea" target="_blank">6777da8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/ReproScie-note_cache/
+    Ignored:    analysis/use-Rmarkdown_cache/
+
+Untracked files:
+    Untracked:  analysis/AdvanceSta-slides_files/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/use-Rmarkdown.Rmd</code>) and HTML (<code>docs/use-Rmarkdown.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/zhanglantian2021/Tutorials/blob/6777da8a6a29ea427a620fa2f4193a0a9a6528ea/analysis/use-Rmarkdown.Rmd" target="_blank">6777da8</a>
+</td>
+<td>
+zhanglantian2021
+</td>
+<td>
+2022-07-08
+</td>
+<td>
+first
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="基础知识" class="section level2" number="0.1">
+<h2 number="0.1"><span class="header-section-number">0.1</span> 基础知识</h2>
+<ol style="list-style-type: decimal">
+<li>如果rmd文件输出成pdf出现问题的话，请查看该<a href="https://yihui.org/tinytex/r/#debugging">方法</a></li>
+<li><a href="https://slides.yihui.org/2020-bearclub-rmarkdown.html#21" class="uri">https://slides.yihui.org/2020-bearclub-rmarkdown.html#21</a></li>
+<li>按照use-VScode中的R配置后，再把按照1.中的把各种包更新一下，下载缺少的包，不要下载插件R markdown all in one，因为那是给mac系统用的，下载了会导致knit不可用。</li>
+<li>在rmarkdown中不可以直接输入不打其他符号如`来直接输入latex的语法否则会导致rmarkdown不能knit出来。</li>
+<li>要保存文件以及关闭编辑器之后的编译出来的html文件中的代码结果才是可展示的，预览的html路径和编译出来的html文件路径是不一样的。</li>
+<li>在开头加上以下代码，以下代码将不会显示，<code>cache=TRUE</code>表示缓存代码，那么会使得每次knit时不会从头编织起，而是从新添加的内容编织起，会加快输出速度，但是如果数据集有更改或者是加载包前后某个函数的背后运行方式不一样的时候（会导致显示结果不一样）最好是<code>cache=FALSE</code></li>
+</ol>
+<pre><code></code></pre>
+</div>
+<div id="文本表达" class="section level2" number="0.2">
+<h2 number="0.2"><span class="header-section-number">0.2</span> 文本表达</h2>
+<ol style="list-style-type: decimal">
+<li>文字居中用的代码是：<code>&lt;center&gt;内容&lt;/center&gt;</code></li>
+<li>文字高亮和变色用的分别代码是：<code>&lt;mark&gt;marked&lt;/mark&gt;</code>; <code>&lt;font color=red&gt;字体变红&lt;/font&gt;</code></li>
+<li>文字更改大小和颜色的代码：<code>&lt;font color=gray size=6&gt;内容&lt;/font&gt;</code>，文字大小一般默认为3，一般大小值从1-7可选。</li>
+<li>用以下代码可以在ppt底部插入引用的文献：<code>.footnote[引用的文献]</code></li>
+<li>用以下代码可以选择把框选的内容挪动位置：<code>.pull-left[内容]</code>或者是pull-right也可以。或者是用<code>.left-column[内 容]</code>也可以</li>
+<li>插入的图片的代码是<code>&lt;img src="img/tree_dist.png" width="90%"/&gt;</code>,img是同这个rmd文件的同一路径的专门放图片的文件夹。或者是<code>&lt;img src="https://cdn-images-1.medium.com/max/800/1*3O597Dv2NGbNzg_dWRu2Hw.png" alt="phylo" width="180" /&gt;</code>或<code>knitr::include_graphics("https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/202204221412565.png")</code>（记得这个要用r代码框住），另外前者是本地图片后二者是网上图片。</li>
+<li>chunk内高亮：</li>
+</ol>
+</div>
+<div id="文章撰写" class="section level2" number="0.3">
+<h2 number="0.3"><span class="header-section-number">0.3</span> 文章撰写</h2>
+<ol style="list-style-type: decimal">
+<li>在.rmd文件的开头用两个—括住的是属于YMAL，表示对于整个文件一些功能或属性的设置。</li>
+</ol>
+<pre><code>---
+title: &quot;Reproducible-Science&quot;
+author: &quot;Zhangyixue&quot;
+document: ctexart
+bibliography: MyLibrary.bib
+output: 
+    html_document:
+        df_print: paged
+        fig_width: 10
+        fig_height: 9
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+</code></pre>
+<p>1.文献引用–zotero和Rmarkdown的联用：在zotero里面把可能要引用到这篇文章的所有文章导出成.bib格式的文件，最好是选择整个文库导出，并且把该文件MyLibrary放在和.rmd文件同一个文件夹下，而且在.rmd文件开头的YMAL处要写上<code>bibliography: MyLibrary.bib</code>和<code>csl：</code> <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmarkdown-41.png" /> <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmarkdwon-42.png" /> <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmarkdown-43.png" /></p>
+</div>
+<div id="presentation" class="section level2" number="0.4">
+<h2 number="0.4"><span class="header-section-number">0.4</span> presentation:</h2>
+<ol style="list-style-type: decimal">
+<li>在YAML的metadata下应该指明output的方式是<code>ioslides_presentation</code></li>
+<li>两种方法使得幻灯片一张张分开：</li>
+</ol>
+<ul>
+<li>开头使用标题标签##或#（后面应该跟着标题内容），标题之下的其他内容也会展示在这张ppt后，除非后面出现新的##或#或—才会生成另外一张ppt</li>
+<li>开头使用三个短横线来表示以下内容是在下一张ppt上。</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>使用管道符号|连接在##或#标题内容后再添加内容表示的是副标题，看起来应该是这样：<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/Rmark-01.png" /></li>
+<li>在网页端展示幻灯片的时候，可以使用以下快捷键来对幻灯片进行不同的操作</li>
+</ol>
+<ul>
+<li><code>f</code>：使得全屏展示</li>
+<li><code>w</code>：使得展示的幻灯片是宽屏的</li>
+<li><code>o</code>：使得多张幻灯片呈可预览状态</li>
+<li><code>h</code>：使得幻灯片上的代码是高亮的</li>
+<li><code>p</code>：展示幻灯片上演示者的笔记</li>
+<li>其他如此图所示：<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmark-03.png" /> <br></li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>幻灯片内容的逐步展示：</li>
+</ol>
+<ul>
+<li>所有幻灯片都是先展示幻灯片的标题，按下按钮后才能展示幻灯片的内容需要在YAML的metadata下指明incremental是true，如下图所示：<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/rmark-02.png" /></li>
+<li>如果上面的incremental参数不设置默认是标题内容一起展示的，如果需要指定单张的幻灯片是逐步展示内容，则需要在标题内容后加上参数，例如<code>## Get up{.build}</code></li>
+<li>而每张幻灯片上需要按下按钮才弹出的内容需要加符号&gt;,例如<code>&gt; - eat eggs</code> <br></li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>在YAML的metadata下的<code>ioslides_presentation:</code>还有别的参数，如incremental这个参数一般控制不同功能，例如：</li>
+</ol>
+<ul>
+<li><code>widescreen：true</code>：使得幻灯片展示是宽屏的</li>
+<li><code>smaller</code>：使得每张幻灯片下除了标题外的内容要小一号，如果只是想指定某张幻灯片内容小点，可以在那张幻灯片标题内容后加smaller，例如<code>## Get up{.smaller}</code></li>
+<li><code>transition: slower</code>或者<code>transition: faster</code>来改变幻灯片跳转速度</li>
+</ul>
+<ol start="7" style="list-style-type: decimal">
+<li>单独幻灯片的参数设置</li>
+</ol>
+<ul>
+<li>可以多个参数同时设置，例如例如<code>## Get up{.smaller .build}</code></li>
+<li>更改幻灯片的背景,例如<code>## Getting up {data-background=foo.png data-background-size=cover}</code> <br></li>
+</ul>
+<ol start="8" style="list-style-type: decimal">
+<li>在ppt中展示代码:</li>
+</ol>
+<ul>
+<li>需要使用代码框符号，如果需要对部分代码强调的话（展现的效果是加粗的），应该强调的代码段的前一行加<code>### &lt;b&gt;</code>;强调代码段的后一行加<code>### &lt;/b&gt;</code>,注意这些都是写在符号```框住的代码框内 <br></li>
+</ul>
+<ol start="9" style="list-style-type: decimal">
+<li>在yaml的medata下的内容开头中写入以下代码是表示加选项child=’文件名.Rmd’可以调入另一个.Rmd文件的内容。 如果有多个.Rmd文件依赖于相同的代码，可以用这样的方法。 #<code>{r external, child="setup.Rmd", include=FALSE} #</code></li>
+</ol>
+<p>而setup.rmd文件中的代码如下，用于所有PPT 的RMD文件中：</p>
+<pre><code>#```{r load-pkgs}
+#Do not change the order of the first two chunks
+
+options(htmltools.dir.version = FALSE)
+library(knitr)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, fig.retina = 3)
+library(tidyverse)
+library(fontawesome) # from github: https://github.com/rstudio/fontawesome
+library(kableExtra)
+library(picante)
+library(entropart)
+library(patchwork)
+library(gganimate)
+#```
+
+#```{r setup-options}
+knitr::opts_chunk$set(
+  echo       = FALSE,
+  eval       = TRUE,
+  warning    = FALSE,
+  message    = FALSE,
+  tidy       = FALSE,
+  size       = &#39;normalsize&#39;,
+  background = &#39;#F7F7F7&#39;,
+  comment    = &#39; &#39;,
+  #dev        =&#39;svg&#39;,
+  dev.args   = list(bg = &#39;transparent&#39;),
+  cache      = FALSE,
+  cache.path =&#39;cache/&#39;,
+  cache.vars = NULL,
+  cache.lazy = TRUE,
+  fig.path   =&#39;figure/&#39;,
+  fig.align  =&#39;center&#39;,
+  fig.show   =&#39;hold&#39;,
+  fig.retina = 3
+)
+#options(crayon.enabled = TRUE)
+#this is necessary so that the code doesn&#39;t wrap
+options(width = 1000)
+
+largefontthm &lt;- theme_bw() + theme(
+    axis.title        = element_text(size = 18),
+    axis.text         = element_text(size = 16),
+    strip.text        = element_text(size = 20),
+    plot.title = element_text(size = 22),
+    plot.subtitle = element_text(size = 18),
+    plot.caption = element_text(size = 14),
+    legend.text = element_text(size = 14),
+    legend.title = element_text(size = 16)
+    )
+
+invthm &lt;- theme_minimal() +
+  theme(
+    panel.background  = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    plot.background   = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    legend.background = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    legend.key        = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    axis.title        = element_text(size = 18),
+    axis.text         = element_text(size = 16),
+    strip.text        = element_text(size = 20)
+  )
+
+voidthm &lt;- theme_void() + 
+  theme(
+    panel.background  = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    plot.background   = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    legend.background = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    legend.key        = element_rect(fill = &#39;transparent&#39;, colour = NA),
+    strip.text        = element_text(size = 20),
+    plot.title = element_text(size=28, face=&quot;bold&quot;)
+  )
+
+#theme_set(invthm)
+#theme_get()
+theme_set(largefontthm)
+#```</code></pre>
+</div>
+<div id="关于包xaringan的使用" class="section level2" number="0.5">
+<h2 number="0.5"><span class="header-section-number">0.5</span> 关于包’xaringan’的使用：</h2>
+<ol style="list-style-type: decimal">
+<li>开头的设置</li>
+</ol>
+<ul>
+<li>在R中下载该包，然后在rmd的YAML的metadata下的基本设置应该如下：</li>
+</ul>
+<pre><code>---
+title: &quot;Changing&quot;
+author: ZhangYixue
+date: April 22, 2022
+output: 
+    xaringan::moon_reader: 
+        css: xaringan-themer.css  
+        nature: 
+            highlightStyle: github
+            highlightLines: true
+            ratio: 16:9
+            countIncrementalSlides: false
+---</code></pre>
+<ul>
+<li><p>其他风格的选择可以参考<a href="https://blog.csdn.net/qq_37379316/article/details/113175271">以下网址</a> <br></p></li>
+<li><p>在参数nature下还可以设置的参数是<code>autoplay: 30000</code>，表示每30秒自动播放一张ppt；<code>countdown: 60000</code>，表示每一张ppt都添加一个计时器，倒计时为60秒 <br></p></li>
+<li><p>在与参数nature下面同等级下加入代码行<code>seal: false</code>可以创建独立于YAML标题的标题幻灯片，也就是yaml的metadata不再作为开头ppt，而是自己设置的了。</p></li>
+</ul>
+<p><br></p>
+<ol start="2" style="list-style-type: decimal">
+<li>每张幻灯片参数设置 应该写在每张幻灯片下，也就是符号```下一行，</li>
+</ol>
+<ul>
+<li>如<code>class: center, bottom, inverse</code>。与center同级的参数选项还有left和right；与bottom级别的参数选项还有top和middle；inverse表示的意思是幻灯片变为黑底白字。如果像以上标题页的位置不想每张设置，可以在YAML的metadata下的nature下中写入<code>titleSlideClass: ["left", "middle"]</code></li>
+<li>如<code>background-image: url(图片网址)</code> <br></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>幻灯片内容的逐步展示</li>
+</ol>
+<ul>
+<li>使用以下代码将会使得内容一点点出现，并且注意的是两个符号–框住的内容才是一个接一个出现的，并且每个–符号应该接的是换行符（也就是enter）而不是直接接内容。</li>
+</ul>
+<pre><code>---
+##慢慢出现内容
+--
+
+- 你
+--
+
+- 好
+--
+
+- 世界
+--
+</code></pre>
+<p><br></p>
+<ol start="4" style="list-style-type: decimal">
+<li>演示者模式：</li>
+</ol>
+<ul>
+<li>在每张ppt的代码中新的一行打入<code>???</code>，那么问号下面的内容就不会在ppt中展示，在网页界面按下按钮p，就可以看到注释的内容。</li>
+<li>可以将自己的计算机连接到第二个屏幕（例如投影仪）时，这样键c和p就会非常实用。在第二个屏幕上，可以显示正常的幻灯片，同时将幻灯片克隆到自己的计算机屏幕上并使用演示者模式。只有自己可以看到演示者模式，使得作为演讲者的你可以看到演示者笔记和时间，并预览下一张幻灯片.</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>交互模式的使用：</li>
+</ol>
+<ul>
+<li>交互地图的使用，使用以下代码:</li>
+</ul>
+<pre><code>---
+地图的展示
+
+#```{r map}
+library(leaflet)
+leaflet() %&gt;% addTiles() %&gt;% 
+setView(lat = 51.4975684,
+lng = -0.1306512, zoom = 20)</code></pre>
+<ul>
+<li>交互式表格的使用主要是用到DT包和datable函数，使用的是以下代码：</li>
+</ul>
+<pre><code>---
+#```{r echo=FALSE}
+library(DT)
+setwd(&quot;E:/academic_resources/AFFC-Xtraning2021.10/Kyle/Lesson 5 Parametric assumptions/Lesson 5 Parametric assumptions&quot;)
+getwd()
+data&lt;- read.table(file=&quot;Leaf area thickness.csv&quot;,header=T,row.names=NULL,sep=&quot;,&quot;)
+datatable(data)</code></pre>
+<div id="关于包xaringanextra的使用" class="section level3" number="0.5.1">
+<h3 number="0.5.1"><span class="header-section-number">0.5.1</span> 关于包’xaringanExtra’的使用：</h3>
+<p><a href="https://blog.csdn.net/qq_37379316/article/details/117002148">中文教程</a></p>
+<p><a href="https://github.com/gadenbuie/xaringanExtra">官方教程</a></p>
+<ol style="list-style-type: decimal">
+<li>并列方式展示演示文稿</li>
+</ol>
+<ul>
+<li>在rmd文件中的yaml的metadata下面的代码块中写入以下代码，渲染后在演示的界面中看到幻灯片的预览模式，按O键即可得到以下多个slides界面，再按O键即可回到默认形式。</li>
+</ul>
+<pre><code>#```{R xaringan-tile-view, echo=FALSE}
+library(&quot;aringanExtra&quot;)
+xaringanExtra::use_tile_view()</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>在线编辑演示文稿</li>
+</ol>
+<ul>
+<li>同样将以下代码加入代码内容中，选然后可以在在放映的幻灯片上直接书写内容，实时更新。</li>
+</ul>
+<pre><code>#```{r xaringan-editable, echo=FALS}
+xaringanExtra::use_editable(expires = 1)</code></pre>
+<ul>
+<li>在加入以下代码后，用代码<code>.can-edit[]</code>框住想要在ppt中编辑的内容，如果是要一大段都可编辑的话可以用以下形式：</li>
+</ul>
+<pre><code>.can-edit[
+- thing one
+- thing two
+]</code></pre>
+<ul>
+<li>如果要存储已编辑并使它们在浏览器会话之间持久存在可以为每个可编辑字段提供一个<code>.key- &lt;NAME&gt;</code>类字段，如<code>.can-edit.key-firstSlideTitle[Change this title and then reload the page]</code></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>在演示幻灯片上进行涂鸦</li>
+</ol>
+<ul>
+<li>单击铅笔图标或按S键进行绘图。按S或启动绘图模式切换涂鸦工具箱。你也可以使用橡皮擦来删除线条或单击“清除（trash）”按钮清除当前幻灯片上的所有涂鸦。当要更改幻灯片时，点击s键退回到一般箭头出现，图纸将保持在每张幻灯片上。在绘图模式下不能更改幻灯片。事实上，你可以使用←和→键来撤消或重做您的图纸。如果想将幻灯片与涂鸦一起保存，最好的方法是从浏览器中打印演示文稿。</li>
+</ul>
+<pre><code>#```{r xaringan-scribble, echo=FALSE}
+xaringanExtra::use_scribble()</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>幻灯片切换时有声音提示</li>
+</ol>
+<ul>
+<li>同样将以下代码加入代码内容中</li>
+</ul>
+<pre><code>#```{r xaringan-slide-tone, echo=FALSE}
+xaringanExtra::use_slide_tone()</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>将选项卡面板加入幻灯片中</li>
+</ol>
+<ul>
+<li>同样将以下代码加入代码内容中。</li>
+</ul>
+<pre><code>#```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()</code></pre>
+<ul>
+<li>然后，创建一个包含若干个.panel[]的.panelset […]。 每个.panel []应该具有.panel-name []和想写的内容。</li>
+</ul>
+<pre><code>#```
+.panelset[
+.panel[.panel-name[R Code]
+内容代码1
+]
+.panel[.panel-name[Plot]
+内容代码2
+]
+]</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>给幻灯片添加全局logo</li>
+</ol>
+<ul>
+<li>同样将以下代码加入代码内容中，需要注意的是使用图床的时候选择了markdown格式粘贴过来的地址需要做修改，比如去掉<code>![]()</code>这些符号变成url的格式才可以显示。</li>
+</ul>
+<pre><code>#```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = &quot;https://gitee.com/zhanglantian2021/picture/raw/master/images/202204261809130.png&quot;
+)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Chinese (Simplified)_China.utf8 
+[2] LC_CTYPE=Chinese (Simplified)_China.utf8   
+[3] LC_MONETARY=Chinese (Simplified)_China.utf8
+[4] LC_NUMERIC=C                               
+[5] LC_TIME=Chinese (Simplified)_China.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.8.3     bslib_0.3.1      jquerylib_0.1.4  compiler_4.2.0  
+ [5] pillar_1.7.0     later_1.3.0      git2r_0.30.1     tools_4.2.0     
+ [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.8.0   evaluate_0.15   
+[13] tibble_3.1.7     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.2     
+[17] cli_3.2.0        rstudioapi_0.13  yaml_2.3.5       xfun_0.30       
+[21] fastmap_1.1.0    httr_1.4.3       stringr_1.4.0    knitr_1.39      
+[25] sass_0.4.1       fs_1.5.2         vctrs_0.4.1      rprojroot_2.0.3 
+[29] glue_1.6.2       R6_2.5.1         processx_3.5.3   fansi_1.0.3     
+[33] rmarkdown_2.14   callr_3.7.0      magrittr_2.0.3   whisker_0.4     
+[37] ps_1.6.0         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
+[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.1    </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogInVzZS1SbWFya2Rvd24iDQphdXRob3I6ICJaaGFuZ3lpeHVlIg0KZGF0ZTogVGhpcyBkb2N1bWVudCB3YXMgbGFzdCB1cGRhdGVkIG9uIGByIGZvcm1hdChTeXMudGltZSgpLCAiJWEgJWIgJWQgJVkgJUg6JU06JVMiKWANCmRvY3VtZW50OiBjdGV4YXJ0DQpvdXRwdXQ6IA0KICAgIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICAgICAgdGhlbWU6IGNvc21vDQogICAgICAgIGhpZ2hsaWdodDogdGV4dG1hdGUNCiAgICAgICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgICAgICBjb2RlX2ZvbGRpbmc6IHNob3cNCiAgICAgICAgaGlnaHRsaWdodDogdGFuZ28NCiAgICAgICAgZGZfcHJpbnQ6IHBhZ2VkDQogICAgICAgIGZpZ19jYXB0aW9uOiB0cnVlDQogICAgICAgIHRvYzogdHJ1ZQ0KICAgICAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUNCiAgICAgICAgdG9jX2RlcHRoOiAzDQogICAgICAgIHRvY19mbG9hdDogIA0KICAgICAgICAgICAgIGNvbGxhcHNlZDogRkFMU0UNCiAgICAgICAgICAgICBzbW9vdGhfc2Nyb2xsOiB0cnVlICAgDQotLS0NCg0KIyMg5Z+656GA55+l6K+GDQoNCjEuIOWmguaenHJtZOaWh+S7tui+k+WHuuaIkHBkZuWHuueOsOmXrumimOeahOivne+8jOivt+afpeeci+ivpVvmlrnms5VdKGh0dHBzOi8veWlodWkub3JnL3Rpbnl0ZXgvci8jZGVidWdnaW5nKQ0KMi4gaHR0cHM6Ly9zbGlkZXMueWlodWkub3JnLzIwMjAtYmVhcmNsdWItcm1hcmtkb3duLmh0bWwjMjENCjMuIOaMieeFp3VzZS1WU2NvZGXkuK3nmoRS6YWN572u5ZCO77yM5YaN5oqK5oyJ54WnMS7kuK3nmoTmiorlkITnp43ljIXmm7TmlrDkuIDkuIvvvIzkuIvovb3nvLrlsJHnmoTljIXvvIzkuI3opoHkuIvovb3mj5Lku7ZSIG1hcmtkb3duIGFsbCBpbiBvbmXvvIzlm6DkuLrpgqPmmK/nu5ltYWPns7vnu5/nlKjnmoTvvIzkuIvovb3kuobkvJrlr7zoh7Rrbml05LiN5Y+v55So44CCDQo0LiDlnKhybWFya2Rvd27kuK3kuI3lj6/ku6Xnm7TmjqXovpPlhaXkuI3miZPlhbbku5bnrKblj7flpoJg5p2l55u05o6l6L6T5YWlbGF0ZXjnmoTor63ms5XlkKbliJnkvJrlr7zoh7RybWFya2Rvd27kuI3og71rbml05Ye65p2l44CCDQo1LiDopoHkv53lrZjmlofku7bku6Xlj4rlhbPpl63nvJbovpHlmajkuYvlkI7nmoTnvJbor5Hlh7rmnaXnmoRodG1s5paH5Lu25Lit55qE5Luj56CB57uT5p6c5omN5piv5Y+v5bGV56S655qE77yM6aKE6KeI55qEaHRtbOi3r+W+hOWSjOe8luivkeWHuuadpeeahGh0bWzmlofku7bot6/lvoTmmK/kuI3kuIDmoLfnmoTjgIINCjYuIOWcqOW8gOWktOWKoOS4iuS7peS4i+S7o+egge+8jOS7peS4i+S7o+eggeWwhuS4jeS8muaYvuekuu+8jGBjYWNoZT1UUlVFYOihqOekuue8k+WtmOS7o+egge+8jOmCo+S5iOS8muS9v+W+l+avj+asoWtuaXTml7bkuI3kvJrku47lpLTnvJbnu4fotbfvvIzogIzmmK/ku47mlrDmt7vliqDnmoTlhoXlrrnnvJbnu4fotbfvvIzkvJrliqDlv6vovpPlh7rpgJ/luqbvvIzkvYbmmK/lpoLmnpzmlbDmja7pm4bmnInmm7TmlLnmiJbogIXmmK/liqDovb3ljIXliY3lkI7mn5DkuKrlh73mlbDnmoTog4zlkI7ov5DooYzmlrnlvI/kuI3kuIDmoLfnmoTml7blgJnvvIjkvJrlr7zoh7TmmL7npLrnu5PmnpzkuI3kuIDmoLfvvInmnIDlpb3mmK9gY2FjaGU9RkFMU0VgDQpgYGANCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFLCBjYWNoZT1UUlVFKQ0KYGBgDQpgYGANCg0KIyMg5paH5pys6KGo6L6+DQoxLiDmloflrZflsYXkuK3nlKjnmoTku6PnoIHmmK/vvJpgPGNlbnRlcj7lhoXlrrk8L2NlbnRlcj4gYA0KMi4g5paH5a2X6auY5Lqu5ZKM5Y+Y6Imy55So55qE5YiG5Yir5Luj56CB5piv77yaYDxtYXJrPm1hcmtlZDwvbWFyaz5gOyBgPGZvbnQgY29sb3I9cmVkPuWtl+S9k+WPmOe6ojwvZm9udD5gDQozLiDmloflrZfmm7TmlLnlpKflsI/lkozpopzoibLnmoTku6PnoIHvvJpgPGZvbnQgY29sb3I9Z3JheSBzaXplPTY+5YaF5a65PC9mb250PmDvvIzmloflrZflpKflsI/kuIDoiKzpu5jorqTkuLoz77yM5LiA6Iis5aSn5bCP5YC85LuOMS035Y+v6YCJ44CCDQo0LiDnlKjku6XkuIvku6PnoIHlj6/ku6XlnKhwcHTlupXpg6jmj5LlhaXlvJXnlKjnmoTmlofnjK7vvJpgLmZvb3Rub3RlW+W8leeUqOeahOaWh+eMrl1gDQo1LiDnlKjku6XkuIvku6PnoIHlj6/ku6XpgInmi6nmiormoYbpgInnmoTlhoXlrrnmjKrliqjkvY3nva7vvJpgLnB1bGwtbGVmdFvlhoXlrrldYOaIluiAheaYr3B1bGwtcmlnaHTkuZ/lj6/ku6XjgILmiJbogIXmmK/nlKhgLmxlZnQtY29sdW1uW+WGhQ0K5a65XWDkuZ/lj6/ku6UNCjYuIOaPkuWFpeeahOWbvueJh+eahOS7o+eggeaYr2A8aW1nIHNyYz0iaW1nL3RyZWVfZGlzdC5wbmciIHdpZHRoPSI5MCUiLz5gLGltZ+aYr+WQjOi/meS4qnJtZOaWh+S7tueahOWQjOS4gOi3r+W+hOeahOS4k+mXqOaUvuWbvueJh+eahOaWh+S7tuWkueOAguaIluiAheaYr2A8aW1nIHNyYz0iaHR0cHM6Ly9jZG4taW1hZ2VzLTEubWVkaXVtLmNvbS9tYXgvODAwLzEqM081OTdEdjJOR2JOemdfZFdSdTJIdy5wbmciDQphbHQ9InBoeWxvIiB3aWR0aD0iMTgwIiAvPmDmiJZga25pdHI6OmluY2x1ZGVfZ3JhcGhpY3MoImh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS96aGFuZ2xhbnRpYW4yMDIxL3BpY3R1cmUvbWFpbi9pbWcvMjAyMjA0MjIxNDEyNTY1LnBuZyIpYO+8iOiusOW+l+i/meS4quimgeeUqHLku6PnoIHmoYbkvY/vvInvvIzlj6blpJbliY3ogIXmmK/mnKzlnLDlm77niYflkI7kuozogIXmmK/nvZHkuIrlm77niYfjgIINCjcuIGNodW5r5YaF6auY5Lqu77yaDQoNCiMjIOaWh+eroOaSsOWGmQ0KDQoxLiDlnKgucm1k5paH5Lu255qE5byA5aS055So5Lik5LiqLS0t5ous5L2P55qE5piv5bGe5LqOWU1BTO+8jOihqOekuuWvueS6juaVtOS4quaWh+S7tuS4gOS6m+WKn+iDveaIluWxnuaAp+eahOiuvue9ruOAgg0KYGBgDQotLS0NCnRpdGxlOiAiUmVwcm9kdWNpYmxlLVNjaWVuY2UiDQphdXRob3I6ICJaaGFuZ3lpeHVlIg0KZG9jdW1lbnQ6IGN0ZXhhcnQNCmJpYmxpb2dyYXBoeTogTXlMaWJyYXJ5LmJpYg0Kb3V0cHV0OiANCiAgICBodG1sX2RvY3VtZW50Og0KICAgICAgICBkZl9wcmludDogcGFnZWQNCiAgICAgICAgZmlnX3dpZHRoOiAxMA0KICAgICAgICBmaWdfaGVpZ2h0OiA5DQogICAgICAgIGZpZ19jYXB0aW9uOiB0cnVlDQogICAgICAgIHRvYzogdHJ1ZQ0KICAgICAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUNCiAgICAgICAgdG9jX2RlcHRoOiAzDQogICAgICAgIHRvY19mbG9hdDogIA0KICAgICAgICAgICAgIGNvbGxhcHNlZDogRkFMU0UNCiAgICAgICAgICAgICBzbW9vdGhfc2Nyb2xsOiB0cnVlICAgDQotLS0NCg0KYGBgDQoNCjEu5paH54yu5byV55SoLS16b3Rlcm/lkoxSbWFya2Rvd27nmoTogZTnlKjvvJrlnKh6b3Rlcm/ph4zpnaLmiorlj6/og73opoHlvJXnlKjliLDov5nnr4fmlofnq6DnmoTmiYDmnInmlofnq6Dlr7zlh7rmiJAuYmli5qC85byP55qE5paH5Lu277yM5pyA5aW95piv6YCJ5oup5pW05Liq5paH5bqT5a+85Ye677yM5bm25LiU5oqK6K+l5paH5Lu2TXlMaWJyYXJ55pS+5Zyo5ZKMLnJtZOaWh+S7tuWQjOS4gOS4quaWh+S7tuWkueS4i++8jOiAjOS4lOWcqC5ybWTmlofku7blvIDlpLTnmoRZTUFM5aSE6KaB5YaZ5LiKYGJpYmxpb2dyYXBoeTogTXlMaWJyYXJ5LmJpYmDlkoxgY3Ns77yaYA0KIVtdKGh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS96aGFuZ2xhbnRpYW4yMDIxL3BpY3R1cmUvbWFpbi9pbWcvcm1hcmtkb3duLTQxLnBuZykNCiFbXShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vemhhbmdsYW50aWFuMjAyMS9waWN0dXJlL21haW4vaW1nL3JtYXJrZHdvbi00Mi5wbmcpDQohW10oaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3poYW5nbGFudGlhbjIwMjEvcGljdHVyZS9tYWluL2ltZy9ybWFya2Rvd24tNDMucG5nKQ0KDQoNCiMjIHByZXNlbnRhdGlvbjoNCjEuIOWcqFlBTUznmoRtZXRhZGF0YeS4i+W6lOivpeaMh+aYjm91dHB1dOeahOaWueW8j+aYr2Bpb3NsaWRlc19wcmVzZW50YXRpb25gDQoyLiDkuKTnp43mlrnms5Xkvb/lvpflubvnga/niYfkuIDlvKDlvKDliIblvIDvvJoNCi0g5byA5aS05L2/55So5qCH6aKY5qCH562+IyPmiJYj77yI5ZCO6Z2i5bqU6K+l6Lef552A5qCH6aKY5YaF5a6577yJ77yM5qCH6aKY5LmL5LiL55qE5YW25LuW5YaF5a655Lmf5Lya5bGV56S65Zyo6L+Z5bygcHB05ZCO77yM6Zmk6Z2e5ZCO6Z2i5Ye6546w5paw55qEIyPmiJYj5oiWLS0t5omN5Lya55Sf5oiQ5Y+m5aSW5LiA5bygcHB0DQotIOW8gOWktOS9v+eUqOS4ieS4quefreaoque6v+adpeihqOekuuS7peS4i+WGheWuueaYr+WcqOS4i+S4gOW8oHBwdOS4iuOAgg0KMy4g5L2/55So566h6YGT56ym5Y+3fOi/nuaOpeWcqCMj5oiWI+agh+mimOWGheWuueWQjuWGjea3u+WKoOWGheWuueihqOekuueahOaYr+WJr+agh+mimO+8jOeci+i1t+adpeW6lOivpeaYr+i/meagt++8miFbXShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vemhhbmdsYW50aWFuMjAyMS9waWN0dXJlL21haW4vaW1nL1JtYXJrLTAxLnBuZykNCjQuIOWcqOe9kemhteerr+WxleekuuW5u+eBr+eJh+eahOaXtuWAme+8jOWPr+S7peS9v+eUqOS7peS4i+W/q+aNt+mUruadpeWvueW5u+eBr+eJh+i/m+ihjOS4jeWQjOeahOaTjeS9nA0KLSBgZmDvvJrkvb/lvpflhajlsY/lsZXnpLoNCi0gYHdg77ya5L2/5b6X5bGV56S655qE5bm754Gv54mH5piv5a695bGP55qEDQotIGBvYO+8muS9v+W+l+WkmuW8oOW5u+eBr+eJh+WRiOWPr+mihOiniOeKtuaAgQ0KLSBgaGDvvJrkvb/lvpflubvnga/niYfkuIrnmoTku6PnoIHmmK/pq5jkuq7nmoQNCi0gYHBg77ya5bGV56S65bm754Gv54mH5LiK5ryU56S66ICF55qE56yU6K6wDQotIOWFtuS7luWmguatpOWbvuaJgOekuu+8miFbXShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vemhhbmdsYW50aWFuMjAyMS9waWN0dXJlL21haW4vaW1nL3JtYXJrLTAzLnBuZykNCjxicj4NCg0KNS4g5bm754Gv54mH5YaF5a6555qE6YCQ5q2l5bGV56S677yaDQotIOaJgOacieW5u+eBr+eJh+mDveaYr+WFiOWxleekuuW5u+eBr+eJh+eahOagh+mimO+8jOaMieS4i+aMiemSruWQjuaJjeiDveWxleekuuW5u+eBr+eJh+eahOWGheWuuemcgOimgeWcqFlBTUznmoRtZXRhZGF0YeS4i+aMh+aYjmluY3JlbWVudGFs5pivdHJ1Ze+8jOWmguS4i+WbvuaJgOekuu+8miFbXShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vemhhbmdsYW50aWFuMjAyMS9waWN0dXJlL21haW4vaW1nL3JtYXJrLTAyLnBuZykNCi0g5aaC5p6c5LiK6Z2i55qEaW5jcmVtZW50YWzlj4LmlbDkuI3orr7nva7pu5jorqTmmK/moIfpopjlhoXlrrnkuIDotbflsZXnpLrnmoTvvIzlpoLmnpzpnIDopoHmjIflrprljZXlvKDnmoTlubvnga/niYfmmK/pgJDmraXlsZXnpLrlhoXlrrnvvIzliJnpnIDopoHlnKjmoIfpopjlhoXlrrnlkI7liqDkuIrlj4LmlbDvvIzkvovlpoJgIyMgR2V0IHVwey5idWlsZH1gDQotIOiAjOavj+W8oOW5u+eBr+eJh+S4iumcgOimgeaMieS4i+aMiemSruaJjeW8ueWHuueahOWGheWuuemcgOimgeWKoOespuWPtz4s5L6L5aaCYD4gLSBlYXQgZWdnc2ANCjxicj4NCg0KNi4g5ZyoWUFNTOeahG1ldGFkYXRh5LiL55qEYGlvc2xpZGVzX3ByZXNlbnRhdGlvbjpg6L+Y5pyJ5Yir55qE5Y+C5pWw77yM5aaCaW5jcmVtZW50YWzov5nkuKrlj4LmlbDkuIDoiKzmjqfliLbkuI3lkIzlip/og73vvIzkvovlpoLvvJoNCi0gYHdpZGVzY3JlZW7vvJp0cnVlYO+8muS9v+W+l+W5u+eBr+eJh+WxleekuuaYr+WuveWxj+eahA0KLSBgc21hbGxlcmDvvJrkvb/lvpfmr4/lvKDlubvnga/niYfkuIvpmaTkuobmoIfpopjlpJbnmoTlhoXlrrnopoHlsI/kuIDlj7fvvIzlpoLmnpzlj6rmmK/mg7PmjIflrprmn5DlvKDlubvnga/niYflhoXlrrnlsI/ngrnvvIzlj6/ku6XlnKjpgqPlvKDlubvnga/niYfmoIfpopjlhoXlrrnlkI7liqBzbWFsbGVy77yM5L6L5aaCYCMjIEdldCB1cHsuc21hbGxlcn1gDQotIGB0cmFuc2l0aW9uOiBzbG93ZXJg5oiW6ICFYHRyYW5zaXRpb246IGZhc3RlcmDmnaXmlLnlj5jlubvnga/niYfot7PovazpgJ/luqYNCg0KNy4g5Y2V54us5bm754Gv54mH55qE5Y+C5pWw6K6+572uDQotIOWPr+S7peWkmuS4quWPguaVsOWQjOaXtuiuvue9ru+8jOS+i+WmguS+i+WmgmAjIyBHZXQgdXB7LnNtYWxsZXIgLmJ1aWxkfWANCi0g5pu05pS55bm754Gv54mH55qE6IOM5pmvLOS+i+WmgmAjIyBHZXR0aW5nIHVwIHtkYXRhLWJhY2tncm91bmQ9Zm9vLnBuZyBkYXRhLWJhY2tncm91bmQtc2l6ZT1jb3Zlcn1gDQo8YnI+DQoNCjguIOWcqHBwdOS4reWxleekuuS7o+eggToNCi0g6ZyA6KaB5L2/55So5Luj56CB5qGG56ym5Y+377yM5aaC5p6c6ZyA6KaB5a+56YOo5YiG5Luj56CB5by66LCD55qE6K+d77yI5bGV546w55qE5pWI5p6c5piv5Yqg57KX55qE77yJ77yM5bqU6K+l5by66LCD55qE5Luj56CB5q6155qE5YmN5LiA6KGM5YqgYCMjIyA8Yj5gO+W8uuiwg+S7o+eggeauteeahOWQjuS4gOihjOWKoGAjIyMgPC9iPmAs5rOo5oSP6L+Z5Lqb6YO95piv5YaZ5Zyo56ym5Y+3YGBg5qGG5L2P55qE5Luj56CB5qGG5YaFDQo8YnI+DQoNCjkuIOWcqHlhbWznmoRtZWRhdGHkuIvnmoTlhoXlrrnlvIDlpLTkuK3lhpnlhaXku6XkuIvku6PnoIHmmK/ooajnpLrliqDpgInpobljaGlsZD0n5paH5Lu25ZCNLlJtZCflj6/ku6XosIPlhaXlj6bkuIDkuKouUm1k5paH5Lu255qE5YaF5a6544CCIOWmguaenOacieWkmuS4qi5SbWTmlofku7bkvp3otZbkuo7nm7jlkIznmoTku6PnoIHvvIzlj6/ku6XnlKjov5nmoLfnmoTmlrnms5XjgIINCiNgYGB7ciBleHRlcm5hbCwgY2hpbGQ9InNldHVwLlJtZCIsIGluY2x1ZGU9RkFMU0V9DQojYGBgDQoNCuiAjHNldHVwLnJtZOaWh+S7tuS4reeahOS7o+eggeWmguS4i++8jOeUqOS6juaJgOaciVBQVA0K55qEUk1E5paH5Lu25Lit77yaDQoNCmBgYA0KI2BgYHtyIGxvYWQtcGtnc30NCiNEbyBub3QgY2hhbmdlIHRoZSBvcmRlciBvZiB0aGUgZmlyc3QgdHdvIGNodW5rcw0KDQpvcHRpb25zKGh0bWx0b29scy5kaXIudmVyc2lvbiA9IEZBTFNFKQ0KbGlicmFyeShrbml0cikNCmtuaXRyOjpvcHRzX2NodW5rJHNldCh3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSwgZWNobyA9IEZBTFNFLCBmaWcucmV0aW5hID0gMykNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShmb250YXdlc29tZSkgIyBmcm9tIGdpdGh1YjogaHR0cHM6Ly9naXRodWIuY29tL3JzdHVkaW8vZm9udGF3ZXNvbWUNCmxpYnJhcnkoa2FibGVFeHRyYSkNCmxpYnJhcnkocGljYW50ZSkNCmxpYnJhcnkoZW50cm9wYXJ0KQ0KbGlicmFyeShwYXRjaHdvcmspDQpsaWJyYXJ5KGdnYW5pbWF0ZSkNCiNgYGANCg0KI2BgYHtyIHNldHVwLW9wdGlvbnN9DQprbml0cjo6b3B0c19jaHVuayRzZXQoDQogIGVjaG8gICAgICAgPSBGQUxTRSwNCiAgZXZhbCAgICAgICA9IFRSVUUsDQogIHdhcm5pbmcgICAgPSBGQUxTRSwNCiAgbWVzc2FnZSAgICA9IEZBTFNFLA0KICB0aWR5ICAgICAgID0gRkFMU0UsDQogIHNpemUgICAgICAgPSAnbm9ybWFsc2l6ZScsDQogIGJhY2tncm91bmQgPSAnI0Y3RjdGNycsDQogIGNvbW1lbnQgICAgPSAnICcsDQogICNkZXYgICAgICAgID0nc3ZnJywNCiAgZGV2LmFyZ3MgICA9IGxpc3QoYmcgPSAndHJhbnNwYXJlbnQnKSwNCiAgY2FjaGUgICAgICA9IEZBTFNFLA0KICBjYWNoZS5wYXRoID0nY2FjaGUvJywNCiAgY2FjaGUudmFycyA9IE5VTEwsDQogIGNhY2hlLmxhenkgPSBUUlVFLA0KICBmaWcucGF0aCAgID0nZmlndXJlLycsDQogIGZpZy5hbGlnbiAgPSdjZW50ZXInLA0KICBmaWcuc2hvdyAgID0naG9sZCcsDQogIGZpZy5yZXRpbmEgPSAzDQopDQojb3B0aW9ucyhjcmF5b24uZW5hYmxlZCA9IFRSVUUpDQojdGhpcyBpcyBuZWNlc3Nhcnkgc28gdGhhdCB0aGUgY29kZSBkb2Vzbid0IHdyYXANCm9wdGlvbnMod2lkdGggPSAxMDAwKQ0KDQpsYXJnZWZvbnR0aG0gPC0gdGhlbWVfYncoKSArIHRoZW1lKA0KICAgIGF4aXMudGl0bGUgICAgICAgID0gZWxlbWVudF90ZXh0KHNpemUgPSAxOCksDQogICAgYXhpcy50ZXh0ICAgICAgICAgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE2KSwNCiAgICBzdHJpcC50ZXh0ICAgICAgICA9IGVsZW1lbnRfdGV4dChzaXplID0gMjApLA0KICAgIHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIyKSwNCiAgICBwbG90LnN1YnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAxOCksDQogICAgcGxvdC5jYXB0aW9uID0gZWxlbWVudF90ZXh0KHNpemUgPSAxNCksDQogICAgbGVnZW5kLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE0KSwNCiAgICBsZWdlbmQudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE2KQ0KICAgICkNCg0KaW52dGhtIDwtIHRoZW1lX21pbmltYWwoKSArDQogIHRoZW1lKA0KICAgIHBhbmVsLmJhY2tncm91bmQgID0gZWxlbWVudF9yZWN0KGZpbGwgPSAndHJhbnNwYXJlbnQnLCBjb2xvdXIgPSBOQSksDQogICAgcGxvdC5iYWNrZ3JvdW5kICAgPSBlbGVtZW50X3JlY3QoZmlsbCA9ICd0cmFuc3BhcmVudCcsIGNvbG91ciA9IE5BKSwNCiAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gJ3RyYW5zcGFyZW50JywgY29sb3VyID0gTkEpLA0KICAgIGxlZ2VuZC5rZXkgICAgICAgID0gZWxlbWVudF9yZWN0KGZpbGwgPSAndHJhbnNwYXJlbnQnLCBjb2xvdXIgPSBOQSksDQogICAgYXhpcy50aXRsZSAgICAgICAgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE4KSwNCiAgICBheGlzLnRleHQgICAgICAgICA9IGVsZW1lbnRfdGV4dChzaXplID0gMTYpLA0KICAgIHN0cmlwLnRleHQgICAgICAgID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMCkNCiAgKQ0KDQp2b2lkdGhtIDwtIHRoZW1lX3ZvaWQoKSArIA0KICB0aGVtZSgNCiAgICBwYW5lbC5iYWNrZ3JvdW5kICA9IGVsZW1lbnRfcmVjdChmaWxsID0gJ3RyYW5zcGFyZW50JywgY29sb3VyID0gTkEpLA0KICAgIHBsb3QuYmFja2dyb3VuZCAgID0gZWxlbWVudF9yZWN0KGZpbGwgPSAndHJhbnNwYXJlbnQnLCBjb2xvdXIgPSBOQSksDQogICAgbGVnZW5kLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9ICd0cmFuc3BhcmVudCcsIGNvbG91ciA9IE5BKSwNCiAgICBsZWdlbmQua2V5ICAgICAgICA9IGVsZW1lbnRfcmVjdChmaWxsID0gJ3RyYW5zcGFyZW50JywgY29sb3VyID0gTkEpLA0KICAgIHN0cmlwLnRleHQgICAgICAgID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMCksDQogICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplPTI4LCBmYWNlPSJib2xkIikNCiAgKQ0KDQojdGhlbWVfc2V0KGludnRobSkNCiN0aGVtZV9nZXQoKQ0KdGhlbWVfc2V0KGxhcmdlZm9udHRobSkNCiNgYGANCmBgYA0KDQoNCg0KDQoNCg0KDQojIyDlhbPkuo7ljIUneGFyaW5nYW4n55qE5L2/55So77yaDQoNCjEuIOW8gOWktOeahOiuvue9rg0KLSDlnKhS5Lit5LiL6L296K+l5YyF77yM54S25ZCO5Zyocm1k55qEWUFNTOeahG1ldGFkYXRh5LiL55qE5Z+65pys6K6+572u5bqU6K+l5aaC5LiL77yaDQoNCmBgYA0KLS0tDQp0aXRsZTogIkNoYW5naW5nIg0KYXV0aG9yOiBaaGFuZ1lpeHVlDQpkYXRlOiBBcHJpbCAyMiwgMjAyMg0Kb3V0cHV0OiANCiAgICB4YXJpbmdhbjo6bW9vbl9yZWFkZXI6IA0KICAgICAgICBjc3M6IHhhcmluZ2FuLXRoZW1lci5jc3MgIA0KICAgICAgICBuYXR1cmU6IA0KICAgICAgICAgICAgaGlnaGxpZ2h0U3R5bGU6IGdpdGh1Yg0KICAgICAgICAgICAgaGlnaGxpZ2h0TGluZXM6IHRydWUNCiAgICAgICAgICAgIHJhdGlvOiAxNjo5DQogICAgICAgICAgICBjb3VudEluY3JlbWVudGFsU2xpZGVzOiBmYWxzZQ0KLS0tDQpgYGANCi0g5YW25LuW6aOO5qC855qE6YCJ5oup5Y+v5Lul5Y+C6ICDW+S7peS4i+e9keWdgF0oaHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3Mzc5MzE2L2FydGljbGUvZGV0YWlscy8xMTMxNzUyNzEpDQo8YnI+DQoNCi0g5Zyo5Y+C5pWwbmF0dXJl5LiL6L+Y5Y+v5Lul6K6+572u55qE5Y+C5pWw5pivYGF1dG9wbGF5OiAzMDAwMGDvvIzooajnpLrmr48zMOenkuiHquWKqOaSreaUvuS4gOW8oHBwdO+8m2Bjb3VudGRvd246IDYwMDAwYO+8jOihqOekuuavj+S4gOW8oHBwdOmDvea3u+WKoOS4gOS4quiuoeaXtuWZqO+8jOWAkuiuoeaXtuS4ujYw56eSDQo8YnI+DQoNCi0g5Zyo5LiO5Y+C5pWwbmF0dXJl5LiL6Z2i5ZCM562J57qn5LiL5Yqg5YWl5Luj56CB6KGMYCBzZWFsOiBmYWxzZWDlj6/ku6XliJvlu7rni6znq4vkuo5ZQU1M5qCH6aKY55qE5qCH6aKY5bm754Gv54mH77yM5Lmf5bCx5piveWFtbOeahG1ldGFkYXRh5LiN5YaN5L2c5Li65byA5aS0cHB077yM6ICM5piv6Ieq5bex6K6+572u55qE5LqG44CCDQoNCjxicj4NCg0KMi4g5q+P5byg5bm754Gv54mH5Y+C5pWw6K6+572uDQrlupTor6XlhpnlnKjmr4/lvKDlubvnga/niYfkuIvvvIzkuZ/lsLHmmK/nrKblj7dgYGDkuIvkuIDooYzvvIwNCi0g5aaCYGNsYXNzOiBjZW50ZXIsIGJvdHRvbSwgaW52ZXJzZWDjgILkuI5jZW50ZXLlkIznuqfnmoTlj4LmlbDpgInpobnov5jmnIlsZWZ05ZKMcmlnaHTvvJvkuI5ib3R0b23nuqfliKvnmoTlj4LmlbDpgInpobnov5jmnIl0b3DlkoxtaWRkbGXvvJtpbnZlcnNl6KGo56S655qE5oSP5oCd5piv5bm754Gv54mH5Y+Y5Li66buR5bqV55m95a2X44CC5aaC5p6c5YOP5Lul5LiK5qCH6aKY6aG155qE5L2N572u5LiN5oOz5q+P5byg6K6+572u77yM5Y+v5Lul5ZyoWUFNTOeahG1ldGFkYXRh5LiL55qEbmF0dXJl5LiL5Lit5YaZ5YWlYHRpdGxlU2xpZGVDbGFzczogWyJsZWZ0IiwgIm1pZGRsZSJdYA0KLSDlpoJgYmFja2dyb3VuZC1pbWFnZTogdXJsKOWbvueJh+e9keWdgClgDQo8YnI+DQoNCg0KMy4g5bm754Gv54mH5YaF5a6555qE6YCQ5q2l5bGV56S6DQotIOS9v+eUqOS7peS4i+S7o+eggeWwhuS8muS9v+W+l+WGheWuueS4gOeCueeCueWHuueOsO+8jOW5tuS4lOazqOaEj+eahOaYr+S4pOS4quespuWPty0t5qGG5L2P55qE5YaF5a655omN5piv5LiA5Liq5o6l5LiA5Liq5Ye6546w55qE77yM5bm25LiU5q+P5LiqLS3nrKblj7flupTor6XmjqXnmoTmmK/mjaLooYznrKbvvIjkuZ/lsLHmmK9lbnRlcu+8ieiAjOS4jeaYr+ebtOaOpeaOpeWGheWuueOAgg0KYGBgDQotLS0NCiMj5oWi5oWi5Ye6546w5YaF5a65DQotLQ0KDQotIOS9oA0KLS0NCg0KLSDlpb0NCi0tDQoNCi0g5LiW55WMDQotLQ0KDQpgYGANCjxicj4NCg0KNC4g5ryU56S66ICF5qih5byP77yaDQotIOWcqOavj+W8oHBwdOeahOS7o+eggeS4reaWsOeahOS4gOihjOaJk+WFpWA/Pz9g77yM6YKj5LmI6Zeu5Y+35LiL6Z2i55qE5YaF5a655bCx5LiN5Lya5ZyocHB05Lit5bGV56S677yM5Zyo572R6aG155WM6Z2i5oyJ5LiL5oyJ6ZKucO+8jOWwseWPr+S7peeci+WIsOazqOmHiueahOWGheWuueOAgg0KLSDlj6/ku6XlsIboh6rlt7HnmoTorqHnrpfmnLrov57mjqXliLDnrKzkuozkuKrlsY/luZXvvIjkvovlpoLmipXlvbHku6rvvInml7bvvIzov5nmoLfplK5j5ZKMcOWwseS8mumdnuW4uOWunueUqOOAguWcqOesrOS6jOS4quWxj+W5leS4iu+8jOWPr+S7peaYvuekuuato+W4uOeahOW5u+eBr+eJh++8jOWQjOaXtuWwhuW5u+eBr+eJh+WFi+mahuWIsOiHquW3seeahOiuoeeul+acuuWxj+W5leS4iuW5tuS9v+eUqOa8lOekuuiAheaooeW8j+OAguWPquacieiHquW3seWPr+S7peeci+WIsOa8lOekuuiAheaooeW8j++8jOS9v+W+l+S9nOS4uua8lOiusuiAheeahOS9oOWPr+S7peeci+WIsOa8lOekuuiAheeslOiusOWSjOaXtumXtO+8jOW5tumihOiniOS4i+S4gOW8oOW5u+eBr+eJhy4NCg0KNS4g5Lqk5LqS5qih5byP55qE5L2/55So77yaDQotIOS6pOS6kuWcsOWbvueahOS9v+eUqO+8jOS9v+eUqOS7peS4i+S7o+eggToNCmBgYA0KLS0tDQrlnLDlm77nmoTlsZXnpLoNCg0KI2BgYHtyIG1hcH0NCmxpYnJhcnkobGVhZmxldCkNCmxlYWZsZXQoKSAlPiUgYWRkVGlsZXMoKSAlPiUgDQpzZXRWaWV3KGxhdCA9IDUxLjQ5NzU2ODQsDQpsbmcgPSAtMC4xMzA2NTEyLCB6b29tID0gMjApDQpgYGANCg0KLSDkuqTkupLlvI/ooajmoLznmoTkvb/nlKjkuLvopoHmmK/nlKjliLBEVOWMheWSjGRhdGFibGXlh73mlbDvvIzkvb/nlKjnmoTmmK/ku6XkuIvku6PnoIHvvJoNCmBgYA0KLS0tDQojYGBge3IgZWNobz1GQUxTRX0NCmxpYnJhcnkoRFQpDQpzZXR3ZCgiRTovYWNhZGVtaWNfcmVzb3VyY2VzL0FGRkMtWHRyYW5pbmcyMDIxLjEwL0t5bGUvTGVzc29uIDUgUGFyYW1ldHJpYyBhc3N1bXB0aW9ucy9MZXNzb24gNSBQYXJhbWV0cmljIGFzc3VtcHRpb25zIikNCmdldHdkKCkNCmRhdGE8LSByZWFkLnRhYmxlKGZpbGU9IkxlYWYgYXJlYSB0aGlja25lc3MuY3N2IixoZWFkZXI9VCxyb3cubmFtZXM9TlVMTCxzZXA9IiwiKQ0KZGF0YXRhYmxlKGRhdGEpDQpgYGANCg0KIyMjIOWFs+S6juWMhSd4YXJpbmdhbkV4dHJhJ+eahOS9v+eUqO+8mg0KW+S4reaWh+aVmeeoi10oaHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3Mzc5MzE2L2FydGljbGUvZGV0YWlscy8xMTcwMDIxNDgpDQoNClvlrpjmlrnmlZnnqItdKGh0dHBzOi8vZ2l0aHViLmNvbS9nYWRlbmJ1aWUveGFyaW5nYW5FeHRyYSkNCg0KMS4g5bm25YiX5pa55byP5bGV56S65ryU56S65paH56i/DQotIOWcqHJtZOaWh+S7tuS4reeahHlhbWznmoRtZXRhZGF0YeS4i+mdoueahOS7o+eggeWdl+S4reWGmeWFpeS7peS4i+S7o+egge+8jOa4suafk+WQjuWcqOa8lOekuueahOeVjOmdouS4reeci+WIsOW5u+eBr+eJh+eahOmihOiniOaooeW8j++8jOaMiU/plK7ljbPlj6/lvpfliLDku6XkuIvlpJrkuKpzbGlkZXPnlYzpnaLvvIzlho3mjIlP6ZSu5Y2z5Y+v5Zue5Yiw6buY6K6k5b2i5byP44CCDQoNCmBgYA0KI2BgYHtSIHhhcmluZ2FuLXRpbGUtdmlldywgZWNobz1GQUxTRX0NCmxpYnJhcnkoImFyaW5nYW5FeHRyYSIpDQp4YXJpbmdhbkV4dHJhOjp1c2VfdGlsZV92aWV3KCkNCmBgYA0KDQoNCjIuIOWcqOe6v+e8lui+kea8lOekuuaWh+eovw0KLSDlkIzmoLflsIbku6XkuIvku6PnoIHliqDlhaXku6PnoIHlhoXlrrnkuK3vvIzpgInnhLblkI7lj6/ku6XlnKjlnKjmlL7mmKDnmoTlubvnga/niYfkuIrnm7TmjqXkuablhpnlhoXlrrnvvIzlrp7ml7bmm7TmlrDjgIINCmBgYA0KI2BgYHtyIHhhcmluZ2FuLWVkaXRhYmxlLCBlY2hvPUZBTFN9DQp4YXJpbmdhbkV4dHJhOjp1c2VfZWRpdGFibGUoZXhwaXJlcyA9IDEpDQpgYGANCg0KLSDlnKjliqDlhaXku6XkuIvku6PnoIHlkI7vvIznlKjku6PnoIFgLmNhbi1lZGl0W11g5qGG5L2P5oOz6KaB5ZyocHB05Lit57yW6L6R55qE5YaF5a6577yM5aaC5p6c5piv6KaB5LiA5aSn5q616YO95Y+v57yW6L6R55qE6K+d5Y+v5Lul55So5Lul5LiL5b2i5byP77yaDQpgYGANCi5jYW4tZWRpdFsNCi0gdGhpbmcgb25lDQotIHRoaW5nIHR3bw0KXQ0KYGBgDQotIOWmguaenOimgeWtmOWCqOW3sue8lui+keW5tuS9v+Wug+S7rOWcqOa1j+iniOWZqOS8muivneS5i+mXtOaMgeS5heWtmOWcqOWPr+S7peS4uuavj+S4quWPr+e8lui+keWtl+auteaPkOS+m+S4gOS4qmAua2V5LSA8TkFNRT5g57G75a2X5q6177yM5aaCYC5jYW4tZWRpdC5rZXktZmlyc3RTbGlkZVRpdGxlW0NoYW5nZSB0aGlzIHRpdGxlIGFuZCB0aGVuIHJlbG9hZCB0aGUgcGFnZV1gDQoNCjMuIOWcqOa8lOekuuW5u+eBr+eJh+S4iui/m+ihjOa2gum4pg0KLSDljZXlh7vpk4XnrJTlm77moIfmiJbmjIlT6ZSu6L+b6KGM57uY5Zu+44CC5oyJU+aIluWQr+WKqOe7mOWbvuaooeW8j+WIh+aNoua2gum4puW3peWFt+euseOAguS9oOS5n+WPr+S7peS9v+eUqOapoeearuaTpuadpeWIoOmZpOe6v+adoeaIluWNleWHu+KAnOa4hemZpO+8iHRyYXNo77yJ4oCd5oyJ6ZKu5riF6Zmk5b2T5YmN5bm754Gv54mH5LiK55qE5omA5pyJ5raC6bim44CC5b2T6KaB5pu05pS55bm754Gv54mH5pe277yM54K55Ye7c+mUrumAgOWbnuWIsOS4gOiIrOeureWktOWHuueOsO+8jOWbvue6uOWwhuS/neaMgeWcqOavj+W8oOW5u+eBr+eJh+S4iuOAguWcqOe7mOWbvuaooeW8j+S4i+S4jeiDveabtOaUueW5u+eBr+eJh+OAguS6i+WunuS4iu+8jOS9oOWPr+S7peS9v+eUqOKGkOWSjOKGkumUruadpeaSpOa2iOaIlumHjeWBmuaCqOeahOWbvue6uOOAguWmguaenOaDs+WwhuW5u+eBr+eJh+S4jua2gum4puS4gOi1t+S/neWtmO+8jOacgOWlveeahOaWueazleaYr+S7jua1j+iniOWZqOS4reaJk+WNsOa8lOekuuaWh+eov+OAgg0KYGBgDQojYGBge3IgeGFyaW5nYW4tc2NyaWJibGUsIGVjaG89RkFMU0V9DQp4YXJpbmdhbkV4dHJhOjp1c2Vfc2NyaWJibGUoKQ0KYGBgDQoNCjQuIOW5u+eBr+eJh+WIh+aNouaXtuacieWjsOmfs+aPkOekug0KLSDlkIzmoLflsIbku6XkuIvku6PnoIHliqDlhaXku6PnoIHlhoXlrrnkuK0NCmBgYA0KI2BgYHtyIHhhcmluZ2FuLXNsaWRlLXRvbmUsIGVjaG89RkFMU0V9DQp4YXJpbmdhbkV4dHJhOjp1c2Vfc2xpZGVfdG9uZSgpDQpgYGANCg0KNS4g5bCG6YCJ6aG55Y2h6Z2i5p2/5Yqg5YWl5bm754Gv54mH5LitDQotIOWQjOagt+WwhuS7peS4i+S7o+eggeWKoOWFpeS7o+eggeWGheWuueS4reOAgg0KYGBgDQojYGBge3IgeGFyaW5nYW4tcGFuZWxzZXQsIGVjaG89RkFMU0V9DQp4YXJpbmdhbkV4dHJhOjp1c2VfcGFuZWxzZXQoKQ0KYGBgDQoNCi0g54S25ZCO77yM5Yib5bu65LiA5Liq5YyF5ZCr6Iul5bmy5LiqLnBhbmVsW13nmoQucGFuZWxzZXQgWy4uLl3jgIIg5q+P5LiqLnBhbmVsIFtd5bqU6K+l5YW35pyJLnBhbmVsLW5hbWUgW13lkozmg7PlhpnnmoTlhoXlrrnjgIINCmBgYA0KI2BgYA0KLnBhbmVsc2V0Ww0KLnBhbmVsWy5wYW5lbC1uYW1lW1IgQ29kZV0NCuWGheWuueS7o+eggTENCl0NCi5wYW5lbFsucGFuZWwtbmFtZVtQbG90XQ0K5YaF5a655Luj56CBMg0KXQ0KXQ0KYGBgDQoNCjYuIOe7meW5u+eBr+eJh+a3u+WKoOWFqOWxgGxvZ28NCi0g5ZCM5qC35bCG5Lul5LiL5Luj56CB5Yqg5YWl5Luj56CB5YaF5a655Lit77yM6ZyA6KaB5rOo5oSP55qE5piv5L2/55So5Zu+5bqK55qE5pe25YCZ6YCJ5oup5LqGbWFya2Rvd27moLzlvI/nspjotLTov4fmnaXnmoTlnLDlnYDpnIDopoHlgZrkv67mlLnvvIzmr5TlpoLljrvmjolgIVtdKClg6L+Z5Lqb56ym5Y+35Y+Y5oiQdXJs55qE5qC85byP5omN5Y+v5Lul5pi+56S644CCDQpgYGANCiNgYGB7ciB4YXJpbmdhbi1sb2dvLCBlY2hvPUZBTFNFfQ0KeGFyaW5nYW5FeHRyYTo6dXNlX2xvZ28oDQogIGltYWdlX3VybCA9ICJodHRwczovL2dpdGVlLmNvbS96aGFuZ2xhbnRpYW4yMDIxL3BpY3R1cmUvcmF3L21hc3Rlci9pbWFnZXMvMjAyMjA0MjYxODA5MTMwLnBuZyINCikNCmBgYA0KDQoNCg0K</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("use-Rmarkdown.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

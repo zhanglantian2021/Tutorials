@@ -1,0 +1,174 @@
+---
+title: "Reproducible-Science-slides"
+author: Zhang Yixue
+date: July , 2022
+output: 
+    xaringan::moon_reader: 
+        nature: 
+            highlightStyle: github
+            highlightLines: true
+            ratio: 16:9
+            countIncrementalSlides: true          
+---
+
+```{css include=FALSE}
+<style type="text/css">
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 19px;
+}
+pre {
+  font-size: 70px
+}
+</style>
+```
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version=FALSE)
+knitr::opts_chunk$set(tidy=FALSE, echo=TRUE, cache=FALSE)
+```
+
+
+```{R xaringan-tile-view, include=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-editable, include=FALSE}
+xaringanExtra::use_editable(expires = 1)
+```
+
+```{r xaringan-scribble, include=FALSE}
+xaringanExtra::use_scribble()
+```
+
+
+```{r xaringan-panelset, include=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r xaringan-fit-screen, include=FALSE}    
+xaringanExtra::use_fit_screen()  
+```  
+
+
+class: center, middle
+# REPRODUCIBLE?
+
+<img src="E:/academic_resources/note-tutorial/data/img/reproducible.png" width="600"/>
+---
+class: center, middle
+# Markdown
+---
+## What is Markdown?
+
+Markdown is a **lightweight markup** language for creating formatted text using a plain-text editor.
+
+<img src="E:/academic_resources/note-tutorial/data/img/markdown1.png" width="300"/>
+
+???
+A lightweight markup language (LML), also termed a simple or humane markup language, is a markup language with simple, unobtrusive syntax. It is designed to be easy to write using any generic text editor and easy to read in its raw form. Lightweight markup languages are used in applications where it may be necessary to read the raw document as well as the final rendered output.
+---
+## Basic grammar
+
+[Demo1](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo1.html)
+
+1. Headings&list&checkbox
+
+2. Font-color&shape
+
+3. Link&picture
+
+4. Formula&latex
+
+5. Content
+
+6. sheet
+
+---
+class: center, middle
+# Rmarkdown
+---
+## What is Rmarkdown
+- R Markdown provides an authoring framework for data science
+
+- R Markdown documents are fully reproducible and support dozens of static and dynamic output formats.
+
+```
+install.packages("rmarkdown")
+```
+<img src="E:/academic_resources/note-tutorial/data/img/Rmarkdown2.png" width="300"/>
+
+
+
+???
+You can use a single R Markdown file to save and execute code and
+generate high quality reports that can be shared with others
+
+---
+## Yaml
+
+[Demo2](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo2.html)
+
+- YAML is a digestible data serialization language often used to create configuration files with any programming language
+
+<img src="E:/academic_resources/note-tutorial/data/img/yaml.png" width="300"/>
+
+---
+## The bridge of R and markdown-knitr
+- It is a package in the programming language R that enables integration of R code into LaTeX, HTML, Markdown,etc . 
+- The purpose of knitr is to allow reproducible research in R through the means of literate programming
+
+```
+install.packages("knitr")Demo
+```
+<img src="E:/academic_resources/note-tutorial/data/img/Rmarkdown2.png" width="300"/>
+
+---
+## Basic grammar
+[Demo2](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo2.html)
+
+1. chunk：global & single
+
+2. display：result；sheet；picture
+
+3. cite：format & template
+
+---
+class: center, middle
+# Git$Github
+---
+## what is Git?
+Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+
+<img src="E:/academic_resources/note-tutorial/data/img/git10.jpg" width="300"/>
+
+---
+## what is Github?
+GitHub offers the distributed version control and source code management (SCM) functionality of Git, plus its own features such as bug tracking, feature requests, task management, continuous integration, and wikis for every project.
+
+<img src="E:/academic_resources/note-tutorial/data/img/github.png" width="300"/>
+
+---
+## What happen under version control?
+working directory -> repository
+
+<img src="E:/academic_resources/note-tutorial/data/img/git1.png" width="300"/>
+
+---
+## Basic grammar
+
+[Demo3](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo3.html)
+
+1. Manipulate documents
+2. Back up
+3. Roll back
+
+---
+class: center, middle
+# Workflowr
+[Demo4](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo4.html)
+---

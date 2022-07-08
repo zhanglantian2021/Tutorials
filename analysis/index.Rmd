@@ -27,3 +27,12 @@ editor_options:
 
 - [ReproScie-demo4](ReproScie-demo4.html)
 
+# Others
+1. [use-git](use-git.html)
+2. [use-latex](use-latex.html)
+3. [use-markdown](use-markdown.html)
+4. [use-Rmarkdown](use-Rmarkdown.html)
+5. [use-Rbasic](use-Rbasic.html)
+6. [use-VScode](use-VScode.html)
+7. [use-zotero](use-zotero.html)
+

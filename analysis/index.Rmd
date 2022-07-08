@@ -8,14 +8,22 @@ editor_options:
   chunk_output_type: console
 ---
 # Advanced Statistics
+
 [AdvanceSta-note](AdvanceSta-note.html)
+
 [AdvanceSta-slides](AdvanceSta-slides.html)
 
 # Reproducible Science
+
 [ReproScie-note](ReproScie-note.html)
+
 [ReproScie-slides](ReproScie-slides.html)
+
 - [ReproScie-demo1](ReproScie-demo1.html)
+
 - [ReproScie-demo2](ReproScie-demo2.html)
+
 - [ReproScie-demo3](ReproScie-demo3.html)
+
 - [ReproScie-demo4](ReproScie-demo4.html)
 

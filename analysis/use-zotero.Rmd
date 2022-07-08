@@ -1,0 +1,94 @@
+---
+title: "use-zotero"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+
+### 下载
+
+1. `https://www.zotero.org/support/dev_builds`该版本是可以支持内置阅读pdf格式的，下载完成后，点击zotero的编辑首选项中设置一下：
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero5.png)
+
+2. 要能够使用知网pdf下载的插件需要上知网海外版：https://chn.oversea.cnki.net/index/
+
+### 插件的使用
+
+1. ZoteroQuickLook 插件
+- Windows 用户必须首先安装快速浏览工具才能使用按空格执行文件预览功能。故您需要安装==QuickLook==软件对ZoteroQuickLook 插件进行必要的辅助。
+- 安装插件后且下载完quicklook后在菜单栏选择编辑的首选项，然后在弹出窗口选择高级，在高级页面选择设置编辑器，然后搜索搜索extensions.zoteroquicklook.customviewcommand。将此配置的值设置为QuickLook.exe的完整路径。
+- 然后选择某个文件按空格键就可以pdf形式的预览文件了
+- 
+2. Jasminum 插件
+- 可以使得姓和名合并或拆分
+- 使得知网下载的学位论文导入目录：https://www.163.com/dy/article/GRSRC94L0538H9RK.html
+- 
+3. ZotFile 插件
+- 其能对文献进行作者-年份-文献标题该特定样式的修改，在zotero主页面点击工具后选择 ZotFile Preference，在弹出页面选择Renaming Rules模块，若您想对其进行修改，可前往 ZotFile 官网 ，其内有完整的不同样式表达式：http://zotfile.com/
+- ZotFile的主要作用在于将文献相关的pdf文档统一存放(可将该位置进行坚果云同步)，且统一存放的方式由用户自定义。比如，可以按照*“年份 - 期刊”样式作为文件框架，将相应的pdf文献对应存储。与此同时，pdf文献的命名也可以进行自定义，如“作者 - 年份 - 标题”*，方便在需要的时候进行辨别查找。
+- 命名规则设置：Zotero→Tools→ZotFile Preferences→Renaming Rules，这里可以根据需求对pdf文件进行重命名，比如{%a - }{%y - }{%t}对应的是作者 - 年份 - 文章名，其他自定义详见ZotFile官网。当然，也可以选择使用Zotero默认的命名方式。
+- 右键书籍选择 manage attachment 然后选择get table of conents 即可得到目录，而中文的可以右键知网助手添加pdf书签后得到
+- 
+4. markdown here 插件
+- 插件下载地址：`https://www.dropbox.com/s/wjuq1nqh4nh9k4s/markdown.xpi?dl=1&raw=1`，然后在zotero中选择条目后选择右侧的笔记添加，按下快捷键：【ctrl+alt+m】，你用Markdown写的笔记就生成为漂亮的文档了！快捷键无法使用的时候可以点击上面的文件然后选择markdown转换。
+
+### 操作上的教程
+新手友好视频教程[https://www.bilibili.com/video/BV1ZE411p7qT/]
+1. 以前那些乱七八糟的PDF怎么处理呢？我们可以将每本电子书拖到对应条目下面。然后批量重命名即可。如下图所示：
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero2.png)
+
+2. 数据存储及文件同步的问题：https://blog.csdn.net/wwlswj/article/details/113416164，
+- 基本设置如下面的图：
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero6.png)；![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero7.png)；![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero9.png)
+
+3. 网络图书馆的使用：`https://www.zotero.org/zhanglantian2021/library`
+通常它的内存很少，所以可以使用坚果云：https://help.jianguoyun.com/?p=3168
+配置如下图：
+![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero-jianguoyun.png)
+
+4. 文件同步功能最好取消否则会导致做的笔记会退回到十几秒的状态：![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero4.png)
+   
+5. 分享与保存的问题：完稿轉為純文字(可後續更改行距、縮排、字型等格式，並可提交分享)：在使用 Zotero插入書目資訊到MS Word時，您使用的Zotero文獻庫與MS Word間存在參數以供連結更新引文的Style 或內容，若直接將帶有參數的檔案提供給其他沒有儲存該文獻庫的電腦開啟，將無法看到引文資訊，因此應轉為純文字後才能提交或分享。而部分Zotero無法提供的格式修改，也可在轉為純文字後進行，避免造成參數連結問題。轉純文字請點選Unlink Citation，即完成轉換。最好在转换前保存有带参数的word文档，以便日后转换和修改文档使用。
+   
+6. 在百度学术等地方搜索文章标题，然后点击引用，选择导出到bibtex，然后全选复制弹出窗口的内容，再回到zotero的那个pdf所在的文件夹下的页面按`ctrl+shift+alt+I`，再把那个pdf文件拖到该导入的bibtex文件中。有时候导出的bibtex是个.bib格式的文件，那么在zotero界面按`shift+ctrl+I`后在弹出的窗口选择该格式文件导入即可。
+   
+7. R和R包的引用方法：http://yangliufr.com/post/how-to-cite-r-in-your-paper-or-publication
+代码`citation("R包名字")`后出现的直接引用的内容，如果要导入到zotero的bibtex格式就用代码`print(citation("R包的名字"),bibtex=TRUE)`
+
+8. 在Zotero軟件界面對應條目上，單擊右鍵，在彈出對話框選擇ExtractAnnotations。在提取注釋的同時，Zotfile在每條注釋下還創建了超連結，點開注釋文本後面的藍色超連結，就可以順利定位到你的筆記位置。在讀一篇長達數百頁的綜述（如Chemical Review以及書籍）時，可以先做高亮筆記，導出注釋，當需要查閱的時候，直接點擊超連結，到達目的頁面，非常方便
+原文網址：https://kknews.cc/news/4vkxzpq.html
+
+9. 移动文件夹而zotero无法找到的时候：https://sspai.com/post/59035
+
+### 扩展使用的教程
+
+1. https://www.yangzhiping.com/tech/zotero5.html
+
+### 怎么判断文章的重要性
+
+1. 作者的重要性：比如【H指数】
+   
+2. 文献的引用次数：比如【Google学术引用次数】
+- 下载插件`https://github.com/beloglazov/zotero-scholar-citations`
+- 该插件开发者为了避免将你条目自带的【引用次数】字段与【Google学术引用次数】冲突，所以，他将其保存在【其它】那个字段里面去了。怎么显示它？如下图所示：![](https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero1.png)
+  
+3. 文献的学术社交媒体影响力，比如【altmetric分数】
+将这个页面的书签`http://www.altmetric.com/bookmarklet.php`拖到Chrome菜单栏上即可。打开文章的原文网页，然后点击Chrome书签栏上，我们在前一个步骤创建的书签：Altmetric it。奇迹发生了！我们获得了一个分数，以及获得了全世界主要的媒体、博客、推特们对这篇文献的讨论。它是社交媒体中非常热门的一个讨论话题。
+
+

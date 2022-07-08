@@ -1,0 +1,1764 @@
+---
+title: "Advance-Statistics-note"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+<mark>说明：所有例子的原始数据已经通过可翻页的表格附在文中，大部分三级标题下的内容是以选项卡的方式附在二级标题下，因此注意小心错过对部分内容的浏览！！所有原始课件和代码都在课题组坚果云TREC Group\Statistics\Kyle_R Advanced workshop_Linear Models Course (2019 Bubeng)路径下，Kyle于19年的课程与今年的内容几乎都一样。另外因为为英文课程，因此该笔记内容是基于个人理解上的中文笔记并且添加一些其他来源的资料补充，所以可能存在一些错误，有错误请与我联系：`zhanglantian2021@gmail.com`</mark>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
+```
+
+# 简单线性模型(LM)
+## 基本概念
+1. 残差：观测值与估计值之差
+2. 总的变异：是各个观测点与均值之差的平方和；是回归平方和与离回归平方和之和。自由度为n-1（n为样本个数）
+3. 回归平方和：就是各个估计值与均值之差的平方和，是由于y与x之间存在直线关系所引起的y的变异程度，反映了在y的总变异中由于x与y的直线关系，而使y变异减小的部分，在总平分和中可以用x解释的部分。可以用U表示，自由度为1（只涉及自变量的个数），U值大说明回归效果好。
+4. 离回归平方和：就是各个观测值与估计值之差的平方和，是误差因素引起的平方和，反映了x对y的线性影响之外的一切因素对y的变异作用，也就是在总平方和中无法用x解释的部分。可以用Q值表示，自由度为n-2（因为涉及两个参数，斜率和截距的计算），Q值越小说明拟合效果越好。
+<br>
+
+## 基本假设：
+
+模型形式：$y_i=\beta_0+\beta_1X_i+\varepsilon_i$ 
+
+1. 在LM中，残差$\varepsilon_i$是正态分布，残差之间是相互独立的，仅与自己本身相关，其方差是同质性的。（是否变量的数据之间是相互独立以及方差齐性可以这么理解？）
+2. 在判断两变量是否存在线性关系中，零假设$H_0$为斜率$\beta_1=0$，备择假设是：$H_1$为斜率$\beta_1\neq0$
+
+
+
+## 代码相关基础 {.tabset}
+<span id="jump1"></span>
+
+### 目录
+<请对上面的选项卡进行选择>
+<br>
+
+- 变量的定义
+- 模型诊断图
+
+
+
+### 变量的定义
+1. ordinal predictor=varates(连续或不连续的)；categorical predictors=factor
+ - note：数据连续与否看的不是数据点的多少，而是数据本身的特性，而随着一些观念的发展，本身非连续的数据有可能变成连续的，比如性别。
+<br>
+
+2. 在对分类变量进行编码时，仅可用重复的1或0来编码，即使分类水平有两个以上时候，相当于开关，在分类变量中，以1编码的那个分类水平为关注的，其他分类水平全要编为0，也就是作为基准线的编码为0
+<br>
+
+[回到选项卡](#jump1)
+
+### 模型诊断图
+1. residual-Leverage残差杠杆图，用plot(lm())即可得出，用来在回归模型中识别有影响力的观测值。
+ - 数据集中的每个观测值都在图中显示为一个点。X轴显示每个点的杠杆率，Y轴显示每个点的标准化残差。
+ - 杠杆率指的是，如果从数据集中删除一个特定的观察值，回归模型中的系数会发生多大的变化。高杠杆率的观察值对回归模型中的系数有很大影响。如果我们去掉这些观察值，模型的系数会有明显的变化。
+ - 值得注意的是，一个观测值的标准化残差的绝对值可以很高，但杠杆率的值却很低。
+ - 如果该图中的任何一点落在Cook’s distance之外（红色虚线），那么它就被认为是一个有影响的观察。如果这样的话可能的做法是：检查那些数据点是否是由于个人错误导致，不是的话考虑用的模型再次拟合，如果本来的回归模型足够好了，那么就删除掉这些异常点重新跑模型（系数将发生显著变化）。
+ 
+ <br>
+
+2. qqplot():Q-Q Plot 全名是 Quantile-Quantile Plot，是一种视觉化比较两项数据的分布是否相同的方法。
+ - 判断方法一句话概括：把有興趣的數據，以及（相對應分位數的）理論常態分佈值，畫出散佈圖。如果呈現一直線，該數據就是常態分佈。
+ - Quantile 的中文是 分位數，是用數據量來分割資料、而不是用數值本身來分割資料，簡單地講就是名次，那么Quantile-Quantile：兩組數據各自相同名次的比較，Q-Q Plot 的原理，是先幫有興趣的數據排名次，再為每個名次找出理論常態分配中、同樣名次對應到的值是多少。如果數據符合常態分配，各名次之間的數據值相對差異應該要符合特定模式。例如：
+ ![](E:/academic_resources/note-tutorial/data/img/sta-01.png)
+ - Q-Q Plot 不是只有判斷「是否為直線」或者「是否為常態分配」，即使畫出來的不是直線，還是能看出資料分配的特性，例如：
+ ![](E:/academic_resources/note-tutorial/data/img/sta-02.png)
+ - 非视觉化的统计学对正态性的检验：Shapiro-Wilk test；Kolmogorov-Smirnov test；Anderson-Darling test，[详情请点击](http://www.hmwu.idv.tw/web/R_AI/v2/hmwu_StatR-05-1_NonParametric_basic.pdf)
+
+[回到选项卡](#jump1)
+
+
+<br>
+
+
+## 模型构建code {.tabset}
+<span id="jump2"></span>
+
+### 目录
+
+<请对上面的选项卡进行选择>
+<br>
+
+- 连续变量
+- 分类变量
+- 分类和连续
+
+### 当predictor为连续变量时
+
+1. **通过手动计算矩阵来理解如何估计参数：**
+```{r Matrix1}
+#以下给出了所有原始数据的查看：
+fishspeed <-read.table(file="E:/academic_resources/note-tutorial/data/fishspeed.csv",header=T,row.names=NULL,sep=",")
+fishspeed
+#告诉R，β0一整列是1
+b0 <- c(rep(1,dim(fishspeed)[1])) 
+b1 <- fishspeed$Temperature
+X <- data.frame(b0,b1)
+X <- as.matrix(X)
+#得到一个关于b0和b1的2✖1的矩阵
+X
+y <- fishspeed$Speed
+#把矩阵X倒置
+Xt <- t(X)
+#比较转置前后的区别
+dim(X);dim(Xt)
+# %*% 表示矩阵相乘
+XX <- Xt %*% X
+#因为矩阵X是18✖2的，Xt是2✖18的，再把这两个矩阵相乘的话，中间部分的18会抵消的，因此得到一个2✖2的新矩阵
+dim(XX)
+XXinv <- solve(XX)
+#这里是指把矩阵XX倒置后得到的计算结果
+XXinv
+Xy <- Xt%*%y
+B <- XXinv %*% Xy
+#这个得到的结果是得到的结果说明截距为17.34；斜率为2.97
+B
+```
+- 参数矩阵$\hat{\beta}$表示为一列两行（分别截距和斜率）的矩阵；X表示为：样本个数n（也是行数）✖参数个数（也是列数，包含了截距和自变量的个数）的矩阵，其中第一列对截距的表示全用1，后面几列全是自变量的数据;矩阵y为一列，为因变量的数据。因此$\hat{\beta}=(X'X)^{-1}X'y$
+
+<br>
+
+
+2. **模型结果的说明：**
+
+```{r Speed-TEM}
+fishspeed <-read.table(file="./data/fishspeed.csv",header=T,row.names=NULL,sep=",")
+summary(lm(Speed~Temperature,data= fishspeed))
+```
+- 结果表明截距（intercept）不显著，唯一的连续predictor的系数（也就是斜率，Temperature ）显著，因此$\beta_0=0$，因为截距是与0做比较的，而$\beta_2≠0$，speed和temperature有显著线性相关
+-  Multiple R-squared:  0.5476是指模型对数据的解释程度。
+-  F-statistic: 19.37 on 1 and 16 DF,  p-value: 0.0004461，是指通过F检验来判断是两变量是否有线性关系，零假设是两变量无线性关系，备择假设是有线性假设，而F值的计算是由(U/1)/(Q/n-2)得来的，其P值也说明了speed与temprature之间存在线性关系。
+<br>
+
+[回到选项卡](#jump2)
+
+
+### 当predictor为分类变量时
+
+1. **通过手动计算矩阵来理解如何估计参数：**
+```{r Matrix2}
+#得到每个物种的样本有多少
+table(fishspeed$Species)
+#这是指把1重复10遍代表是trout的有10个样本，同理，galaxias有8个样本，在连续性变量中b1就是本来自变量的值。
+b1 <- c(rep(1,10),rep(0,8))
+X <- data.frame(b0,b1)
+X <- as.matrix(X)
+y <- fishspeed$Speed
+Xt <- t(X)
+XX <- Xt %*% X
+XXinv <- solve(XX)
+Xy <- Xt%*%y
+B <- XXinv %*% Xy
+#这里的b0的36.4是指物种Galaxias这一组别下speed的平均速度，b1只是指这两类别的均值之差。
+B
+```
+<br>
+
+2. **模型结果说明：**
+```{r Speed-species}
+fishspeed <-read.table(file="./data/fishspeed.csv",header=T,row.names=NULL,sep=",")
+fishspeed$Species <- as.factor(fishspeed$Species)
+summary(lm(Speed~Species,data= fishspeed))
+t.test(Speed~Species,data= fishspeed,var.equal = TRUE)
+```
+- lm模型表明：intercept的36.4是指物种Galaxias这一组别下speed的平均速度，而b1+b0的和是指物种Tout这一组别下的speed的平均速度，所以b1只是指这两类别的均值之差。因此SpeciesTrout这一列指的是trout和Galaxias两组比较有显著差异。
+- 用t检验的结果很好的说明了上面的描述，用t检验是因为是小样本事件，比较的是两个物种（组别）的y（速度）的均值是否有很大差异，两个组别下的样本量不一样，一组为8，一组为10，因此要用`var.equal=TRUE`来强调这两组别的方差是齐质的，否则默认为FAULSE
+<br>
+
+[回到选项卡](#jump2)
+
+
+### 当predictor有分类和连续变量时
+
+1. **通过手动计算矩阵来理解如何估计参数：**
+```{r Matrix3}
+#以下给出了所有原始数据的查看：
+fishspeed2 <-read.table(file="./data/fishspeed2.csv",header=T,row.names=NULL,sep=",")
+fishspeed2
+fishspeed2$Species <- as.factor(fishspeed2$Species)
+#记住估计参数的矩阵B ~ (X'X)-1 X'y
+#赋予截距矩阵b0全是1
+b0 <- c(rep(1,dim(fishspeed2)[1]))
+table(fishspeed2$Species)
+#赋予b1是关于连续变量-温度的矩阵，b2矩阵代表的是分类变量中Tenebrias水平，编码为1，b3矩阵代表的是是分类变量中Trout水平的变量，编码为1。
+b1 <- fishspeed2$Temperature
+#b2 <- c(rep(0,8),rep(1,11),rep(0,10))；b3 <- c(rep(0,8),rep(0,11),rep(1,10))，不能像这样赋予b2和b3，否则结果出来的和lm()不一样，目的是为了每个编码为1的分类变量水平处于开端或末端。
+b2 <- c(rep(0,10),rep(0,8),rep(1,11))
+b3 <- c(rep(1,10),rep(0,8),rep(0,11))
+#这是关于相互作用的矩阵
+b4 <- b2*b1
+b5 <- b3*b1
+X <- data.frame(b0,b1,b2,b3,b4,b5)
+X <- as.matrix(X)
+y <- fishspeed2$Speed
+Xt <- t(X)
+XX <- Xt %*% X
+XXinv <- solve(XX)
+Xy <- Xt%*%y
+B <- XXinv %*% Xy
+B
+#可以用以下函数检查一下是否与矩阵计算的一样。
+co <- coef(lm(Speed~Temperature*Species,fishspeed2))
+knitr::kable(co)
+```
+
+
+2. **模型结果说明：**
+```{r Speed-TEM$species}
+fishspeed2 <-read.table(file="./data/fishspeed2.csv",header=T,row.names=NULL,sep=",")
+fishspeed2$Species <- as.factor(fishspeed2$Species)
+#开头chunk命名不能用{r Speed-TEM*species}，否则会导致无法调用plot-device
+plot(fishspeed2$Temperature, fishspeed2$Speed,col= c("red", "blue","green")[as.numeric(fishspeed2$Species)])
+#species在后面是因为基于species不同所以温度和速度之间的关系模式有变化所以用的不是加和关系，而且species是factor。
+lm1 <- lm(Speed~Temperature*Species,fishspeed2)
+summary(lm1)
+knitr::kable(summary(lm1)$coefficients)
+anova(lm1)
+```
+- 因为自变量有两个，而且一个连续的一个是分类的，所以summary中：$\beta_0$就是基准线的`Intercept`，基准线的斜率就是`Temperature`-$\beta_1$，而`SpeciesTenebrias` 下的数值是$\beta_2$，指的是物种`Tenebrias`与基准线截距相比，截距变化了多少。而`SpeciesTrout`下的数值是$\beta_3$，指的是物种`Trout`与基准线截距相比，截距变化了多少。`Temperature:SpeciesTenebrias `为$\beta_4$，指的是物种`Tenebrias`与基准线的斜率相比变化了多少；同理`Temperature:SpeciesTrout`为$\beta_5$，指的是物种`Trout`与基准线的斜率相比变化了多少。因此每个物种的线性模型是：
+    - y(G)=22.44+x；
+    - y(Te)=(22.44+21.58)+(1+1.37)x;
+    - y(tr)=(22.44+18.35)+(1+1.63)x
+- 因此结果表明其他两个物种分别与galaxes相比截距和斜率都有显著性差异，当关于斜率差异的信息是非显著而截距差异信息是显著的时候需删除相关的变量重新跑一遍，但是关于斜率差异的信息是显著的，而截距差异信息是非显著的时候，该自变量在模型中不可以删除。
+- 因此在lm1中的full model应该这么写:S = b0 + b1*T + b2[Ten] + b3[Tro]  + b4*T[Ten]  + b5*T[Tro]
+- anova的分析结果是两个自变量以及两者相互作用分别与因变量的关系是否显著。如果相互作用不显著，需要重新写成加和关系再跑一遍模型。
+- 本来默认是的基准线是galaxes，也就是把它编码为1，其他编码为0，是以它为基准的。因为把它设置为factor的时候，默认的排序是按字母排的，以排第一个的为基准线，要更改的话用函数relevel()
+```{r Relevel}
+fishspeed2$Species <- relevel(fishspeed2$Species, ref = "Tenebrias")
+lm2 <- lm(Speed~Temperature*Species,fishspeed2)
+summary(lm2)
+```
+- 基准线改变是不会改变每个方程的系数，可是会改变结果显示是否显著，因为比较的基准线变了，是指另外两条线分别和基准线的截距和斜率相比，另外两条线的截距和斜率与基准相比的变化的部分是否有显著差异。
+
+[回到选项卡](#jump2)
+
+
+<br>
+<br>
+
+## 检查lm模型准则 {.tabset}
+<span id="jump3"></span>
+
+### 目录
+
+<请对上面的选项卡进行选择>
+<br>
+
+- 检查异常值
+- 检查正态性
+- 检查方差同质性
+
+
+### 检查异常值
+```{r obs}
+#每段代码前都要setwd一下，否则无法找到文件
+fishspeed2 <-read.table(file="./data/fishspeed2.csv",header=T,row.names=NULL,sep=",")
+#summay一下引入的数据，看每列数据的结构
+summary(fishspeed2)
+lm3 <- lm(Speed~Temperature*Species,fishspeed2)
+summary(lm3)
+#检查有无异常观测值
+par(mfrow=c(2,2))
+plot(lm3)
+```
+
+- residual-Leverage残差杠杆图表明没有数据点在Cook’s distance，也就没有异常观测数据。
+
+[回到选项卡](#jump3)
+
+### 检查正态性
+```{r residual }
+#视觉化和统计学上来检查残差
+resids <- resid(lm3, type='pearson')
+library(car)
+qqPlot(resids)
+shapiro.test(residuals(lm3))
+```
+- 对残差的qqplot结果表示，在95%的置信区间，残差的正态性还可以。
+- shapiro.test结果表明p值为0.8，not significant，所以是正态的,注意的是该方法一般适用于小样本量（50 < n < 100）
+
+[回到选项卡](#jump3)
+
+### 检查方差同质性
+```{r fangcha}
+#方差同质性的检查
+plot(sqrt(abs(resids))~lm3$fitted); abline(a = 1.96, b = 0, col = 2)
+leveneTest(residuals(lm3), as.factor(fishspeed2$Species))
+
+```
+- 对残差绝对化后，对其与模型的拟合值关系做图，plot的图表明点是均匀分布的，因此方差是同质性的，<mark>红线1.96？</mark>
+- leveneTest是对按species分组，来检查组与组之间的方差是否是同质的，p值是0.17，not significant，因此是同质的。
+- 其它视觉化效果更好的关于正态性和同质性的检验
+```{r check2}
+library(tidyverse)
+library(performance)
+library(see)
+library(qqplotr)
+check_model(lm3)
+```
+
+[回到选项卡](#jump3)
+
+<br>
+<br>
+
+# 广义线性模型(GLM)
+## 基本分布 {.tabset}
+<span id="jump4"></span>
+
+### 目录
+
+<请对上面的选项卡进行选择>
+<br>
+
+- 正态分布
+- 伽马分布
+- Beta分布
+- 二项式分布
+
+
+### 正态分布Nomal
+没有边界，有均值μ和方差σ2；有两个参数；用于连续性数据。![](E:/academic_resources/note-tutorial/data/img/sta-normal.png)
+<br>
+
+[回到选项卡](#jump4)
+
+
+### 伽马分布Gamma
+边界时0到正无穷，但不包含0；有两个参数𝛼(shape)和𝛽(rate)，mean (μ = 𝛼 / 𝛽)variance (σ2 = 𝛼 / 𝛽2)；用于连续性的有边界的数据；当作是其他几个分布的先验(Normal, Poisson) ![](E:/academic_resources/note-tutorial/data/img/sta-gamma.png)
+<br>
+
+[回到选项卡](#jump4)
+
+
+### Beta分布
+边界在0到1且包含0和1；有两个参数 𝛼>0, 𝛽>0，也是通过这两个参数算出均值和方差；用于比例型连续数据,，当作是其他几个分布的先验(Binomial, Neg Bin, Geometric)
+
+![](E:/academic_resources/note-tutorial/data/img/sta-beta.png)
+<br>
+
+[回到选项卡](#jump4)
+
+
+### 泊松分布Poisson
+边界是从0到正无穷，而且包含0；而且均值等于方差，即：μ = σ2(=λ)；仅有一个参数 ；用于描述某一特定事件在某一时间或空间的发生次数。或者计数型数据，即使离散型数。![](E:/academic_resources/note-tutorial/data/img/sta-possion.png)
+<br>
+
+[回到选项卡](#jump4)
+
+
+### 二项式分布Binomial：
+边界在0到1且包含0和1；μ = np, success或yes的概率；σ2 = μ (1 – μ) ；用于二项式数据，如按0和1编码的数据，或二项式数据的比例之和等于给定的试验次数n，即离散型数![](E:/academic_resources/note-tutorial/data/img/sta-binomal.png)
+<br>
+
+[回到选项卡](#jump4)
+
+## 基本概念 {.tabset}
+<span id="jump5"></span>
+
+### 目录
+<请对上面的选项卡进行选择>
+<br>
+
+- link-function
+- MLE
+- over/under-dispersion
+- LRT
+- AIC
+
+
+### link-function 
+在glm中有一个link function，来把响应变量转换成一个没有边界的，线性的，适合进行回归分析的新回归变量，同时它也确保估计值受制于响应的原始分布的界限。![](E:/academic_resources/note-tutorial/data/img/sta-link.png)
+<br>
+
+[回到选项卡](#jump5)
+
+
+### MLE 
+1. 在lm中估计参数以及看拟合效果用的是最小残差平方和（LS）的方法，该方法只适用于残差正态的情况，而在glm中用的是Maximum Likelihood Estimation（MLE）。
+2. 在该方法中相当于构建一个新的函数，即似然函数$L=(y,X,\beta,\sigma^2)$,而这个新函数会产生一个新的参数$\theta$,这个参数是用来解出$\beta$和$\sigma^2$的。是通过求导（简单模型）或数字搜索法（复杂模型）得到新参数$\theta$。
+3. 它可以用于判断模型对数据的拟合效果，对于这点，在lm中可以看$R^2$(自变量对因变量的解释度)，但残差非正态时这不可用，在glm中一般通过方差分析来判断，用到的方法是Deviance tests和AIC comparisons
+- 偏差（deviance），用来判断模型好坏，有三个模型，
+    - null model-对信息的解释是最少的：y ~ 1 (no predictors)
+    - fitted model-预测出来的模型： y ~ x1 + x2
+    - Saturated model-解释了全部信息的全模型：y~ x1 + x2 + x3 +….+ xn
+- AIC=2k-2\ln(L)：K是參數的數量，L是概似函數
+    - 當n增加時，AICc收斂成AIC。所以AICc可以應用在任何樣本大小的情況下。
+4. 它可以用来评价自变量是否对模型有用，对于这点，可以通过T-test和ANOVA来判断，但残差非正态时都不可用，在glm一般用的均值的比较，用的方法是 Wald Z-statistic tests(类似于t-test)，该方法的原理是用mean estimate 
+除以它的standard error，这个比例是正态的，因此且遵循一个固定的正态分布，而被称为Z分布（而T分布的形状是根据误差的df而改变）
+[回到选项卡](#jump5)
+
+
+### over/under dispersion
+1. 定义：是指deviance与error的自由度之比远远大于/小于基于特定统计模型的预期，远远大于1则是over-dispersion。该方法通常在评估残差过大或过小的问题，导致不会出产生真的likelihood。
+2. 通常在泊松和二项式分布中出现该问题，通常是方差异质性或选错分布类型等原因导致的。
+3. 在过度分散的情况下，拟合模型产生了过小的标准误差(SE)，那么结果会比本身应该的样子more significant，也就是犯一类错误的概率会增加；同样地，在under-dispersion情况下，拟合模型产生了过大的SE，那么结果会比本身应该的样子less significant，也就是犯二类错误的概率会增加。我们更不能接受犯一类错误。
+<br>
+[回到选项卡](#jump5)
+
+
+### LRT 
+1. 定义：似然比检验（likelihood ratio test, LRT）是一种检验参数能否反映真实约束的方法（分布或模型的某参数等于是否为真实约束）。似然比检验的思想是：“如果参数约束是有效的，那么加上这样的约束不应该引起似然函数最大值的大幅度降低。也就是说似然比检验的实质是在比较有约束条件下的似然函数最大值与无约束条件下似然函数最大值。(因此该方法还是基于MLE)
+2. 似然比检验用来评估两个模型中那个模型更适合当前数据分析。具体来说，一个相对复杂的模型与一个简单模型比较，来检验它是不是能够显著地适合一个特定的数据集。如果可以，那么这个复杂模型的附加参数能够用在以后的数据分析中。
+3. LRT应用的一个前提条件是这些待比较的模型应该是分级的巢式模型。具体来讲，是说相对于简单模型，复杂模型仅仅是多了一个或者多个附加参数。也就是说，比较的两个模型之间存在“嵌合关系”，其中一个模型的变量无约束，另一个模型的变量是前者经过约束后得到的。如果两个模型之间不是嵌套关系，那么就不能使用LRT，而要使用广义的LRT.
+4. 增加模型参数必定会导致高似然值成绩。因此根据似然值的高低来判断模型的适合度是不准确的。LRT提供了一个客观的标准来选择合适的模型。LRT检验的公式: LR = 2*(InL1- InL2)
+5. 零模型和拟合模型的比较，S代表饱和模型；1代表拟合模型；0代表零模型。第一个是拟合模型的值，第二个是零模型的值：`2*(logLik(mod.sealS)-logLik(mod.seal1))`；`2*(logLik(mod.sealS)-logLik(mod.seal0)`
+[回到选项卡](#jump5)
+
+### AIC
+1. 定义：Akaike information criterion,`AIC=-2 logLik + 2(k+1)`，k是參數的數量，L是概似函數，增加自由參數的數目提高了擬合的優良性，AIC鼓勵數據擬合的優良性但是儘量避免出現過度擬合（Overfitting）的情況。所以優先考慮的模型應是AIC值最小的那一個。赤池訊息量準則的方法是尋找可以最好地解釋數據但包含最少自由參數的模型。
+2. 同样的数据集，分别用了Negative Binomial和Poisson来拟合，此时可以用AIC来比较，因为它们的分布是类似的。具体原因请参考[此处](https://math.usu.edu/jrstevens/biostat/PoissonNB.pdf) 
+3. 大部分情况下，不同模型之间的比较最好不用AIC，因为`AIC=-2logLik + 2(k+1)`，由于模型不同，背后的分布可能不同，对数likelihood本身可能也不同，因此而产生的AIC值的比较没有意义。关于这点可以参考[1](https://stats.stackexchange.com/questions/139201/model-selection-can-i-compare-the-aic-from-models-of-count-data-between-linear)和[2](https://stats.stackexchange.com/questions/345069/likelihood-comparable-across-different-distribution)
+
+[回到选项卡](#jump5)
+
+## 基本假设
+1. 残差不需要正态性了，而是其分布有多种选择，如二项，泊松等等，因此叫广义线性模型。一般来说残差是什么分布，相应变量y就是什么分布了。如果响应变量可以用另一种参数分布来描述，那么我们就可以用回归来分析关系，使用广义线性模型了。
+2. 方差同lm中一样是同质性的，而且同lm中一样模型具有可加性，残差是相互独立的。
+3. 在lm中如果有数据不是正态的可以通过log或curbt等来转换成正态的，但是很多数据不能进行这种转换，因为转化后解释上会有困难，而且即使正态了，但本来数据的方差同质性可能会被破坏。
+<br>
+
+
+
+
+## 代码相关基础
+1. 使用plot()对线性回归模型进行作图的时候会得到四个图可以用来判断方差同质性，正态性，以及当时离散型数据的时候判断是否有over-dispersion的情况出现。
+- 图二和图四再LM的代码部分已有资料
+- 图一和图三一般是为直线较正常，图一一般用来诊断方差齐性，图三一般用来诊断数据离散性。？
+- 当响应变量（因变量）的值较多的时候，诊断图较为有用，当响应变量只有有限个时，诊断图的功效会降低很多。
+<br>
+
+2. binnedplot图（分类图）来检查。然后，它用每个bin中的残差为每个bin中的数值计算出一个围绕0的2个标准误差的范围。这应该包含95%的数据点，以阴影区域表示。圆点代表每个bin的平均残差大小。 然后，可以看到具有过度分散值的bin位于这些阴影区域之外。只有当你有许多数值位于范围之外时，过度分散才被认为是一个问题。 可以使用更多细节请参考[该链接](https://easystats.github.io/performance/reference/binned_residuals.html#:~:text=Binned%20residual%20plots%20are%20achieved,%2C%20Hill%202007%3A%2097%20.)
+<br>
+
+3. 关于如何应该选择如何分布的问题，以及其他一些在glm会出现的问题和解决方法，可以查看该[该链接](https://data.princeton.edu/wws509/sets)。另外在lesson 2的exercise2.4中就是看似是泊松分布的数据，但是会出现问题，应该选择的事gamma分布
+
+
+
+## 模型code {.tabset}
+
+<span id="jump6"></span>
+
+### 目录
+<请对上面的选项卡进行选择>
+<br>
+
+- glm的构建
+- 模型的评价
+- 模型的选择
+
+
+
+### glm的构建
+1. **构建广义线性模型：**
+
+```{r make-glm}
+library(ggplot2)
+#以下给出了所有原始数据的查看：
+seal <- read.csv('./data/sealData1.csv', h=T)
+seal
+#一位行为生态学家在2天内多次接近50只正在哺乳的海豹。在2天的时间里多次接近海豹，并记录了攻击性反应的数量。她想检查幼崽的年龄是否影响了攻击性反应的概率。n.obs是实验的seal的总数量，n.response是指观察到有反应的seal的数量，pupage指幼崽的年纪
+summary(seal)
+head(seal)
+dim(seal)
+#通过上面对例子的理解发现实际这是个binomial数据（0-1），因为真正反映攻击的不是个数（因为观察的总个数在变化），而是比例，因此作图看关系可以大致看出随着年龄的增大，攻击性反应逐渐减少。因此先把数据转换成0-1的形式，也就是成功-失败的形式，再把这两个数据整合成新的一列当作响应变量。glm函数中的link可以不指定，一般用默认。
+plot(n.response/n.obs~pupage,data=seal)
+mod.seal <- glm(cbind(n.response, n.obs-n.response)~pupage,
+                data=seal,family=binomial(link=logit))
+summary(mod.seal)   
+```
+- 结果表明age与seal的攻击性行为间有显著线性关系。
+
+
+<br>
+<br>
+
+2. **对于glm结果的作图**
+
+```{r pic-glm}
+library(ggplot2)
+seal <- read.csv('./data/sealData1.csv', h=T)
+mod.seal <- glm(cbind(n.response, n.obs-n.response)~pupage,
+                data=seal,family=binomial(link=logit))
+summary(seal)
+#新建立一个数据框是为了放置预测值，设为1：30是因为summary(seal)的结果是显示puage的最小值是1，最大值是30，因此设立的范围应该与此相同，因为在用link model中y的范围有很大变化，x没有。
+newdata <- data.frame(pupage=1:30)
+newdata
+#se.if=true表示需要使用标准误差；newdata表示一个数据框架，在其中寻找用于预测的变量。如果省略，则使用拟合的线性预测器。
+preds <- predict(mod.seal, newdata=newdata, se.fit=T)
+#看结果可以看出产生了30个的预测值以及相对应的标准误差
+preds
+#以下是为了给预测值加上置信区间，1.96是Z分布对应95%的Z值(因为原始数据 个数为50个，属于小样本量)
+newdata$fit_T <- preds$fit
+newdata$upr_T <- preds$fit+preds$se.fit*1.96
+newdata$lwr_T <- preds$fit-preds$se.fit*1.96
+#结果显示每个预测值都有对应的置信区间上下界限值
+head(newdata)
+
+plot(newdata$pupage,newdata$fit_T,type="l")
+lines(newdata$pupage,newdata$upr_T,lty=2)
+lines(newdata$pupage,newdata$lwr_T,lty=2)
+#以下是使用plogist函数把用link-model转换后的y再转回来
+newdata$fit <- plogis(preds$fit)
+newdata$upr <- plogis(preds$fit+preds$se.fit*1.96) 
+newdata$lwr <- plogis(preds$fit-preds$se.fit*1.96)
+head(newdata) #note the extra columns in the dataframe
+str(newdata)
+#ggplot内的数据是指画出原始数据点，geom_smooth是指经过转换回来的拟合值曲线以及对应的置信区间范围。
+ggplot(data=seal, aes(x=pupage, y=n.response/n.obs)) + geom_point()+
+geom_smooth(data=newdata,aes(x=pupage, y=fit, ymin=lwr, ymax=upr),
+              stat='identity')
+```
+[回到选项卡](#jump6)
+
+<br>
+
+### 模型的评价
+```{r model}
+#这是被测试的模型
+mod.seal1 <- glm(cbind(n.response, n.obs-n.response)~pupage, data=seal,family=binomial)
+
+#先拟合出零模型，零模型就是指斜率为0，但有截距的时候
+mod.seal0 <- glm(cbind(n.response, n.obs-n.response)~1, data=seal,family=binomial)
+#通过结果可以看出残差和null的deviances都是相等的
+summary(mod.seal0)
+#logLik最常用于用最大似然法拟合的模型
+logLik(mod.seal0)
+#然后拟合出饱和模型，在此过程中先在seal数据框中构建一个虚拟的自变量X1(vector),包含了从1到50的50个数据，因为seal中一共有50行
+seal$x1 <- as.factor(1:nrow(seal))
+summary(seal)
+mod.sealS <- glm(cbind(n.response, n.obs-n.response)~x1, data=seal,family=binomial)
+#可以看出结果中的残差的deviance几乎为0，
+summary(mod.sealS)
+logLik(mod.sealS)
+#因此以下计算结果（叫似然比检验LRT）是被测试模型和零模型的residual deviance的，与summary被测试模型的结果相比是一样的
+2*(logLik(mod.sealS)-logLik(mod.seal1))
+2*(logLik(mod.sealS)-logLik(mod.seal0))
+summary(mod.seal1)
+#用anova来分析,强调检验方式是chisq是因为在R里Chi-Square test是用来检验两个分类变量之间是否有显著相关关系，这里比较的是residual和null的deviances，相当于在问加入因子pupage后，residual是否有明显的减少），结果显示因子pupage对该回归模型的影响非常显著，这里就是相当于用deviance-test来判断模型如何
+anova(mod.seal1,test='Chisq')
+#一样的意思这个结果表明fitted model和null model有显著差异。
+anova(mod.seal1,mod.seal0,test='Chisq')
+
+
+```
+- 更多细节参考此处[1](https://stats.stackexchange.com/questions/316763/log-likelihood-function-in-poisson-regression)和
+[2](https://en.wikipedia.org/wiki/Logistic_regression)
+
+<br>
+
+[回到选项卡](#jump6)
+
+<br>
+
+### 模型的选择
+```{r select}
+#以下给出了所有原始数据的查看，此数据是关于是否通过入学(admit),受到了gre和gpa以及学校的rank的影响
+mydata <- read.csv("./data/binary.csv",header=T,sep=" ")
+mydata
+summary(mydata)
+#首先模型1中放入所有的自变量
+mydata$rank <- as.factor(mydata$rank)
+glm1 <- glm(admit ~ gre+gpa+rank, data = mydata, family = "binomial")
+summary(glm1)
+#去掉p值最大的那个自变量，放入模型2，跟前一个相比，这个相当于是subset model。结果可以看出各个自变量系数和显著性都发生了变化
+glm2 <- glm(admit ~ gpa+rank, data = mydata, family = "binomial")
+summary(glm2)
+#比较模型，可以从上面的summary看出null model中的deviance是499.9，此时通过anova比较两个模型的结果可以看出两个模型显著有差异，glm2模型对deviance解释的更多。而AIC的结果却是glm1更好....？？
+anova(glm1,glm2,test="Chisq")
+AIC(glm1,glm2)
+#用其他方法自动一步步筛选模型，而不用像上面一样写出所有subset model，从结果可以看出还是三个自变量都放入更好。
+library(MuMIn)
+options(na.action = "na.fail") 
+glm1 <- glm(admit ~ gre+gpa+rank, data = mydata, family = "binomial")
+dredge(glm1)
+``` 
+
+[回到选项卡](#jump6)
+
+
+## 离散型数据的问题 {.tabset}
+<span id="jump7"></span>
+
+### 目录
+<请对上面的选项卡进行选择>
+
+<br>
+
+- 过度离散的判断
+- 解决方法一
+- 解决方法二
+- 解决方法三
+- 解决方法四
+
+### 过度离散的判断
+```{r Over}
+##############################################以下为泊松数据的判断
+#每次读入新的数据表格都要重新设置一下路径！！！
+#以下给出了所有原始数据的查看
+aphid2 <- read.csv('./data/AphidData2.csv', h=T)
+aphid2
+#检查数据，trt一列数据为factor，n.aphids是计数的数据，而且直方图的结果也表明了是泊松分布
+summary(aphid2) 
+hist(aphid2$n.aphids)
+str(aphid2)
+aphid2$trt <- as.factor(aphid2$trt)
+mod1 <- glm(n.aphids~trt, data=aphid2, family=poisson)
+#结果显示intercept是指处理trt下C组的n.aphids与0相比有显著差别，为3.5；trt下的I组与C组比较有显著差异，为1.5。
+summary(mod1)
+#看图判断出trt下的C组很有可能过度分散了
+par(mfrow=c(2,2))
+plot(mod1)
+#统计学上的检测方法，结果如下，数值远远大于1，因此属于过度分散了
+chisq <- sum(resid(mod1, type='pearson')^2)
+chisq/df.residual(mod1) 
+#判断上面结果产生的5.8与1值比较差异是否显著
+1-pchisq(chisq, df.residual(mod1)) 
+#其他检验是否过度离散的方法，结合了上述的chisq和显著性判断，但该方法仅仅适用于泊松分布的glm
+library(AER)
+dispersiontest(mod1,alternative = "greater")  
+
+##############################################以下为二项式数据的判断
+#使用的还是glm的模型选择部分的例子
+mydata <- read.csv("./data/binary.csv",header=T,sep=" ")
+#查看数据结构，发现y都是0或1，因此是二项分布的数据，且rank为factor。
+head(mydata)
+summary(mydata)
+str(mydata)
+mydata$rank <- as.factor(mydata$rank)
+mylogit <- glm(admit ~ gre+gpa+rank, data = mydata, family = "binomial")
+#summary和anova的结果显示自变量对y都有显著影响
+summary(mylogit)
+anova(mylogit,test='Chisq')
+#作图检查一下过度离散问题
+par(mfrow=c(2,2))
+plot(mylogit)
+#使用统计学上的检验方法确认一下，数值非常接近1，因此是没有过度分散的问题的。
+chisq <- sum(resid(mylogit, type='pearson')^2)
+chisq/df.residual(mylogit) 
+#由于该数据集中y是0和1而不是成功-失败的比例问题，因此在用上面作图和chisq的方法的时候是有问题的，做个binnedplot图（分类图）来检查。图的结果也表明没有过度离散的问题。
+library(arm)
+ x <- predict(mylogit)
+ y <- resid(mylogit)
+par(mfrow=c(1,1))
+binnedplot(x,y)
+#通过零模型来判断拟合模型是否解释了响应变量的大量变化（deviance）。
+null.logit <- glm(admit ~ 1, data = mydata, family = "binomial")
+#以下结果可以看出零模型的deviance为499.9，而拟合模型的deviance占了458.5，因此是解释了响应变量的大部分变化。
+summary(null.logit)
+anova(null.logit,mylogit,test="Chisq")
+#以下结果是展示模型中每个放入的每个参数对deviance的解释。
+summary(mylogit)
+anova(mylogit,test="Chisq")
+```
+
+[回到选项卡](#jump7)
+
+
+### 解决方法一
+```{r quasi}
+#方法一：quasi-poission
+mod.qp <- glm(n.aphids~trt, data=aphid2, family=quasipoisson(link=log))
+#与mod1的模型比较只是改变了family，因此可以看出系数不会发生变化
+coef(mod.qp)
+coef(mod1)
+#画图来比较当family不同时mod1和mod.qp的变化，可以看出唯一的变化是第2，3，4张图的范围发生了变化，family=quasiposiion的范围更窄，就是因为数据过度离散的问题被解决了。
+par(mfrow=c(2,2))
+plot(mod1)
+plot(mod.qp)
+#summary一下可以看出，mod.qp用的是Z分布来检验，mod1用的是t分布来检验，二者的系数没有发生变化，但是p值会稍微有变化，另外mod.qp没有AIC值是因为quasipoisson只是个虚拟的posisson，没有真正的分布，而AIC中用来计算的likelihood是要基于分布来计算的。
+summary(mod.qp)
+summary(mod1)
+#anova用来检验两个模型的devaiance，没有变化，关于为什么mod.qp要用F检验而不是Chisq，请查看[该链接](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/anova.glm.html)
+anova(mod1, test='Chisq')
+anova(mod.qp, test='F') 
+#统计学上的检测方法，结果如下，数值远远大于1，因此属于过度分散了,结果显示都是同样的数值，是因为那个模型的60个数据的residual都是一样的
+sum(resid(mod1, type='pearson')^2)/df.residual(mod1)
+sum(resid(mod.qp, type='pearson')^2)/df.residual(mod.qp) 
+#也不可以用以下这种方法来比较，因为该方法仅用于glm中的poisson分布。
+#dispersiontest(mod1,alternative = "greater")  
+#dispersiontest(mod.qp,alternative = "greater")  
+#看出系数没有变化，但是对于系数估计的显著性发生了变化，模型mod.qp更好是因为估计更保守。
+coef(summary(mod1))
+coef(summary(mod.qp))
+```
+
+[回到选项卡](#jump7)
+
+
+### 解决方法二
+```{r negative-binomial}
+#方法二：negative binomial
+library(MASS)
+mod.nb <- glm.nb(n.aphids~trt, data=aphid2)
+#与没有改变的mod1比较，mod.nb的四张图的范围都缩小了，注意的是在mod.qp中近第一张图的范围没有变。而且相比于mod.qp的优化，mod.nb更好，因为图三的线更直。
+par(mfrow=c(2,2))
+plot(mod1)
+plot(mod.nb)
+#通过summary可以看出，mod.nb也是z分布，但是p值不一样，虽然估计的系数还是一样的，而且模型的devirance也发生了变化。
+summary(mod1)
+summary(mod.nb)
+```
+
+[回到选项卡](#jump7)
+
+
+### 解决方法三
+关于这个方法和包的使用可见[该链接](https://cran.nyuad.nyu.edu/web/packages/COMPoissonReg/COMPoissonReg.pdf)
+
+```{r CMP}
+library(COMPoissonReg)
+mod.CMP <- glm.cmp(n.aphids~trt, data=aphid2)
+#mod.CMP不能进行模型诊断图plot，通过summary，mod.CMP的系数发生了变化
+summary(mod1)
+summary(mod.CMP)
+#比较四个模型的AIC值
+AIC(mod1); AIC(mod.qp);AIC(mod.nb); AIC(mod.CMP)
+```
+
+[回到选项卡](#jump7)
+
+### 解决方法四
+```{r indx}
+#方法四：是通过新增自设变量indx解决的
+#以下展示原始数据，N是处理的苗木数量为因变量，trt为处理，有一水平为对照，其他两水平分别为杀虫剂和杀菌剂，随机因子为station，关于随机效应这点具体见同该例子于glmm部分。
+pests <- read.csv('./data/Pesticide.csv')
+pests
+#查看数据
+summary(pests)
+head(pests,n=10)
+dim(pests)
+pests$station <- as.factor(pests$station)
+pests$trt <- as.factor(pests$trt)
+#尝试通过新增自设变量来indx来解决过度分散的问题，因为在泊松分布中，本来是均值等于方差，但是由于不是标准的泊松分布（过度分散）导致了方差大于均值了，因此此时把数据行数处理成随机效应（其预设就是正态的），作为一个层新的正态数据叠加上去来调整非标准的泊松数据。已知pests数据有108行，因此新的indx有108个数据
+dim(pests)
+pests$indx <- 1:nrow(pests)
+glmp3 <- glmer(N~trt+(1|station) + (1|indx),pests,family=poisson())
+##结果显示，与前面相比杀菌剂与对照组相比不显著了，同时过度分散问题被解决了，但似乎存在分散不足的问题，容易犯二类错误，但比犯一类错误要好，对于分散不足（underdispersion）的解决可能是使用VGAM包中的广义泊松分布？？其他建议可以参考[该链接](https://stats.stackexchange.com/questions/111104/using-gp-fit-of-gpfit-package-in-r)
+summary(glmp3)
+sum(resid(glmp3, type='pearson')^2)/df.residual(glmp3)
+```
+
+[回到选项卡](#jump7)
+
+<br>
+
+# 混合线性模型(LMM)
+
+## 基本概念
+1. 考虑到数据的依赖结构，避开假性重复的问题（依赖性），因此对固定效应的进行估计和检验，但对随机效应仅仅测试方差的部分。
+- 加入随机效应可以规避与方差分析相关的缺失值问题，可以获得更好的残差分布以及对固定效应的估计会更好。随机效应是我们所不关心的，但是却仍然对数据的变化造成了影响。
+- 固定效应：是我们会特别关心的变量，也就是与我们假设密切相关的变量（对因变量y的影响）。如果某个因素水平大小是我们所感兴趣的，具有很多信息的，并且这些信息能够被量化的，那么它就是固定效应
+2. 在混合模型中，用限制性最大似然法（REML）来获得对方差的无偏估计。而最大似然法（ML）是用于嵌套的模型比较（例如GLM章节提到的LRTs, AIC, AICc）。
+- ML下的方法，如AIC和LRT不能用于比较同一个数据集的混合模型，如一个模型仅有随机效应的截距，另一个模型有随机效应的截距和斜率，这二者不能比较，因此两个模型的方差成分不一样。
+- 当方差远远大于0的时候，用ML的计算方法是不可靠的，因此评估固定因子的时候可以用包lmertest中的anova函数，或包pbkrtest中的KRmodcomp函数，或包car中的Anova函数；评估随机因子可以用ranova函数和r.squaredGLMM函数。
+3. 混合模型选择的基本步骤：
+- 写出带有所有固定和随机效应的完整模型
+- 首先评估随机效应，并酌情减少随机效应。适当地减少随机效应（使用引导估计）。
+- 评估固定效应，并酌情减少固定效应（LRT、信息理论方法、估计DF方法、bootstrap法）。
+- 提出最终选定模型的数据和参数估计（使用REML的估计值）
+4. 收缩 "Shrinkage"，是指在包含随机效应的模型中，由模型可以估计得到随机效应的标准偏差值(ω)。收缩值可以反应当前数据所包含的信息是否足以支持对于该随机效应估计，越小越好，当收缩值过大时，提示当前数据并不足以估计该随机效应。
+- 当Shrinkage取负值时，则提示经验贝叶斯估计的参数分布方差比估计的方差值大，模型对该随机效应的方差指定可能存在错误。
+- 越接近0表示收缩值越好，没有金标准的接受标准，但一般认为小于20~30%以下是可以接受的，
+- 当高于30%则提示当前的数据不足以支持估计该参数的个体间变异，与之相关的诊断图表不能够正确的显示诊断信息，不能用用于诊断；即使是正确的模型依然可能会遇到收缩值较大的情况。
+5. prediction intervals和confidence intervals的区别：
+详细请参考[链接1](http://www.graphpad.com/support/faqid/1506/)和[链接2](http://robjhyndman.com/hyndsight/intervals/)
+
+
+
+## 基本假设
+
+1. 模型表达形式：$y_i=X\beta+Zb+\varepsilon$而且$b\sim N(0,\psi)$;$\varepsilon\sim N(0,\sigma^2)$
+<br>
+2. 模型矩阵形式：
+![](E:/academic_resources/note-tutorial/data/img/sta-10.png)
+
+3. 参数的估计：
+- 在lm和glm中的估计参数矩阵都为$\hat{\beta}=(X'X)^{-1}X'y$，但是在lmm中不是。在lmm中把本事vector的error转变成了矩阵的形式，在协方差矩阵中，还表明了残差之间相互独立，方差同质（具体看动物模型一章）
+![](E:/academic_resources/note-tutorial/data/img/sta-13.png)
+<br>
+- 因此参数估计矩阵就变为：$\hat{\beta}=(X'V^{-1}X)^{-1}X'V^{-1}y$(实际上V矩阵要比这里的更复杂！)
+
+4. 在lm和glm中都假设残差相互独立，而且每个加入的自变量是同等地位的，但是在lmm中，自变量被分为了一些会造成固定效应($X\beta$)，一些会造成随机效应(Zb)。重要的是，随机变量的系数被假定为具有围绕平均值为零的正态分布，因为我们不关心随机变量的均值，因此结果中也只会展示随机效应的方差组成。因此正态性在混合模型的各个层面都应得到保证，随机效应的和residual errors！！！（用diagnostic plots检验）
+
+## 代码相关基础
+1. 在混合模型中会出现模型接近奇异的问题，也就是参数在可行参数空间的边界上：一个或多个效应的线性组合的方差（接近为零。当写完混合模型运行后会出现提示`boundary (singular) fit: see help('isSingular')`使用函数`isSingular(混合模型名)`来判断是否存在奇异问题，如果结果为true即是
+<br>
+
+2. 函数`getME()`是从拟合的混合效应模型中提取或获取通用成分，结果中表示的意思如下，其他更多细节请参考[该链接](https://www.rdocumentation.org/packages/lme4/versions/1.1-29/topics/getME)
+- N为该数据集biodepth的总样本量为
+- p为固定效应参数的数量2
+- nmp为随机效应参数的数量
+- q是随机因素下的水平数为8
+- nth是隨機因素的方差，它说明的是所有個體之間存在多少變異性，而不是每個組中個體之間的方差水平。
+- REMLs是残差标准差的估计值，0 表示模型通過最大似然擬合，任何其他正整數表示通過受限最大似然擬合
+- reTrms为随机效应有多少项
+<br>
+
+3. bootstrap：Bootstrap方法可以通过重复抽样，获得一定规模的样本量，进而得到统计量的经验分布并进行区间估计。 
+- Bootstrap理论是一种新的增广样本统计方法，它的无先验性，以及计算过程中只需要有限的观测数据，使其可方便地应用于小样本数据处理。
+- 在具体实施中，需要考虑原始观测样本的样本量以及抽样次数。要保证应用Bootstrap方法进行估计的有效性，至少要有8个观察值。相关文献中提出根据实际情况,观测样本越多越好
+- 更多详细资料请参考该[链接](http://influentialpoints.com/Training/nonparametric-or-parametric_bootstrap.htm)
+
+
+
+## 模型构建code{.tabset}
+<span id="jump9"></span>
+
+### 目录
+
+- 构建lmm
+- 查看仅有截距随机效应
+- 模型的应用1
+- 查看有截距和斜率的随机效应
+- 模型的应用2
+- 模型的准则检查和评价
+
+### 构建lmm
+
+```{r lmm}
+library(lme4) #用于混合模型的包
+library(car)
+library(arm)
+library(MuMIn)
+library(ggplot2)
+#以下会展示出例子的所有原始数据，radon是一种化学元素，会导致肺癌，现在是把美国不同地区（couty）分门别类（cgroup），然后看各个地方radon在不同floor时的浓度水平，floor_0代表地面
+radon <- read.csv('./data/Radon_Data_RB.csv', h=TRUE)
+radon
+#查看数据结构
+dim(radon)
+summary(radon)
+str(radon)
+#把分类变量设为factor
+radon$floor <- as.factor(radon$floor)
+radon$county <- as.factor(radon$county)
+radon$cgroup <- as.factor(radon$cgroup)
+#对因变量radon和我们关注的自变量floor做图来查看数据结构
+par(mfrow=c(1,1))
+boxplot(radon~floor, data=radon, notch=T)
+#添加一条回归线更好地查看二者的关系，在这里有无group=1作出来的图都一样，为什么？
+ggplot(data=radon, aes(x=floor, y=radon, group=1)) + geom_point() + geom_smooth(method='lm')
+#在对二者进行简单线性拟合，并对该模型进行诊断，结果表明残差正态了，方差同质了。
+mod.radon.lm1 <- lm(radon~floor, data=radon)
+par(mfrow=c(2,2))
+plot(mod.radon.lm1)  
+#查看下模型中具体参数的影响，结果表明二者存在显著线性关系，截距和斜率都显著，单问题是Multiple R-squared:  0.03457，也就是模型对数据的解释程度只有0.03，过于小了，表明模型不合适，这是因为p值得计算涉及标准误差，而它又是通过样本量n得来的，只要n足够大，结果都会显示极其显著。此例说明n太大但是自变量又太少，模型过于简单了！！！
+summary(mod.radon.lm1) 
+
+#增加自变量！！！按不同county来查看radon与floor的关系，前面的关系是所以这些国家的radon与floor的总和。按county分了之后可以看出不同county见二者的关系变化非常大，有些甚至在不同floor水平的radon没有变化了。（差异这么大的原因有部分是因为不同county样本量不同导致的）
+ggplot(data=radon, aes(x=floor, y=radon, group=county)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  facet_wrap(~county)  
+#在这里county是随机变量，前面1表示在county之间的radon和floor的关系只有在截距上发生变化，斜率保持一致，也就是county对它们关系的影响不会随着floor的变化而变化。
+mod.radon.lmer1 <- lmer(radon~floor + (1|county), data=radon)
+#查看该模型的残差是否正态。
+par(mfrow=c(1,2))
+hist(resid(mod.radon.lmer1)) 
+#查看该模型方差同质否
+plot(mod.radon.lmer1) 
+```
+[回到选项卡](#jump9)
+
+### 查看仅有截距的随机效应
+- **满足它的参数应该服从均值为0的正态分布的假设**
+
+```{r check1}
+#ranef()是一个通用函数，用于从一个拟合的模型对象中提取随机效应的条件模式。以下结果会出来随机变量county所有的截距取值。因为该模型设置随机效应的斜率不变，因此该模型只有截距一列vector，所以`ranef(mod.radon.lmer1)`和`ranef(mod.radon.lmer1)[[1]]`提取得效果是一样，[[1]]表示提取第一列。而[,1]表示倒置那一列数据，否则无法用hist来作直方图，这是为了查看随机变量应该是正态度分布的！！！因为它包含得信息只有截距，因此结果表明它是正态得！！
+hist(ranef(mod.radon.lmer1)[[1]][,1])
+#以下是把随机效应的截距赋予到残差的一部分res1上去，把截距这些信息倒置是为了hist作图，可以看出是正态分布的，而且summary以下发现其均值为0，因为随机效应的均值在假设中就是为0，在直方图上把均值线也表示出来了
+res1 <- ranef(mod.radon.lmer1)$county[,1]
+summary(res1) ## mean ~ 0
+hist(res1) ## histogram
+abline(v=mean(res1), col='red')
+#这里使用qqplot的方式来看随机效应解释的残差部分是否是正态的，实际与前面`hist(ranef(mod.radon.lmer1)[[1]][,1])`效果是一样的。
+par(mfrow=c(1,1)); qqPlot(res1)
+#用summary查看以下该模型的效果，可以看出随机效应county造成的因变量的变化占0.5，其他无法解释的部分（residual）占1.09
+summary(mod.radon.lmer1) 
+#用来查看该混合模型中随机响应的方差组成，相当于把summary该模型结果中随机效应一栏的std.DEV.结果提取出来
+VarCorr(mod.radon.lmer1) 
+```
+[回到选项卡](#jump9)
+
+### 模型的应用1
+
+- **随机效应仅有截距**
+
+```{r use1}
+#对比两个模型的系数估计值（在混合模型就是指固定效应的系数，因为随机效应没有，因此同等于`fixef(mod.radon.lmer1)`），可以看有变化，但标准误差有变化
+coef(summary(mod.radon.lm1))
+coef(summary(mod.radon.lmer1))
+#以下表达式与`coef(summary(mod.radon.lmer1))`效果一样
+summary(mod.radon.lmer1)$coef
+#以下是为了得到每个county的地面层（floor_0）的radon浓度水平，可以按以下这么做，基本逻辑是将固定效应的截距值加随上机效应的截距值，记住在固定变量的结果理解中，intercept截距的值代表的是地面（floor_0）的值，而斜率floor是指floor_0与floor_1的差距！！！！
+#会发现`fixef(mod.radon.lmer1)["(Intercept)"] `就是混合模型summary结果中对floor截距的估计值1.33，同样可以用`coef(summary(mod.radon.lmer1))`得到。而`ranef(mod.radon.lmer1)$county$"(Intercept)"得到的就是同`ranef(mod.radon.lmer1)[[1]][,1]`的结果，也就是随机效应截距的变化值。
+gfloor <- fixef(mod.radon.lmer1)["(Intercept)"] +
+            ranef(mod.radon.lmer1)$county$"(Intercept)"
+gfloor
+#对每个county的地面水平（floor_0）加和后做平均代表的才是其真正的固定效应，因为随机变量是会影响固定变量和因变量之间的关系。而又因为固定效应是我们所关心的，所以它的均值不为0。
+mean(gfloor)
+#作图来看该均值
+hist(gfloor) 
+abline(v=mean(gfloor), col=2)  
+#以下是为了得到每个county的一层（floor_1）的radon浓度水平，可以按以下这么做，基本逻辑是固定变量的截距值和斜率值再加上随机效应的截距值，注意floor_1真正的值是截距intercpt加上斜率floor！！！！
+#会发现`fixef(mod.radon.lmer1)["floor"]`就是该混合模型summary的结果中固定变量的斜率`floor=-0.79`。
+firstfloor <- fixef(mod.radon.lmer1)["(Intercept)"] +fixef(mod.radon.lmer1)["floor"]+ ranef(mod.radon.lmer1)$county$"(Intercept)"
+firstfloor
+mean(firstfloor)
+#会发现mean(firstfloor)=以下表达式的结果。因为随机效应对固定变量这个因素下的不同水平（指floor_0与floor_1）的影响是一样的！！！！同样做图来查看均值
+mean(gfloor)+fixef(mod.radon.lmer1)["floor"]
+```
+[回到选项卡](#jump9)
+
+### 查看有截距和斜率的随机效应
+
+- **随机效应有截距和斜率**
+
+```{r chec2}
+mod.radon.lmer2 <- lmer(radon ~ floor + (1+floor|county), data=radon)
+summary(mod.radon.lmer2) 
+#比较两个不同混合模型中固定效应估计截距和斜率的变化
+rbind(fixef(mod.radon.lmer1),fixef(mod.radon.lmer2))
+
+#可以看出随机效应county造成的因变量的变化占0.51，其他无法解释的部分（residual）占1.09，固定变量floor对这种随机效应的影响的影响占0.19（？），floor和county有负相关关系，因为corr为-0.345，如果为-1或1是否代表county可以去除？？可以看出从一开始最简单只有一个自变量的mod.radon.lm1的Residual standard error为1.211变到仅有截距随机效应的为1.09531 ，再到有截距和斜率的随机效应为1.09376，说明数据的不可解释部分越来越少了？？？
+VarCorr(mod.radon.lmer1) 
+VarCorr(mod.radon.lmer2)
+#对比发现现在lmer2有两列信息了，第一列是其随机效应county的截距，一列是随机效应斜率floor
+dim(ranef(mod.radon.lmer2)$county)
+summary(ranef(mod.radon.lmer1)$county)
+summary(ranef(mod.radon.lmer2)$county)
+```
+[回到选项卡](#jump9)
+
+### 模型的应用2
+```{r use2}
+##在lmer2中比较在county2这个地方里地面和一楼的radon浓度水平差异，基本逻辑是固定效应的地面和一楼的差异（也就是斜率floor的数值）加上随机效应里面这两层floor在county2的差异。
+#在随机效应的截距指的是固定变量的截距（记住这是floor0的radon水平）在不同county之间有变化，也就是它的截距代表了floor0的radon浓度是随county不同而不同？？？？而随机效应的斜率指的是在不同county之间固定变量的斜率也有变化，也就是在不同county里floor下两水平之间radon的差异是有差异的？？比如couty2的地面r水平为9，一楼r水平为17，county3的地面r水平为5，一楼r水平为12，那么，9和5属于随机效应的截距部分？而7-9=8和12-5=7是属于随机效应的斜率部分？？？？
+#因为斜率代表的都是差异部分，所以该问题下用的全是斜率的数据。
+fixef(mod.radon.lmer2)["floor1"]+ranef(mod.radon.lmer2)$county$"floor1"
+#在county 1中的floor_1的radon水平是什么？基本逻辑是固定效应截距和斜率部分相加（代表各个国家平均情况下floor_1的值），再加上随机效应中county 1的截距和斜率（即county1所导致的原本floor_1的变化）。
+floor1 <- fixef(mod.radon.lmer2)["(Intercept)"] +ranef(mod.radon.lmer2)$county$"(Intercept)"[1] +fixef(mod.radon.lmer2)["floor1"]+ranef(mod.radon.lmer2)$county$"floor1"[1]
+floor1
+#或者这么写也可以，`ranef(mod.radon.lmer2)[[1]][1,1]`代表取随机效应里的county1的截距。`ranef(mod.radon.lmer2)[[1]][1,2]`代表取随机效应里的county2的截距
+            fixef(mod.radon.lmer2)["(Intercept)"] +
+			fixef(mod.radon.lmer2)["floor1"]+
+            ranef(mod.radon.lmer2)[[1]][1,1]+
+            ranef(mod.radon.lmer2)[[1]][1,2]
+#或者这么写也可以，在这里`ranef(mod.radon.lmer2)[[1]]`和`ranef(mod.radon.lmer2)$county`是等效的，是因为这个模型里只有一个随机效应，如果有其他随机效应，那么需要指明第几个随机效应或者那个随机变量的名字。
+            fixef(mod.radon.lmer2)["(Intercept)"] +
+			fixef(mod.radon.lmer2)["floor1"]+
+            ranef(mod.radon.lmer2)$county[1,1]+
+            ranef(mod.radon.lmer2)$county[1,2]
+
+```
+[回到选项卡](#jump9)
+
+### 模型的准则检查和评价
+```{r evelu}
+#先得到每个在模型lmer2下预测值对应的残差值，因为一共有2369个y值，所以也有这么多的残差值
+resids <- resid(mod.radon.lmer2, type='pearson')
+length(resids)
+#检查模型lmer2的方差同质性，图结果显示方差同质了
+plot(resids~fitted(mod.radon.lmer2))
+lines(lowess(resids~fitted(mod.radon.lmer2)), col='red')
+#以下代码效果和上面两条综合的图一样
+plot(mod.radon.lmer2) 
+#这个也是用来检查残差的方差是否同质，区别在哪？？
+plot(sqrt(abs(resids))~ fitted(mod.radon.lmer2))
+lines(lowess(sqrt(abs(resids))~
+               fitted(mod.radon.lmer2)), col='red')
+
+#以下是在检查该模型的残差是否正态了
+qqPlot(resids)
+
+
+#该图用来判断残差在固定效应floor之间具有可比性否，这个图的结果表明把residual按floor_0和floor_1分组来看，它们的残差都是正态的，二者的方差几乎是一致的，因此这两组是可以进行比较的。
+boxplot(resids~radon$floor)
+
+#第一个图是用来检查这个模型中随机效应的截距是否满足正态，以及这个模型随机效应的斜率是否满足正态，因为我们的假设中就是随机效应的参数就是正态分布的，均值为0
+par(mfrow=c(1,2))
+qqPlot(ranef(mod.radon.lmer2)$county$'(Intercept)')
+qqPlot(ranef(mod.radon.lmer2)$county$floor)
+
+#R2m指的是固定效应解释的部分，R2c指的是随机效应加固定效应解释的部分，因此二者相减才是真正的随机效应解释的部分。它这个和OLS中的R-square不同，详情用`?r.squaredGLMM`查看。
+r.squaredGLMM(mod.radon.lmer2)
+```
+[回到选项卡](#jump9)
+
+## 实验设计中的随机效应{.tabset}
+<span id="jump10"></span>
+
+### 目录
+- 嵌套模型
+- 交叉模型
+
+
+### 嵌套模型中随机效应
+```{r nested1}
+#查看一下数据，看到county有68种，cgroup有10种
+summary(radon)
+#用table来展示cgroup和county的关系，行是county名，c列是cgroup名。表示的是当couty为a，cgroup为b的时候样本数量有多少个。这个结果说明了每个cgoup下只包含了7种或5种county，也就是类似把这几个county划分在东北地区的cgroup下，把那个几个county划分在西南地区的cgroup下，它们之间是没有重叠的。因此从这个数据结构可以看出来county是嵌套在cgroup里面的。也就是每一种county只在特定的cgoup里出现，不可能说county1出现在cgroup1里又出现在cgroup2里
+table(radon$cgroup, radon$county) 
+#用一下表达式检查每种county只在特定的cgroup的出现，数值应该全为1，即在不同cgroup间出现一次。
+colSums(table(radon$cgroup, radon$county)!=0) 
+#在加载了lme4包之后可以用以下函数来检查两组数据之间是否嵌套，结果为true即为嵌套，函数的第一项是下级，第二项是上级
+isNested(radon$county, radon$cgroup)
+isNested(radon$cgroup, radon$county) 
+#写下嵌套模型lmer3，在该模型中随机效应为从group和county，而且它们属于嵌套关系，且近考虑随机效应的截距。
+mod.radon.lmer3 <- lmer(radon~floor + (1|cgroup/county), data=radon)
+#仅考虑截距的随机效应的嵌套也可以写成这样，和上面表达式一样
+mod.radon.lmer3b <- lmer(radon~floor + (1|cgroup) +  (1|cgroup:county),data=radon)
+
+#how to interpret the result?
+summary(mod.radon.lmer3)
+
+#另一个嵌套模型的例子，该生物深度实验试图了解物种丰富度如何影响草地群落的生态系统功能，在欧洲的几个地方采用了区块重复取样设计。这里只考虑物种丰富度对生物量生产的影响。
+#以下给出全部原始数据。
+biodepth <- read.csv('./data/Biodepth.csv', h=TRUE)
+biodepth
+#查看以下数据结构
+summary(biodepth)
+dim(biodepth)
+biodepth$location <- as.factor(biodepth$location)
+biodepth$block <- as.factor(biodepth$block)
+biodepth$plot <- as.factor(biodepth$plot)
+#把一些分类变量设置为因子后发现每种location和每种block出现了几次展示了出来（冒号之后的数字），但是按每个plot来看，都只出现了一次。
+summary(biodepth)
+head(biodepth)
+#检查下block是否嵌套在location下或者location是否嵌套在block下，发现都不是。
+isNested(biodepth$block,biodepth$location)
+isNested(biodepth$location,biodepth$block)
+#嵌套的关系有问题，因此检查一下,结果显示每个location都出现了两种block，实际上每个国家下block都是不同的，应该都是在特定国家都只出现一次才是嵌套格式，因此是命名有问题
+table(biodepth$location,biodepth$block)
+#对block重新命名，每个国家下都有两种block1和2，加上location国家名来区分。
+biodepth$block.loc <- paste0(biodepth$location,"_",biodepth$block)
+#重新检查数据结构。已经是嵌套结构
+table(biodepth$location,biodepth$block.loc)
+isNested(biodepth$block.loc,biodepth$location)
+#检查响应变量的正态性，发现对数据进行转换时，第四张图效果是最好的。
+par(mfrow=c(2,2))
+hist(biodepth$biomass)
+hist(log(biodepth$biomass+1))
+hist((biodepth$biomass)^(1/2))
+hist((biodepth$biomass)^(1/3))
+biodepth$biomass.cubrt <- (biodepth$biomass)^(1/3)
+
+#做嵌套混合模型
+lmm1 <- lmer(biomass.cubrt~log.diversity + (1|location/block.loc),biodepth)
+#结果显示block.loc的std.Dev为0，也就是没有解释任何y的变异。为模型奇异问题。
+summary(lmm1)
+#检查模型残差是否正态
+isSingular(lmm1)
+par(mfrow=c(1,1))
+qqPlot(resid(lmm1))
+#检查模型残差是否同质性
+plot(sqrt(abs(resid(lmm1)))~ fitted(lmm1))
+lines(lowess(sqrt(abs(resid(lmm1)))~
+               fitted(lmm1)), col='red')
+#检查随机效应的正态性，结果显示location为正态，但是block.loc方差为0，不是正态分布了，结合上面的问题，剔除该变量
+qqPlot(ranef(lmm1)$location$'(Intercept)')
+qqPlot(ranef(lmm1)$block.loc$'(Intercept)')
+#重新做模型
+lmm2 <- lmer(biomass.cubrt~log.diversity + (1+log.diversity|location),biodepth)
+#结果显示：#random intercepts not very important？？？？？？？
+summary(lmm2)
+```
+[回到选项卡](#jump10)
+
+
+### 交叉模型中随机效应
+
+```{r crossed}
+#以下给出全部原始数据，该例子是关于土壤类型影响了植物生长，同时随机变量有地点的不同以及物种的不同。
+plantsoil <- read.csv('./data/plantsoil.csv', h=TRUE)
+plantsoil
+summary(plantsoil)
+plantsoil$Plot <- as.factor(plantsoil$Plot)
+plantsoil$soil <- as.factor(plantsoil$soil)
+plantsoil$species <- as.factor(plantsoil$species)
+summary(plantsoil)
+#代码`unique(plantsoil$species)`提取出每个species的名字，length()是给出多少一共多种species，而summary下有展示出前几个species，每种下面出现了几次。
+length(unique(plantsoil$species))  
+#使用table函数发现没有嵌套关系，plot和species是交叉的关系
+table(plantsoil$Plot,plantsoil$species)
+#如果两个随机变量是交叉关系，模型应该这样建立：
+mod1 <- lmer(growth~soil+(1|Plot)+(1|species),plantsoil)
+#summary一下发现结随机效应对y变异的解释和残差相比，解释了许多，另外应该注意的是intercept指的是soilA，而soilM指的是该类型与A比，soilS与A比，而此时，M与S还没有比较到。
+summary(mod1)
+#由于土地类型M与S还没有比较到，因此更换基准线，也就是intercept变成了soilM，记住relevel之后要重新跑一下模型，否则summary的结果不会变!!!
+plantsoil$soil <- relevel(plantsoil$soil,ref="M")
+mod1 <- lmer(growth~soil+(1|Plot)+(1|species),plantsoil)
+summary(mod1)
+#作图一下可以发现按土壤类型来分组，看growth的状况，可以发现，均值，方差似乎都没有很大的区别。
+plot(growth~soil,plantsoil)
+#把模型生成的拟合值的残差提取出来，应该有651个，与该数据集的样本量是一致的。
+resids <- resid(mod1, type='pearson')
+length(resids)
+dim(plantsoil)
+#检查残差是否方差同质了以及是否正态了，结果显示都是好的。
+plot(sqrt(abs(resids))~ fitted(mod1))
+lines(lowess(sqrt(abs(resids))~
+               fitted(mod1)), col='red')
+qqPlot(resids)
+#检查随机效应是否正态，如果随机效应有斜率也应该检查斜率的正态性，但该例子中仅有截距。结果显示基本都是正态的。
+par(mfrow=c(1,2))
+qqPlot(ranef(mod1)$species$'(Intercept)')
+qqPlot(ranef(mod1)$Plot$'(Intercept)')
+#比较模型中固定效应和随机效应分别解释了多少，可以看出随机效应解释的部分多得多，也和summary该模型的随机效应部分的std.DEV偏大一致。
+r.squaredGLMM(mod1)
+#如果这种交叉模型里随机效应有斜率，比如以下这个例子，是指不同土地类型间植物生长的差异会因物种不同而不同。因为上面的R2结果显示随机效应影响y的变异很多，而且通过mod1的结果species的std.dev是4.6084，比plot大很多。所以看看speices是否会影响固定效应的斜率，而这个模型结果显示species只影响土地类型M而不影响其他（也就是该随机效应不影响y和固定效应下水平S和A的关系），因为VARIANCE只有0.003和0.019 ?????
+mod2 <- lmer(growth~soil+(1|Plot)+(1+soil|species),plantsoil)
+summary(mod2)
+```
+[回到选项卡](#jump10)
+
+## 模型选择{.tabset}
+<span id="jump11"></span>
+
+### 目录
+- 手工判断随机或固定因子是否应该纳入模型
+- 函数判断随机或固定因子是否应该纳入模型
+- bootstrap一起判断随机和固定因子
+
+### 手工判断随机或固定因子是否应该纳入模型
+
+```{r seperate1}
+library(lme4)
+library(ggplot2)
+library(lattice)
+library(arm)
+library(utils)
+library(car)
+library(MuMIn)
+#以下的例子是生物深度与生物多样性的关系，同时还受到了国家和实验设置的block的影响。
+biodepth <- read.csv("./data/Biodepth.csv")
+biodepth
+#查看数据
+summary(biodepth)
+dim(biodepth)
+biodepth$location<-as.factor(biodepth$location)
+biodepth$block<-as.factor(biodepth$block)
+
+###########################################################以下是手动计算判断固定因子是否应该纳入
+#先做一个只把location考虑成随机效应的模型
+mod1 <- lmer(sqrt(biomass)~log.diversity + (1|location), data=biodepth)
+#从结果看出来，由于log.diversity属于连续变量，因此它作为固定变量，在结果的截距就是指和0比，summary和anova的结果都没有看到p值和自由度df的值
+summary(mod1)
+anova(mod1)
+#使用likelihood ratio方法，也就先要建立一个混合模型的零模型，因此先把固定变量去除，以下写法其实相当于`lmer(sqrt(biomass)~1 + (1|location)`。对比一下两个模型的summary结果可以发现，零模型中的只有截距了，而且零模型中随机效应中的residual解释的部分增大了。
+mod0 <- update(mod1, ~.-log.diversity)
+summary(mod1)
+summary(mod0)
+#此时anova是用于对比这个模型有无显著差异的，结果显示是有显著差异的，也就是拟合模型是要比零模型要好，因此放入固定变量是有意义的。而且可以可以看出mod1的AIC更小，也说明这个问题。
+anova(mod0, mod1)
+#现在手动估计自由度df
+##结果显示N为该数据集biodepth的总样本量为476；p为固定效应参数的数量2；nmp为随机效应参数的数量474；q是随机因素下的水平数为8(因为location中有8个国家)；nth是隨機因素的方差为1，残差标准差的REML估计值为2；reTrms为随机效应有1项。这都表示这些信息所占的自由度个数
+getME(mod1, 'devcomp')$dims 
+length(unique(biodepth$location)) 
+##首先不保守地计算固定效应所占的自由度，实际上就是n-p-nth-REML，为471
+den.df1 <- 476 - 2 - 1 - 2   
+den.df1
+###然后可以得到固定效应的F值，为47.5
+anova(mod1) 
+###因为得到了F值和自由度，现在可以使用概率生成函数来看该固定因子是否显著。
+pf(47.5, df1=1, df2=den.df1, lower.tail=FALSE)
+##其次保守地计算固定效应所占的自由度，实际上就是n-p-q-REML
+###对比上面的结果可以发现，固定因子的自由度减小了之后，p值会增大。但总体而言两者差别不大，因为无论保守或不保守地估计固定效应自由度都是四十多，而总自由度是476。还可以发现den.f1和den.f2的区别就是前者减去的是nth，后者减去的是随机效应的水平数。与怎么看待随机效应有关，如果要估计出它每个参数，则是8，如果把它所有参数放入矩阵，而只要估计出这个矩阵的一个参数就是1？？？？
+den.df2 <- 476  -2 - 8 - 2  
+den.df2
+pf(47.5, df1=1, df2=den.df2, lower.tail=FALSE)
+
+
+###########################################################以下是关于手动计算判断随机因子是否应该纳入
+##在使用REML方法来计算时：LR值为435.07；mod1的AIC值为2909.54；mod_lm的AIC值为3342.62，说明纳入了随机因子的模型更好。这表明在R背后计算AIC值的时候，参数数量没有像公式中一样+1，为什么？？（因为是先通过函数计算对比数值后发现R中背后的计算逻辑是这样的）
+mod_lm <- lm(sqrt(biomass)~log.diversity, data=biodepth)
+reml_lr <- 2 * c(logLik(mod1, REML=TRUE) - logLik(mod_lm, REML=TRUE))
+AIC_mod1 <- 2*(4)-2*logLik(mod1,REML=TRUE)
+AIC_mod_lm <- 2*(3)-2*logLik(mod_lm,REML=TRUE)
+reml_lr
+AIC_mod1
+AIC_mod_lm 
+
+##在使用ML方法来计算时：LR值为434.23；mod1的AIC值为2909.54；mod_lm的AIC值为3341.78，这也说明了纳入了随机因子的模型更好。可以看出REML和ML方法的区别对简单线性模型lm有影响，但对混合线性模型没有影响。
+mod_lm <- lm(sqrt(biomass)~log.diversity, data=biodepth)
+reml_lrM <- 2 * c(logLik(mod1) - logLik(mod_lm))
+AIC_mod1M <- 2*(4)-2*logLik(mod1)
+AIC_mod_lmM <- 2*(3)-2*logLik(mod_lm)
+reml_lrM
+AIC_mod1M
+AIC_mod_lmM
+```
+[回到选项卡](#jump11)
+
+### 函数判断随机或固定因子是否应该纳入模型
+```{r seperate2}
+#接前一个的例子
+###########################################################以下是用函数来看固定因子是否应该纳入
+##加载包lmertest后就可以估计出混合模型中固定因子和随机因子显著性了，记得要重新要跑一下模型！！！！另外anova是用F检验固定因子效应显著性，ranova使用LRT方法来估计随机因子显著性。更多细节请参考该[该链接](https://blog.51cto.com/yijiaobani/2867247)
+library(lmerTest)
+mod1 <- lmer(sqrt(biomass)~log.diversity + (1|location), data=biodepth)
+###判断固定因子是否应该加入，可以看出该包使用的是不保守地估计固定因子的方法，也就是手动计算中的方法一，也就是把随机效应的参数估计当成矩阵，随机响应的参数估计只占一个自由度了而不是八个。
+anova(mod1)
+####以下是用另一个包的方法来查看固定因子是否纳入，结果与anova的差不多
+library("sjstats")
+p_value(mod1)
+###使用另两个包pbkrtest和car来估计固定因子的显著性，可以发现这两个包都是采取更保守的方法来估计，也就是手动计算部分的方法二，把随机效应的参数估计占了8个自由度。函数KRmodcomp要写入没有固定因子的零模型，而函数Anova不需要。
+library(pbkrtest)
+KRmodcomp(mod0, mod1)
+library(car)
+Anova(mod1, test='F')
+
+
+###########################################################以下是用函数来看随机因子是否应该纳入
+##用anova来计算,默认情况refit=true，也就是结果产生的是用ML来计算LR(likelihood ratio)而不是REML；问题是anova用ML背后计算逻辑是在混合模型中AIC的计算loglik要-1，而且参数数量都不像公式一样+1
+anova(mod1, mod_lm)
+AIC_mod1M1 <- 2*(4)-2*(logLik(mod1)-1)
+AIC_mod_lmM <- 2*(3)-2*logLik(mod_lm)
+logLik(mod1)-1
+AIC_mod1M1
+AIC_mod_lmM
+
+##用anova计算的时候如果强调refit=FALSE,那么是用REML来计算LR，但会出现警告，也就是这么做是有问题的。用手动计算可以看出anova用REML来计算AIC的时候，实际上是对混合模型采取了REML的方法，但是对线性模型lm还是采取的是ML的方法！！！
+anova(mod1, mod_lm,refit=FALSE)
+AIC_mod1M1 <- 2*(4)-2*logLik(mod1,REML=TRUE)
+AIC_mod_lmM <- 2*(3)-2*logLik(mod_lm)
+AIC_mod1M1 
+AIC_mod_lmM
+
+##用ranova函数来查看，在结果中，none部分的loglik值为-1450.8；AIC值为2909.5。(1 | location) 的loglik值为-1668.3；AIC值为3342.6，LR值为435.07。通过与手动计算的部分相比。可以发现ranova默认使用的是REML的方法！！！而且通过对比二者的loglik值发现，结果中的none代表的是mod1也就是混合模型！！(1 | location) 代表的是去除随机因子的简单线性模型mod_lm!!!因此该结果表示两个模型差异显著，而且看第一项是混合模型的AIC更小，应该纳入随机因子！！！
+ranova(mod1)
+AIC_mod1 <- 2*(4)-2*logLik(mod1,REML=TRUE)
+AIC_mod_lm <- 2*(3)-2*logLik(mod_lm,REML=TRUE)
+logLik(mod1, REML=TRUE)
+logLik(mod_lm, REML=TRUE)
+AIC_mod1
+AIC_mod_lm 
+##用以下函数来查看随机响应和固定效应解释了模型的多少，可以看出在该总模型中，随机效应的影响非常大！！
+r.squaredGLMM(mod1)
+##以下是查看模型的方差
+library("sjstats")
+#得到随机效应的p值
+p_value(mod1)
+#得到模型的方差组成，同样可以勘察随机效应的影响非常大！
+insight::get_variance(mod1)
+
+```
+[回到选项卡](#jump11)
+
+### bootstrap一起判断随机和固定因子
+
+```{r together}
+#以下是原数据的展示，以及该例子是研究：在不同的温室里，有两种水平的光照和3种水平的落叶（损害）。光照的两种水平和三种水平的损害在每个温室里都实施（并且假设这十个温室可能是有一定差异的）。在每个温室中，植物以3个水平的落叶，想要知道的是光照和损害对植物生长有什么影响。
+damage <- read.csv("./data/plantdamage.csv")
+damage
+#查看数据结构
+summary(damage)
+dim(damage)
+#把分类变量设为因子
+damage$shadehouse <- as.factor(damage$shadehouse)
+damage$light <- as.factor(damage$light)
+#检查响应变量是否满足正态性。结果显示不正态，因此进行数据转换。
+hist((damage$growth))
+hist((damage$damage))
+damage$growth.cubrt <- (damage$growth)^(1/3)
+#发现shadehouse有十种
+unique(damage$shadehouse)
+
+###########################################################以下是建立仅有截距的随机效应
+library(lme4)
+lmm1 <- lmer(growth~light*damage+(1|shadehouse),damage)
+summary(lmm1)
+##anova这里实际上用的是lmerTest包中对固定因子是否应该纳入模型来判断,记得要先加载该包再重新运行一下模型，否则不能得出p值！！！，而Anova用的是car包里的方法，前者更保守，后者更不保守。
+library(lmerTest)
+lmm1 <- lmer(growth~light*damage+(1|shadehouse),damage)
+anova(lmm1)
+library(car)
+Anova(lmm1, test='F')
+##
+library(MuMIn)
+r.squaredGLMM(lmm1)
+ranova(lmm1)
+###########################################################以下是建立有截距和斜率的随机效应
+lmm2 <-lmer(growth~light*damage+(1+damage|shadehouse),damage)
+##对比lmm1的结果发现，固定因子间差异的显著性全减少了（尤其是固定因子damage不显著了,也就是以lightD为基准线的截距显著但斜率不显著了，但lightL的斜率还是显著，因此不可删除damge这一项），但随机因子的解释的部分变多了。对比一下用anova对比可以直接判断，而不是比较差异性！！！看得出来所有固定因子的p值都大了，显著性减小了。
+summary(lmm2)
+anova(lmm2)
+##评价一下随机响应，采用的是bootstrap的方法，也就是对参数的估计从点估计到置信区间的估计了？？？除了sigma(模型的方差？)的置信区间永远在0的右边（因为是平方计算）,只有当它接近0的时候才是不显著的，其他的参数的置信区间只有跨零的时候才是不显著的。结果显示，随机因子的截距（结果的第三项），和随机因子的斜率（结果的第一项）都是显著的。固定因子的结果同summary中的结果。`oldNames=F`是为了给出每个置信区间前参数的名字，否则只会显示编号，但会增加运行时间，另外nsim代表抽取样本次数，一般来说比较大更好，同样也会增加运行时间！！！！
+###可以看出summary可以评价固定因子间的差异性，但用bootstrap可以看出随机和固定因子的差异性，因此更好！！！！
+library(MASS)
+confint.result <- confint(lmm2, method='boot', oldNames=F, nsim = 2999) 
+confint.result
+###以下是手算置信区间的步骤：
+mod1 <- lmer(sqrt(biomass)~log.diversity + (1|location), data=biodepth)
+mods <- replicate(499, {
+  newresp <- simulate(mod1)
+  newmod <- refit(mod1, newresp)}, 
+  simplify=FALSE)
+fixef.sims <- sapply(mods, fixef) 
+fixef.sims
+## will give you the fixed effect for all models
+class(fixef.sims)
+apply(fixef.sims, 1, quantile, c(0.025, 0.975))
+confint.result
+
+##查看固定效应和随机效应对总变异的解释程度比较，从结果可以看出随机效应的影响非常非常小。
+r.squaredGLMM(lmm2)
+##使用ranova函数查看一下整个随机效应是否应该纳入模型，看的是第一项，第一项才是混合模型，可以看出AIC稍微小一点点而已，但是最好还是纳入，结合bootstrp的结果来看也是应该纳入。
+ranova(lmm2)
+```
+[回到选项卡](#jump11)
+
+
+## 模型预测{.tabset}
+<span id="jump12"></span>
+
+### 目录
+- lm的拟合值与置信区间
+- lmm中的拟合值
+- lmm中的置信区间
+
+### lm的预测与置信区间
+```{r lm}
+library(lme4)
+library(ggplot2)
+library(lattice)
+library(arm)
+library(utils)
+library(car)
+###########################################################以下是关于土壤类型和水分对植物生长影响的数据，用的是lm模型
+irr <- read.csv("./data/irrigation.csv")
+irr
+#查看数据
+summary(irr)
+head(irr)
+irr$soil <- as.factor(irr$soil)
+mod.irr <- lm(growth ~ soil*water, data=irr)
+#检查方差齐性和残差正态性，结果都不错因此可以用lm模型
+par(mfrow=c(2,2))
+plot(mod.irr)  
+#检查结果，发现每一项结果都是显著的，因此该模型是可以用的
+summary(mod.irr) 
+#用以下函数得到该模型lm中y的拟合值，仅仅得到一个含有拟合值的vector
+fit1 <- fitted(mod.irr)
+head(fit1)
+#用以下方式把拟合值放入包含了各项原始数据的irr数据集中
+irr$fitted <- fitted(mod.irr)
+head(irr)
+par(mfrow=c(1,1))
+#绘制出实际的观测的y值和拟合的y值，发现基本呈线性关系
+plot(growth~fitted,irr)
+#以下的plot图和上面的一样，因为数据是一样的，再绘制出截距为0，斜率为1的线
+plot(fit1, irr$growth)
+abline(a=0,b=1, col=2)
+#现在要预测在water因子为2后，植物的生长会怎么变化，且当土地类型为loam时
+##创建一个新的数据集，仅有两列（water和soil），且仅有一行数据（分别为sand和2）
+newdat <- data.frame(soil=factor('sand'), water=2)
+newdat
+summary(irr)
+##根据模型mod.irr预测，当土地类型为sand，water为2的时候growth为多少,结果显示为0.388
+predict(mod.irr, newdata=newdat) 
+##通过以下函数还可以得到关于这个预测值的standard error，结果为se.fit的0.049。需要该信息，是因为在计算95% 置信区间CI的时候是这样计算的：y-hat +- 1.96*s.e.
+predict(mod.irr, newdata=newdat, se.fit=TRUE)
+###因此关于这一个数据点置信区间的上下界限分别为0.29和0.48：
+0.388 - 1.96*0.049
+0.388 + 1.96*0.049
+###上面为手动计算，以下是用函数直接得到关于：当土地类型为sand，water为2的时候growth为多少的置信区间confidence interval。
+predict(mod.irr, newdata=newdat, interval='confidence', level=0.95)
+###以下是用函数直接得到关于：当土地类型为sand，water为2的时候growth为多少的预测区间prediction interval，对比可以发现该区间范围要比confidence intercal 大得多，也就是更保守
+predict(mod.irr, newdata=newdat, interval='prediction', level=0.95)
+0.388+((summary(mod.irr)$sigma))*1.96
+0.388-((summary(mod.irr)$sigma))*1.96
+```
+[回到选项卡](#jump12)
+
+### lmm中的拟合值
+
+```{r fitted}
+library(lme4)
+library(ggplot2)
+library(lattice)
+library(arm)
+library(utils)
+library(car)
+###########################################################以下是关于光照和损害对植物生长影响的数据，用的是lmm模型，其中shadehouse是随机效应
+plants <- read.csv('./data/plantdamage3.csv')
+plants
+#查看数据结构
+summary(plants)
+head(plants)
+plants$light <- as.factor(plants$light)
+plants$shadehouse <- as.factor(plants$shadehouse)
+plants$block <- as.factor(plants$block)
+summary(plants)
+dim(plants)
+library(lme4)
+#构建混合模型并且查看模型结果
+mod.pl.lmer1 <- lmer(growth~light*damage + (1|shadehouse),data=plants)
+summary(mod.pl.lmer1)
+#用包lmertest中得函数来检查固定因子和随机因子是否应该纳入模型，记得重新跑一遍模型，函数anova才能出来p值！！结果显示该模型各类因子都应都纳入。
+library(lmerTest)
+mod.pl.lmer1 <- lmer(growth~light*damage + (1|shadehouse),data=plants)
+anova(mod.pl.lmer1)
+ranova(mod.pl.lmer1)
+
+###########################################################用函数来计算预测值，首先需要需要手动赋予各个自变量(无论是随机因子还是固定因子)具体的值和名称，要与输入模型中的一样。相当于把light，damge，shadehouse的原始数据提取出来，结合到新的数据集中去，注意，函数expan.grid是把因子不同水平都结合的了，因此总共的数据行数有2*3*10=60，看preddat的数据就知道。
+summary(plants)
+preddat <- expand.grid(light=c('D', 'L'),
+                       damage=c(0, 0.1, 0.25),
+                       shadehouse =1:10)
+##查看一下新的数据集结构，发现shadehouse应该设为factor
+summary(preddat)
+dim(preddat)
+preddat$shadehouse <-as.factor(preddat$shadehouse)                                 
+summary(preddat)
+preddat                 
+##对比检查下原始数据集和新创建的数据集下因子的水平数量和名字是否一致！！！
+levels(preddat$light)
+levels(plants$light)
+levels(preddat$shadehouse) 
+levels(plants$shadehouse)  
+##然后创建固定因子的预测值pre.fix（新拟合的y值），使用的是模型lmer创立的mod.p1.lmer1，输入的固定因子为新数据中的shadehouse，light和damage，把新得到的y值同样放入该数据集preddat中。另外，re.form=~0等效于re.form=NA。
+preddat$pred.fix <- predict(mod.pl.lmer1, newdata=preddat, re.form=~0) 
+head(preddat,n=10)
+###以下函数是针对数据集preddat，仅提取出因子light水平为D，damage值为0的数据。会发现当这两个固定因子的水平或值是一样的时候，即使随机因子shadehouse不一样，预测值也是一样的，这是因为在用predict函数拟合新y值得时候还没有考虑随机因子，也就是re.form=~0
+subset(preddat, light=='D' & damage==0) 
+##接着创建包含了随机和固定因子的预测值pre.sh（新拟合的y值），使用的是模型lmer创立的mod.p1.lmer1，输入的固定因子为新数据中的的shadehouse，light和damage，把新得到的y值同样放入该数据集preddat中。此时是把全部随机因子考虑进去，如果随机因子有多个，只考虑其中一个，可以用函数`preddat$pred.sh <- predict(mod.pl.lmer1, newdata=preddat, re.form=~(1|shadehouse))`
+preddat$pred.sh <- predict(mod.pl.lmer1, newdata=preddat, re.form=NULL) 
+head(preddat,n=10)
+###以下函数是针对数据集preddat，仅提取出因子light水平为D，damage值为0的数据。会发现当这两个固定因子的水平或值是一样的时候，会因为随机因子shadehouse不一样，预测值也不一样。
+subset(preddat, light=='D' & damage==0) 
+##以下函数是把随机因子的截距部分数值提取出来，也就是把shadehouse按1到10排序后后面对应的值提取第一列（因为该模型中也只有截距一列），会发现该列数值就等于预测值中的pre.sh-pre.fix。
+ranef(mod.pl.lmer1)$shadehouse[1:10,1]  ## compare this with model random BLUPS
+preddat$pred.fix-preddat$pred.sh
+
+###########################################################以下为手动计算仅受固定因子影响的拟合的y值
+##首先提取出仅有固定因子的模型
+form <- formula(mod.pl.lmer1, fixed.only=T)
+form
+##然后去除仅有固定因子模型中的因变量
+form <- update(form, NULL~.) 
+form
+##接着把我们含有各个自变量的数据集preddat放入公式form中并形成新的model matrix。由于此时放入了form中，因此自动按字母顺序，把因子中light的D编为0，为基准，L编码为1，为关注的，也就是其列名为light L，是L就编码为1，不是就编码为0，而damage为本来自身的数值，lightL:damage为现在这两列数值的相乘，两外此时模型截距默认全为1。
+predmat <- model.matrix(form, data=preddat)
+head(predmat)
+dim(predmat)
+##记住y的预测值是这么算的： y-hat = X*beta，因此此时的X就是上面我们通过最简单模型form得到的predmat，beta也就是fixef(mod.pl.lmer1，关于参数矩阵的计算可以参考第一部分的lm中的模型构建code。由于predmat矩阵为60✖4，fixef矩阵为4✖1，因此得到预测值vector一列，含60个数据，并且把该vector放入数据集preddat中并且命名为pre.hand，此时的预测值结果是在仅受这两个固定因子的影响得到的
+preddat$pred.hand <- as.vector(predmat %*% fixef(mod.pl.lmer1))
+head(preddat,n=12)
+
+###########################################################以下为手动计算受固定和随机因子影响的拟合的y值
+##首先先制作一个含随机效应的矩阵，把含有各个自变量数据等的数据preddat放入公式~0+shadehouse中得到一个计算出来的60✖10的矩阵
+ranefmat <- model.matrix(~0 + shadehouse, preddat)
+head(ranefmat,20)
+dim(ranefmat) 
+colnames(ranefmat)
+##记住此时含有随机效应的y预测值是这么算的：y-hat(random effect) = XB + Zb，其中的Z也就是上面新形成的数据集ranefmat，关于其参数b矩阵就是ranef(mod.pl.lmer1)$shadehouse[,1]，关于这个参数的提取可以查看第三部分lmm中的模型构建code中的查看仅有截距的随机效应。
+preddat$pred.hr <- predmat %*% fixef(mod.pl.lmer1) +
+  ranefmat %*% (ranef(mod.pl.lmer1)$shadehouse[,1])
+head(preddat,n=12)
+```
+[回到选项卡](#jump12)
+
+### lmm中的置信区间
+```{r interval}
+###########################################################在得到了混合效应模型的预测值pre.sh(同pre.hr)后，需要得到每个预测值对应的standard errors。
+##函数vcoc是用来拟合模型对象的方差-协方差矩阵。当 cov(X, Y)>0时，表明 X与Y 正相关；当 cov(X, Y)<0时，表明X与Y负相关，当 cov(X, Y)=0时，表明X与Y不相关。矩阵内的每个元素数值都代表cov(X,Y),X与Y表示不同因子，或者表示同一因子之间的关系。可以发现把该矩阵的对角线上的数字开方后得到数字就是summary中各个固定因子下的sta.error
+summary(mod.pl.lmer1)
+vcv <- vcov(mod.pl.lmer1)
+vcv
+sqrt(diag(vcov(mod.pl.lmer1)))
+summary(mod.pl.lmer1)$coef
+##根据summary中每个固定因子下的std.error来计算每个拟合y值的std.error，
+semod <-  sqrt(diag(predmat%*%vcv%*%t(predmat)))
+semod
+##因为用dim函数发现这里样本量一共是103个，属于大样本，所以在计算置信区间的时候假设它可以直接用标准正态度分布，也就是1.96其实是标准正态分布的第97.5百分位数，但是为了更精确，因此我们的实际自由度只有99，用的是t分布，因为有4个固定因子（lightL，lightD，damgae，相互作用？）和1个随机因子，因此在2.5%的情况下，概率累积密度为1.98。
+###因此仅受固定因子影响的预测y值得置信区间的上下界限如下
+dim(plants)
+qt(p=0.025, df = 103-4-1)
+preddat$ucl <- preddat$pred.fix + semod*1.98
+preddat$lcl <- preddat$pred.fix - semod*1.98
+ggplot(data=preddat, aes(x=damage, y=pred.fix, 
+ymin=lcl, ymax=ucl, colour=light)) +
+geom_smooth(stat='identity') + theme_classic()
+
+###因此受固定和随机因子影响的预测y值得置信区间的上下界限如下。
+preddat$ucl.sh <- preddat$pred.sh + semod*1.98
+preddat$lcl.sh <- preddat$pred.sh - semod*1.98
+ggplot(data=preddat, aes(x=damage, y=pred.sh, ymin=lcl.sh, ymax=ucl.sh, colour=light)) +
+geom_smooth(stat='identity') +facet_wrap(~shadehouse) +theme_bw()
+##这个是仅有固定因子的时候十个shadehouse间growth和light与damge之间变化，与上面的包含了随机因子的图片发现，以下十张图片没有变化，而上面的混合模型中在不同shadehouse中growth随light和damage的变化也发生了变化
+ggplot(data=preddat, aes(x=damage, y=pred.fix, ymin=lcl, ymax=ucl, colour=light)) +
+geom_smooth(stat='identity') + facet_wrap(~shadehouse)
+
+######上面的置信区间只考虑了固定效应的不确定性。因为semod的计算只涉及了固定因子的std.error，如果再考虑随机效应的不确定性，那么这部分的semod会增大。
+##首先先提取出随机效应的的方差等值，summary该模型中的随机效应的Variance和Std.Dev.分别对应着as.data.frame(VarCorr(mod.pl.lmer1))中的vcoc和sdcor
+vc1 <- as.data.frame(VarCorr(mod.pl.lmer1))
+vc1
+##然后提前出随机响应shadehouse的variance值并赋予到var.sh中去
+var.sh <- vc1[vc1$grp=='shadehouse', 'vcov']
+var.sh
+##然后重新计算std.error以及新的置信区间，注意此时的置信区间中间的斜线值是仅受固定影响得来的。
+semod1 <-  sqrt(diag(predmat%*%vcv%*%t(predmat)) + var.sh)
+semod1
+preddat$ucl.fix <- preddat$pred.fix + semod1*1.98
+preddat$lcl.fix <- preddat$pred.fix - semod1*1.98
+##第一张图是考虑了固定和随机效应两者的不确定部分后得来的置信区间，第二张图是仅考虑固定效应的不确定部分而得来的置信区间，可以发现第一张图的置信区间范围更宽，因为增加了不确定部分。
+ggplot(data=preddat, aes(x=damage, y=pred.fix, ymin=lcl.fix, ymax=ucl.fix, colour=light)) +geom_smooth(stat='identity') +theme_classic()
+ggplot(data=preddat, aes(x=damage, y=pred.fix, 
+ymin=lcl, ymax=ucl, colour=light)) +
+geom_smooth(stat='identity') + theme_classic()
+##对考虑了随机和固定效应影响的拟合y值同样做图，发现十个shadehouse中的置信区间与前面的比较也都变宽了。
+preddat$ucl.sh1 <- preddat$pred.sh + semod1*1.98
+preddat$lcl.sh1 <- preddat$pred.sh - semod1*1.98
+ggplot(data=preddat, aes(x=damage, y=pred.sh, ymin=lcl.sh1, ymax=ucl.sh1, colour=light)) +
+geom_smooth(stat='identity') +facet_wrap(~shadehouse) +theme_bw()
+```
+
+[回到选项卡](#jump12)
+
+
+# 广义混合线性模型(GLMM){.tabset}
+<span id="jump13"></span>
+
+## 目录
+- 二项式分布数据
+- 泊松分布数据
+- 模型的选择和拟合
+
+## 二项式分布数据
+```{r binomal}
+library(lme4)
+library(ggplot2)
+#以下是关于美国总统选举的例子，明显是二项式分布的数据，因为y要么为1，也就是更喜欢 Bush；要么为0，也就是更喜欢Dukakis。影响的因子有state，sex，race，age
+polls <- read.csv('./data/pollsdata_day2.csv')
+polls
+#查看数据
+summary(polls)
+polls$state <- as.factor(polls$state)
+polls$edu <- as.factor(polls$edu)
+polls$black <- as.factor(polls$black)
+polls$female <- as.factor(polls$female)
+#构建广义模型并且查看结果，该结果用于回答问题：黑人选民和女性选民是否倾向于乔治-布什的可能性更大或更小？因为问的是和，因此是加和模型，而不考虑相互作用。结果显示黑人选民更倾向于bush，但女性没有明显倾向。
+glm1 <- glm(bush~black+female,polls,family=binomial())
+summary(glm1)
+
+#作图看一下地区的影响，发现不同地区之间上面的关系有所不同，因此重新构建模型
+ggplot(data=polls, aes(x=black, y=bush,group=female)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  facet_wrap(~state)  
+##构建广义混合模型并且查看结果，是为了回答不同州的女性的不同投票模式是否解释了一些投票结果的差异？结果与上面一样，看来不同州之间对这种关系影响很小。
+glmm1 <- glmer(bush~black+female+(1|state),polls,family=binomial())
+summary(glmm1)
+#
+glmm2 <- glmer(bush~black+female+(1+female|state),polls,family=binomial())
+summary(glmm2)
+#用bootstrap的方法来查看固定和随机效应是否显著，除非在最后的分析，否则抽样次数不要太多，否则会需要非常多的时间，当使用非常大的nism时，在该例子中随机效应的斜率会变得显著
+confint(glmm2,method='boot', oldNames=F, nsim = 199)
+
+#检查模型的残差是否是方差同质了？
+plot(sqrt(abs(resid(glmm2)))~ fitted(glmm2))
+lines(lowess(sqrt(abs(resid(glmm2)))~
+               fitted(glmm2)), col='red')
+
+#检查数据是否存在过度分散的问题
+##首先是视觉化的binnedplot图，几乎都在灰线内，不存在该问题
+library(arm)
+x <- predict(glmm2)
+y <- resid(glmm2)
+par(mfrow=c(1,1))
+binnedplot(x,y)
+##统计学上检查是否有该问题，数值接近1，不存在
+sum(resid(glmm2, type='pearson')^2)/df.residual(glmm2)
+
+#检查随机效应的正态性，因为广义指的只是因变量的分布类型，但还是要符合lmm模型中随机效应参数是正态的假设，看结果发现随机效应的截距和斜率都正态了
+par(mfrow=c(1,2))
+qqPlot(ranef(glmm2)$state$'(Intercept)')
+qqPlot(ranef(glmm2)$state$'female1')
+
+
+```
+[回到选项卡](#jump13)
+
+## 泊松分布数据
+```{r possion}
+#以下例子是关于处理幼苗的数量，响应变量是N，也就是苗的存活数量，自变量是trt，也就是对幼苗不同的处理，有对照（不做处理），杀虫剂和杀菌剂三个水平，随机因素是地区station，Nsees是每个样方内的总苗木数
+pests <- read.csv('./data/Pesticide.csv')
+pests
+#查看数据
+summary(pests)
+head(pests,n=10)
+dim(pests)
+pests$station <- as.factor(pests$station)
+pests$trt <- as.factor(pests$trt)
+#通过作图可以发现大致上是杀虫剂的使用更利于幼苗的存活，但是这种关系在不同地区之间有差异。
+ggplot(data=pests, aes(x=trt, y=N,col=trt)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  facet_wrap(~station)  
+#基于以上的原因因此构建随机效应模型，结果显示trt各个水平都是显著区别于control对照组的
+glmp1 <- glmer(N~trt+(1|station),pests,family=poisson())
+summary(glmp1)
+#检查数据该模型数据是否有过度分散的问题，结果显示远远大于1说明存在该问题
+sum(resid(glmp1, type='pearson')^2)/df.residual(glmp1)
+
+##############################################尝试通过引入协变量来看看是否能解决过度分散的问题
+##hist作图发现新引入的Nseeds为连续变量，但是是非正态的，因此需要转换一下（注意！此处广义模型针对的是y或者说残差的分布可以非正态！一般严格要求x应该也是正态的）
+hist(pests$Nseeds)
+pests$Nseeds.log <- log(pests$Nseeds)
+hist(pests$Nseeds.log )
+glmp2 <- glmer(N~trt+Nseeds.log+(1|station),pests,family=poisson())
+##结果显示引入的Nseeds作为协变量不显著，可以不引入，而且依旧存在过度分散的问题
+summary(glmp2)
+sum(resid(glmp2, type='pearson')^2)/df.residual(glmp2)
+
+##############################################尝试通过新增自设变量来indx来解决过度分散的问题。这个方法叫observation  level random effect (OLRE)
+dim(pests)
+pests$indx <- 1:nrow(pests)
+glmp3 <- glmer(N~trt+(1|station) + (1|indx),pests,family=poisson())
+##结果显示，与前面相比杀菌剂与对照组相比不显著了，同时过度分散问题被解决了，但可能存在分散不足的问题？？？？
+summary(glmp3)
+sum(resid(glmp3, type='pearson')^2)/df.residual(glmp3)
+##检查随机效应的正态性，结果随机因子station正态性不错，但是作为随即因子的indx正态性不是特别好，因此该方法也有点问题
+par(mfrow=c(1,2))
+qqPlot(ranef(glmp3)$station$'(Intercept)')
+qqPlot(ranef(glmp3)$indx$'(Intercept)')
+
+##########################################尝试更改分布族，用gamma来做模型
+glmp4 <- glmer(N~trt + (1|station), data=pests,family=Gamma(link=log))
+#结果显示trt下各个水平还是与对照组有显著差异
+summary(glmp4)
+#模型比较
+#方法一：RMSPE tests，均方根误差（RMSE）”是回归模型两项主要性能指标中的一项。 它度量模型所预测的值与实际值之间的平均差值。 它用来估计模型预测目标值的性能（准确度）。 “均方根误差”的值越小，模型的质量越好。结果显示glmm3更好
+pests$fitted.gamma <- (fitted(glmp4))
+pests$fitted.poisson <- (fitted(glmp3))
+library(MLmetrics)
+RMSPE(y_pred=pests$fitted.poisson,y_true=pests$N)
+RMSPE(y_pred=pests$fitted.gamma,y_true=pests$N)
+#用R2来看，结果显示在glmm4中随机效应对总变异解释的更少了相较于glmm3的结果而言，这是因为glmm3有个多的随机因子indx
+library(MuMIn)
+library(ggplot2)
+library(lme4)
+r.squaredGLMM(glmp3)
+r.squaredGLMM(glmp4)
+#通过作图来比较，两者都比较好的拟合了。但glmp3更好
+par(mfrow=c(1,2))  
+plot(log(fitted.poisson)~log(N),data=pests,col="red")
+abline(a=0,b=1,col="black")
+plot(log(fitted.gamma)~log(N),data=pests,col="blue")
+abline(a=0,b=1,col="black")
+##以下图就是把上面两张图的拟合数据点放在一起看
+ggplot(data=pests, aes(x=log(N), y=log(fitted.poisson))) + geom_point(col="red")+
+  geom_point(data=pests,aes(x=log(N), y=log(fitted.gamma)),
+              stat='identity')
+
+##############################################尝试引入随机效应的斜率的来解决过度分散的问题
+glmp5 <- glmer(N~trt+(1+trt|station),pests,family=poisson())
+## 结果显示过度分散的问题被解决，而且该方法比上面的OLRE更好，因为在解释上更容易。
+summary(glmp5)
+sum(resid(glmp5, type='pearson')^2)/df.residual(glmp5)
+##最后用bootstrap来同时检查随机和固定因子
+confint(glmp5,method='boot', oldNames=F, nsim = 199)
+```
+[回到选项卡](#jump13)
+
+## 模型选择和拟合
+```{r}
+#依旧是十个温室里对植物做不同光照和损伤的实验，但是区别在于：在lmm的模型预测中关于拟合值和置信区间的计算中用到该例子时用因变量是growth生长速率，但在该例子中由于给定的总苗木数量是4，因此这里的survs虽然是具体不同的数字，但也不可如前面的泊松分布数据的例子一般当作泊松分布，而是二项式分布了，因为知道总的减去存活的，相当于知道死亡数了。
+survive <- read.csv('./data/plantdamage2.csv')
+summary(survive)
+dim(survive)
+survive$shadehouse <- as.factor(survive$shadehouse)
+survive$light <- as.factor(survive$light)
+length(unique(survive$shadehouse))
+head(survive)
+##############################################模型的选择
+#构建模型，结果显示light和damage相互作用不明显，因此更改模型。
+glmm1 <- glmer(cbind(survs,4-survs)~light*damage+(1|shadehouse),survive,family=binomial())
+summary(glmm1)
+#把light和damage有相互作用和没相互作用的模型做比较发现没有显著差异。而且两个模型都显示仅lightD与0比有显著差异，斜率damage都可以去除。
+glmm2 <- glmer(cbind(survs,4-survs)~light+damage+(1|shadehouse),survive,family=binomial())
+summary(glmm2)
+anova(glmm1,glmm2) #LRT
+#去除自变量damage重新做模型，把有无damage的模型做比较发现没有显著差异，因为glmm3中依旧是light D与0比有差异，但是light L与light D比也是没有差异，同glmm2
+glmm3 <- glmer(cbind(survs,4-survs)~light+(1|shadehouse),survive,family=binomial())
+summary(glmm3)
+anova(glmm2,glmm3) #LRT
+##但是用bootsrap的方法结果显示，light D与0比有差异，但是light L与light D比也是有差异，因此模型glmm3是可以的
+confint(glmm3,method='boot', oldNames=F, nsim = 199)
+
+##############################################画出模型的拟合曲线
+#虽然上面的模型选择说明glmm3更好，但是为了学习，依旧选择全模型glmm1来作为例子
+##如lmm部分的拟合值做法一样，手动赋予各个自变量(无论是随机因子还是固定因子)具体的值和名称，要与输入模型中的一样。相当于把light，damge，shadehouse的原始数据提取出来，结合到新的数据集中去。
+preddat <- expand.grid(light=c('D', 'L'),
+                       damage=c(0, 0.1, 0.25),
+                       shadehouse =1:10)
+summary(preddat)
+dim(preddat)
+preddat$shadehouse <-as.factor(preddat$shadehouse)
+##首先算出仅受固定效应影响的拟合值
+preddat$pred.fix.T <- 
+  predict(glmm1, newdata=preddat, re.form=~0) 
+##然后算出受固定和随机效应影响的拟合值
+preddat$pred.sh.T <- predict(glmm1, newdata=preddat, re.form=NULL) 
+head(preddat,n=10)
+##接着进行用plogis进行转换，注意与lmm中部分的例子相比这里需要对y转换！！！因为这里是glmm，有个连接函数对y进行了改变，所以需要转换回去！！！
+preddat$pred.fix <-plogis(preddat$pred.fix.T)
+preddat$pred.sh <-plogis(preddat$pred.sh.T)
+head(preddat,n=10)
+##做出仅有固定效应时light和damage对存活率的影响
+ggplot(data=survive, aes(x=damage, y=survs/4)) + geom_point()+
+  geom_smooth(data=preddat,aes(x=damage, y=pred.fix, col=light),stat='identity')
+##做出有固定效应和随机效应时light和damage对存活率的影响（也就是不同shadehouse时light和damage对存活率的影响也有差异）
+ggplot(data=survive, aes(x=damage, y=survs/4)) + geom_point()+
+  geom_smooth(data=preddat,aes(x=damage, y=pred.sh, col=light),stat='identity')+facet_wrap(~shadehouse)
+```
+[回到选项卡](#jump13)
+
+# 总结
+
+- 固定和随机效应的区别
+![](E:/academic_resources/note-tutorial/data/img/sta-14.png)
+
+<br>
+
+- 得到正确的预测值和置信区间需要明确的是：
+![](E:/academic_resources/note-tutorial/data/img/sta-21.png)
+
+<br>
+
+- 关于分布的总结（以下截图来自范欢师姐上课内容）
+![](E:/academic_resources/note-tutorial/data/img/sta-31.png)
+![](E:/academic_resources/note-tutorial/data/img/sta-32.png)
+![](E:/academic_resources/note-tutorial/data/img/sta-33.png)
+![](E:/academic_resources/note-tutorial/data/img/sta34.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

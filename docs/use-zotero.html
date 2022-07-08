@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Zhangyixue" />
+
+
+<title>use-zotero</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/zhanglantian2021/Tutorials">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">use-zotero</h1>
+<h4 class="author">Zhangyixue</h4>
+<h4 class="date">This document was last updated on 周五 7月 08 2022 19:52:57</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-07-08
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Tutorials/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220708code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220708)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220708code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220708)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstreed27da86e869a0bbc0a711c4008b797d573559954targetblankd27da86a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/zhanglantian2021/Tutorials/tree/d27da86e869a0bbc0a711c4008b797d573559954" target="_blank">d27da86</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstreed27da86e869a0bbc0a711c4008b797d573559954targetblankd27da86a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/zhanglantian2021/Tutorials/tree/d27da86e869a0bbc0a711c4008b797d573559954" target="_blank">d27da86</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+working directory clean
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/use-zotero.Rmd</code>) and HTML (<code>docs/use-zotero.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/zhanglantian2021/Tutorials/blob/d27da86e869a0bbc0a711c4008b797d573559954/analysis/use-zotero.Rmd" target="_blank">d27da86</a>
+</td>
+<td>
+zhanglantian2021
+</td>
+<td>
+2022-07-08
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="下载" class="section level3" number="0.0.1">
+<h3 number="0.0.1"><span class="header-section-number">0.0.1</span> 下载</h3>
+<ol style="list-style-type: decimal">
+<li><p><code>https://www.zotero.org/support/dev_builds</code>该版本是可以支持内置阅读pdf格式的，下载完成后，点击zotero的编辑首选项中设置一下： <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero5.png" /></p></li>
+<li><p>要能够使用知网pdf下载的插件需要上知网海外版：<a href="https://chn.oversea.cnki.net/index/" class="uri">https://chn.oversea.cnki.net/index/</a></p></li>
+</ol>
+</div>
+<div id="插件的使用" class="section level3" number="0.0.2">
+<h3 number="0.0.2"><span class="header-section-number">0.0.2</span> 插件的使用</h3>
+<ol style="list-style-type: decimal">
+<li>ZoteroQuickLook 插件</li>
+</ol>
+<ul>
+<li>Windows 用户必须首先安装快速浏览工具才能使用按空格执行文件预览功能。故您需要安装==QuickLook==软件对ZoteroQuickLook 插件进行必要的辅助。</li>
+<li>安装插件后且下载完quicklook后在菜单栏选择编辑的首选项，然后在弹出窗口选择高级，在高级页面选择设置编辑器，然后搜索搜索extensions.zoteroquicklook.customviewcommand。将此配置的值设置为QuickLook.exe的完整路径。</li>
+<li>然后选择某个文件按空格键就可以pdf形式的预览文件了</li>
+<li></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Jasminum 插件</li>
+</ol>
+<ul>
+<li>可以使得姓和名合并或拆分</li>
+<li>使得知网下载的学位论文导入目录：<a href="https://www.163.com/dy/article/GRSRC94L0538H9RK.html" class="uri">https://www.163.com/dy/article/GRSRC94L0538H9RK.html</a></li>
+<li></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>ZotFile 插件</li>
+</ol>
+<ul>
+<li>其能对文献进行作者-年份-文献标题该特定样式的修改，在zotero主页面点击工具后选择 ZotFile Preference，在弹出页面选择Renaming Rules模块，若您想对其进行修改，可前往 ZotFile 官网 ，其内有完整的不同样式表达式：<a href="http://zotfile.com/" class="uri">http://zotfile.com/</a></li>
+<li>ZotFile的主要作用在于将文献相关的pdf文档统一存放(可将该位置进行坚果云同步)，且统一存放的方式由用户自定义。比如，可以按照<em>“年份 - 期刊”样式作为文件框架，将相应的pdf文献对应存储。与此同时，pdf文献的命名也可以进行自定义，如“作者 - 年份 - 标题”</em>，方便在需要的时候进行辨别查找。</li>
+<li>命名规则设置：Zotero→Tools→ZotFile Preferences→Renaming Rules，这里可以根据需求对pdf文件进行重命名，比如{%a - }{%y - }{%t}对应的是作者 - 年份 - 文章名，其他自定义详见ZotFile官网。当然，也可以选择使用Zotero默认的命名方式。</li>
+<li>右键书籍选择 manage attachment 然后选择get table of conents 即可得到目录，而中文的可以右键知网助手添加pdf书签后得到</li>
+<li></li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>markdown here 插件</li>
+</ol>
+<ul>
+<li>插件下载地址：<code>https://www.dropbox.com/s/wjuq1nqh4nh9k4s/markdown.xpi?dl=1&amp;raw=1</code>，然后在zotero中选择条目后选择右侧的笔记添加，按下快捷键：【ctrl+alt+m】，你用Markdown写的笔记就生成为漂亮的文档了！快捷键无法使用的时候可以点击上面的文件然后选择markdown转换。</li>
+</ul>
+</div>
+<div id="操作上的教程" class="section level3" number="0.0.3">
+<h3 number="0.0.3"><span class="header-section-number">0.0.3</span> 操作上的教程</h3>
+<p>新手友好视频教程[<a href="https://www.bilibili.com/video/BV1ZE411p7qT/" class="uri">https://www.bilibili.com/video/BV1ZE411p7qT/</a>] 1. 以前那些乱七八糟的PDF怎么处理呢？我们可以将每本电子书拖到对应条目下面。然后批量重命名即可。如下图所示： <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero2.png" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>数据存储及文件同步的问题：<a href="https://blog.csdn.net/wwlswj/article/details/113416164" class="uri">https://blog.csdn.net/wwlswj/article/details/113416164</a>，</li>
+</ol>
+<ul>
+<li>基本设置如下面的图： <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero6.png" />；<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero7.png" />；<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero9.png" /></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><p>网络图书馆的使用：<code>https://www.zotero.org/zhanglantian2021/library</code> 通常它的内存很少，所以可以使用坚果云：<a href="https://help.jianguoyun.com/?p=3168" class="uri">https://help.jianguoyun.com/?p=3168</a> 配置如下图： <img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero-jianguoyun.png" /></p></li>
+<li><p>文件同步功能最好取消否则会导致做的笔记会退回到十几秒的状态：<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero4.png" /></p></li>
+<li><p>分享与保存的问题：完稿轉為純文字(可後續更改行距、縮排、字型等格式，並可提交分享)：在使用 Zotero插入書目資訊到MS Word時，您使用的Zotero文獻庫與MS Word間存在參數以供連結更新引文的Style 或內容，若直接將帶有參數的檔案提供給其他沒有儲存該文獻庫的電腦開啟，將無法看到引文資訊，因此應轉為純文字後才能提交或分享。而部分Zotero無法提供的格式修改，也可在轉為純文字後進行，避免造成參數連結問題。轉純文字請點選Unlink Citation，即完成轉換。最好在转换前保存有带参数的word文档，以便日后转换和修改文档使用。</p></li>
+<li><p>在百度学术等地方搜索文章标题，然后点击引用，选择导出到bibtex，然后全选复制弹出窗口的内容，再回到zotero的那个pdf所在的文件夹下的页面按<code>ctrl+shift+alt+I</code>，再把那个pdf文件拖到该导入的bibtex文件中。有时候导出的bibtex是个.bib格式的文件，那么在zotero界面按<code>shift+ctrl+I</code>后在弹出的窗口选择该格式文件导入即可。</p></li>
+<li><p>R和R包的引用方法：<a href="http://yangliufr.com/post/how-to-cite-r-in-your-paper-or-publication" class="uri">http://yangliufr.com/post/how-to-cite-r-in-your-paper-or-publication</a> 代码<code>citation("R包名字")</code>后出现的直接引用的内容，如果要导入到zotero的bibtex格式就用代码<code>print(citation("R包的名字"),bibtex=TRUE)</code></p></li>
+<li><p>在Zotero軟件界面對應條目上，單擊右鍵，在彈出對話框選擇ExtractAnnotations。在提取注釋的同時，Zotfile在每條注釋下還創建了超連結，點開注釋文本後面的藍色超連結，就可以順利定位到你的筆記位置。在讀一篇長達數百頁的綜述（如Chemical Review以及書籍）時，可以先做高亮筆記，導出注釋，當需要查閱的時候，直接點擊超連結，到達目的頁面，非常方便 原文網址：<a href="https://kknews.cc/news/4vkxzpq.html" class="uri">https://kknews.cc/news/4vkxzpq.html</a></p></li>
+<li><p>移动文件夹而zotero无法找到的时候：<a href="https://sspai.com/post/59035" class="uri">https://sspai.com/post/59035</a></p></li>
+</ol>
+</div>
+<div id="扩展使用的教程" class="section level3" number="0.0.4">
+<h3 number="0.0.4"><span class="header-section-number">0.0.4</span> 扩展使用的教程</h3>
+<ol style="list-style-type: decimal">
+<li><a href="https://www.yangzhiping.com/tech/zotero5.html" class="uri">https://www.yangzhiping.com/tech/zotero5.html</a></li>
+</ol>
+</div>
+<div id="怎么判断文章的重要性" class="section level3" number="0.0.5">
+<h3 number="0.0.5"><span class="header-section-number">0.0.5</span> 怎么判断文章的重要性</h3>
+<ol style="list-style-type: decimal">
+<li><p>作者的重要性：比如【H指数】</p></li>
+<li><p>文献的引用次数：比如【Google学术引用次数】</p></li>
+</ol>
+<ul>
+<li>下载插件<code>https://github.com/beloglazov/zotero-scholar-citations</code></li>
+<li>该插件开发者为了避免将你条目自带的【引用次数】字段与【Google学术引用次数】冲突，所以，他将其保存在【其它】那个字段里面去了。怎么显示它？如下图所示：<img src="https://raw.githubusercontent.com/zhanglantian2021/picture/main/img/zotero1.png" /></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>文献的学术社交媒体影响力，比如【altmetric分数】 将这个页面的书签<code>http://www.altmetric.com/bookmarklet.php</code>拖到Chrome菜单栏上即可。打开文章的原文网页，然后点击Chrome书签栏上，我们在前一个步骤创建的书签：Altmetric it。奇迹发生了！我们获得了一个分数，以及获得了全世界主要的媒体、博客、推特们对这篇文献的讨论。它是社交媒体中非常热门的一个讨论话题。</li>
+</ol>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Chinese (Simplified)_China.utf8 
+[2] LC_CTYPE=Chinese (Simplified)_China.utf8   
+[3] LC_MONETARY=Chinese (Simplified)_China.utf8
+[4] LC_NUMERIC=C                               
+[5] LC_TIME=Chinese (Simplified)_China.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.8.3     bslib_0.3.1      jquerylib_0.1.4  compiler_4.2.0  
+ [5] pillar_1.7.0     later_1.3.0      git2r_0.30.1     tools_4.2.0     
+ [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.8.0   evaluate_0.15   
+[13] tibble_3.1.7     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.2     
+[17] cli_3.2.0        rstudioapi_0.13  yaml_2.3.5       xfun_0.30       
+[21] fastmap_1.1.0    httr_1.4.3       stringr_1.4.0    knitr_1.39      
+[25] sass_0.4.1       fs_1.5.2         vctrs_0.4.1      rprojroot_2.0.3 
+[29] glue_1.6.2       R6_2.5.1         processx_3.5.3   fansi_1.0.3     
+[33] rmarkdown_2.14   callr_3.7.0      magrittr_2.0.3   whisker_0.4     
+[37] ps_1.6.0         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
+[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.1    </code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogInVzZS16b3Rlcm8iDQphdXRob3I6ICJaaGFuZ3lpeHVlIg0KZGF0ZTogVGhpcyBkb2N1bWVudCB3YXMgbGFzdCB1cGRhdGVkIG9uIGByIGZvcm1hdChTeXMudGltZSgpLCAiJWEgJWIgJWQgJVkgJUg6JU06JVMiKWANCmRvY3VtZW50OiBjdGV4YXJ0DQpvdXRwdXQ6IA0KICAgIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICAgICAgdGhlbWU6IGNvc21vDQogICAgICAgIGhpZ2hsaWdodDogdGV4dG1hdGUNCiAgICAgICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgICAgICBjb2RlX2ZvbGRpbmc6IHNob3cNCiAgICAgICAgaGlnaHRsaWdodDogdGFuZ28NCiAgICAgICAgZGZfcHJpbnQ6IHBhZ2VkDQogICAgICAgIGZpZ19jYXB0aW9uOiB0cnVlDQogICAgICAgIHRvYzogdHJ1ZQ0KICAgICAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUNCiAgICAgICAgdG9jX2RlcHRoOiAzDQogICAgICAgIHRvY19mbG9hdDogIA0KICAgICAgICAgICAgIGNvbGxhcHNlZDogRkFMU0UNCiAgICAgICAgICAgICBzbW9vdGhfc2Nyb2xsOiB0cnVlICAgDQotLS0NCg0KDQojIyMg5LiL6L29DQoNCjEuIGBodHRwczovL3d3dy56b3Rlcm8ub3JnL3N1cHBvcnQvZGV2X2J1aWxkc2Dor6XniYjmnKzmmK/lj6/ku6XmlK/mjIHlhoXnva7pmIXor7twZGbmoLzlvI/nmoTvvIzkuIvovb3lrozmiJDlkI7vvIzngrnlh7t6b3Rlcm/nmoTnvJbovpHpppbpgInpobnkuK3orr7nva7kuIDkuIvvvJoNCiFbXShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vemhhbmdsYW50aWFuMjAyMS9waWN0dXJlL21haW4vaW1nL3pvdGVybzUucG5nKQ0KDQoyLiDopoHog73lpJ/kvb/nlKjnn6XnvZFwZGbkuIvovb3nmoTmj5Lku7bpnIDopoHkuIrnn6XnvZHmtbflpJbniYjvvJpodHRwczovL2Nobi5vdmVyc2VhLmNua2kubmV0L2luZGV4Lw0KDQojIyMg5o+S5Lu255qE5L2/55SoDQoNCjEuIFpvdGVyb1F1aWNrTG9vayDmj5Lku7YNCi0gV2luZG93cyDnlKjmiLflv4XpobvpppblhYjlronoo4Xlv6vpgJ/mtY/op4jlt6XlhbfmiY3og73kvb/nlKjmjInnqbrmoLzmiafooYzmlofku7bpooTop4jlip/og73jgILmlYXmgqjpnIDopoHlronoo4U9PVF1aWNrTG9vaz096L2v5Lu25a+5Wm90ZXJvUXVpY2tMb29rIOaPkuS7tui/m+ihjOW/heimgeeahOi+heWKqeOAgg0KLSDlronoo4Xmj5Lku7blkI7kuJTkuIvovb3lroxxdWlja2xvb2vlkI7lnKjoj5zljZXmoI/pgInmi6nnvJbovpHnmoTpppbpgInpobnvvIznhLblkI7lnKjlvLnlh7rnqpflj6PpgInmi6npq5jnuqfvvIzlnKjpq5jnuqfpobXpnaLpgInmi6norr7nva7nvJbovpHlmajvvIznhLblkI7mkJzntKLmkJzntKJleHRlbnNpb25zLnpvdGVyb3F1aWNrbG9vay5jdXN0b212aWV3Y29tbWFuZOOAguWwhuatpOmFjee9rueahOWAvOiuvue9ruS4ulF1aWNrTG9vay5leGXnmoTlrozmlbTot6/lvoTjgIINCi0g54S25ZCO6YCJ5oup5p+Q5Liq5paH5Lu25oyJ56m65qC86ZSu5bCx5Y+v5LulcGRm5b2i5byP55qE6aKE6KeI5paH5Lu25LqGDQotIA0KMi4gSmFzbWludW0g5o+S5Lu2DQotIOWPr+S7peS9v+W+l+Wnk+WSjOWQjeWQiOW5tuaIluaLhuWIhg0KLSDkvb/lvpfnn6XnvZHkuIvovb3nmoTlrabkvY3orrrmloflr7zlhaXnm67lvZXvvJpodHRwczovL3d3dy4xNjMuY29tL2R5L2FydGljbGUvR1JTUkM5NEwwNTM4SDlSSy5odG1sDQotIA0KMy4gWm90RmlsZSDmj5Lku7YNCi0g5YW26IO95a+55paH54yu6L+b6KGM5L2c6ICFLeW5tOS7vS3mlofnjK7moIfpopjor6XnibnlrprmoLflvI/nmoTkv67mlLnvvIzlnKh6b3Rlcm/kuLvpobXpnaLngrnlh7vlt6XlhbflkI7pgInmi6kgWm90RmlsZSBQcmVmZXJlbmNl77yM5Zyo5by55Ye66aG16Z2i6YCJ5oupUmVuYW1pbmcgUnVsZXPmqKHlnZfvvIzoi6Xmgqjmg7Plr7nlhbbov5vooYzkv67mlLnvvIzlj6/liY3lvoAgWm90RmlsZSDlrpjnvZEg77yM5YW25YaF5pyJ5a6M5pW055qE5LiN5ZCM5qC35byP6KGo6L6+5byP77yaaHR0cDovL3pvdGZpbGUuY29tLw0KLSBab3RGaWxl55qE5Li76KaB5L2c55So5Zyo5LqO5bCG5paH54yu55u45YWz55qEcGRm5paH5qGj57uf5LiA5a2Y5pS+KOWPr+WwhuivpeS9jee9rui/m+ihjOWdmuaenOS6keWQjOatpSnvvIzkuJTnu5/kuIDlrZjmlL7nmoTmlrnlvI/nlLHnlKjmiLfoh6rlrprkuYnjgILmr5TlpoLvvIzlj6/ku6XmjInnhacq4oCc5bm05Lu9IC0g5pyf5YiK4oCd5qC35byP5L2c5Li65paH5Lu25qGG5p6277yM5bCG55u45bqU55qEcGRm5paH54yu5a+55bqU5a2Y5YKo44CC5LiO5q2k5ZCM5pe277yMcGRm5paH54yu55qE5ZG95ZCN5Lmf5Y+v5Lul6L+b6KGM6Ieq5a6a5LmJ77yM5aaC4oCc5L2c6ICFIC0g5bm05Lu9IC0g5qCH6aKY4oCdKu+8jOaWueS+v+WcqOmcgOimgeeahOaXtuWAmei/m+ihjOi+qOWIq+afpeaJvuOAgg0KLSDlkb3lkI3op4TliJnorr7nva7vvJpab3Rlcm/ihpJUb29sc+KGklpvdEZpbGUgUHJlZmVyZW5jZXPihpJSZW5hbWluZyBSdWxlc++8jOi/memHjOWPr+S7peagueaNrumcgOaxguWvuXBkZuaWh+S7tui/m+ihjOmHjeWRveWQje+8jOavlOWmgnslYSAtIH17JXkgLSB9eyV0feWvueW6lOeahOaYr+S9nOiAhSAtIOW5tOS7vSAtIOaWh+eroOWQje+8jOWFtuS7luiHquWumuS5ieivpuingVpvdEZpbGXlrpjnvZHjgILlvZPnhLbvvIzkuZ/lj6/ku6XpgInmi6nkvb/nlKhab3Rlcm/pu5jorqTnmoTlkb3lkI3mlrnlvI/jgIINCi0g5Y+z6ZSu5Lmm57GN6YCJ5oupIG1hbmFnZSBhdHRhY2htZW50IOeEtuWQjumAieaLqWdldCB0YWJsZSBvZiBjb25lbnRzIOWNs+WPr+W+l+WIsOebruW9le+8jOiAjOS4reaWh+eahOWPr+S7peWPs+mUruefpee9keWKqeaJi+a3u+WKoHBkZuS5puetvuWQjuW+l+WIsA0KLSANCjQuIG1hcmtkb3duIGhlcmUg5o+S5Lu2DQotIOaPkuS7tuS4i+i9veWcsOWdgO+8mmBodHRwczovL3d3dy5kcm9wYm94LmNvbS9zL3dqdXExbnFoNG5oOWs0cy9tYXJrZG93bi54cGk/ZGw9MSZyYXc9MWDvvIznhLblkI7lnKh6b3Rlcm/kuK3pgInmi6nmnaHnm67lkI7pgInmi6nlj7PkvqfnmoTnrJTorrDmt7vliqDvvIzmjInkuIvlv6vmjbfplK7vvJrjgJBjdHJsK2FsdCtt44CR77yM5L2g55SoTWFya2Rvd27lhpnnmoTnrJTorrDlsLHnlJ/miJDkuLrmvILkuq7nmoTmlofmoaPkuobvvIHlv6vmjbfplK7ml6Dms5Xkvb/nlKjnmoTml7blgJnlj6/ku6Xngrnlh7vkuIrpnaLnmoTmlofku7bnhLblkI7pgInmi6ltYXJrZG93bui9rOaNouOAgg0KDQojIyMg5pON5L2c5LiK55qE5pWZ56iLDQrmlrDmiYvlj4vlpb3op4bpopHmlZnnqItbaHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMVpFNDExcDdxVC9dDQoxLiDku6XliY3pgqPkupvkubHkuIPlhavns5/nmoRQREbmgI7kuYjlpITnkIblkaLvvJ/miJHku6zlj6/ku6XlsIbmr4/mnKznlLXlrZDkuabmi5bliLDlr7nlupTmnaHnm67kuIvpnaLjgILnhLblkI7mibnph4/ph43lkb3lkI3ljbPlj6/jgILlpoLkuIvlm77miYDnpLrvvJoNCiFbXShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vemhhbmdsYW50aWFuMjAyMS9waWN0dXJlL21haW4vaW1nL3pvdGVybzIucG5nKQ0KDQoyLiDmlbDmja7lrZjlgqjlj4rmlofku7blkIzmraXnmoTpl67popjvvJpodHRwczovL2Jsb2cuY3Nkbi5uZXQvd3dsc3dqL2FydGljbGUvZGV0YWlscy8xMTM0MTYxNjTvvIwNCi0g5Z+65pys6K6+572u5aaC5LiL6Z2i55qE5Zu+77yaDQohW10oaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3poYW5nbGFudGlhbjIwMjEvcGljdHVyZS9tYWluL2ltZy96b3Rlcm82LnBuZynvvJshW10oaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3poYW5nbGFudGlhbjIwMjEvcGljdHVyZS9tYWluL2ltZy96b3Rlcm83LnBuZynvvJshW10oaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3poYW5nbGFudGlhbjIwMjEvcGljdHVyZS9tYWluL2ltZy96b3Rlcm85LnBuZykNCg0KMy4g572R57uc5Zu+5Lmm6aaG55qE5L2/55So77yaYGh0dHBzOi8vd3d3LnpvdGVyby5vcmcvemhhbmdsYW50aWFuMjAyMS9saWJyYXJ5YA0K6YCa5bi45a6D55qE5YaF5a2Y5b6I5bCR77yM5omA5Lul5Y+v5Lul5L2/55So5Z2a5p6c5LqR77yaaHR0cHM6Ly9oZWxwLmppYW5ndW95dW4uY29tLz9wPTMxNjgNCumFjee9ruWmguS4i+Wbvu+8mg0KIVtdKGh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS96aGFuZ2xhbnRpYW4yMDIxL3BpY3R1cmUvbWFpbi9pbWcvem90ZXJvLWppYW5ndW95dW4ucG5nKQ0KDQo0LiDmlofku7blkIzmraXlip/og73mnIDlpb3lj5bmtojlkKbliJnkvJrlr7zoh7TlgZrnmoTnrJTorrDkvJrpgIDlm57liLDljYHlh6Dnp5LnmoTnirbmgIHvvJohW10oaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3poYW5nbGFudGlhbjIwMjEvcGljdHVyZS9tYWluL2ltZy96b3Rlcm80LnBuZykNCiAgIA0KNS4g5YiG5Lqr5LiO5L+d5a2Y55qE6Zeu6aKY77ya5a6M56i/6L2J54K657SU5paH5a2XKOWPr+W+jOe6jOabtOaUueihjOi3neOAgee4ruaOkuOAgeWtl+Wei+etieagvOW8j++8jOS4puWPr+aPkOS6pOWIhuS6qynvvJrlnKjkvb/nlKggWm90ZXJv5o+S5YWl5pu455uu6LOH6KiK5YiwTVMgV29yZOaZgu+8jOaCqOS9v+eUqOeahFpvdGVyb+aWh+eNu+W6q+iIh01TIFdvcmTplpPlrZjlnKjlj4Pmlbjku6XkvpvpgKPntZDmm7TmlrDlvJXmlofnmoRTdHlsZSDmiJblhaflrrnvvIzoi6Xnm7TmjqXlsIfluLbmnInlj4PmlbjnmoTmqpTmoYjmj5Dkvpvntablhbbku5bmspLmnInlhLLlrZjoqbLmlofnjbvluqvnmoTpm7vohabplovllZ/vvIzlsIfnhKHms5XnnIvliLDlvJXmlofos4foqIrvvIzlm6DmraTmh4novYnngrrntJTmloflrZflvozmiY3og73mj5DkuqTmiJbliIbkuqvjgILogIzpg6jliIZab3Rlcm/nhKHms5Xmj5DkvpvnmoTmoLzlvI/kv67mlLnvvIzkuZ/lj6/lnKjovYnngrrntJTmloflrZflvozpgLLooYzvvIzpgb/lhY3pgKDmiJDlj4PmlbjpgKPntZDllY/poYzjgILovYnntJTmloflrZfoq4vpu57pgbhVbmxpbmsgQ2l0YXRpb27vvIzljbPlrozmiJDovYnmj5vjgILmnIDlpb3lnKjovazmjaLliY3kv53lrZjmnInluKblj4LmlbDnmoR3b3Jk5paH5qGj77yM5Lul5L6/5pel5ZCO6L2s5o2i5ZKM5L+u5pS55paH5qGj5L2/55So44CCDQogICANCjYuIOWcqOeZvuW6puWtpuacr+etieWcsOaWueaQnOe0ouaWh+eroOagh+mimO+8jOeEtuWQjueCueWHu+W8leeUqO+8jOmAieaLqeWvvOWHuuWIsGJpYnRleO+8jOeEtuWQjuWFqOmAieWkjeWItuW8ueWHuueql+WPo+eahOWGheWuue+8jOWGjeWbnuWIsHpvdGVyb+eahOmCo+S4qnBkZuaJgOWcqOeahOaWh+S7tuWkueS4i+eahOmhtemdouaMiWBjdHJsK3NoaWZ0K2FsdCtJYO+8jOWGjeaKiumCo+S4qnBkZuaWh+S7tuaLluWIsOivpeWvvOWFpeeahGJpYnRleOaWh+S7tuS4reOAguacieaXtuWAmeWvvOWHuueahGJpYnRleOaYr+S4qi5iaWLmoLzlvI/nmoTmlofku7bvvIzpgqPkuYjlnKh6b3Rlcm/nlYzpnaLmjIlgc2hpZnQrY3RybCtJYOWQjuWcqOW8ueWHuueahOeql+WPo+mAieaLqeivpeagvOW8j+aWh+S7tuWvvOWFpeWNs+WPr+OAgg0KICAgDQo3LiBS5ZKMUuWMheeahOW8leeUqOaWueazle+8mmh0dHA6Ly95YW5nbGl1ZnIuY29tL3Bvc3QvaG93LXRvLWNpdGUtci1pbi15b3VyLXBhcGVyLW9yLXB1YmxpY2F0aW9uDQrku6PnoIFgY2l0YXRpb24oIlLljIXlkI3lrZciKWDlkI7lh7rnjrDnmoTnm7TmjqXlvJXnlKjnmoTlhoXlrrnvvIzlpoLmnpzopoHlr7zlhaXliLB6b3Rlcm/nmoRiaWJ0ZXjmoLzlvI/lsLHnlKjku6PnoIFgcHJpbnQoY2l0YXRpb24oIlLljIXnmoTlkI3lrZciKSxiaWJ0ZXg9VFJVRSlgDQoNCjguIOWcqFpvdGVyb+i7n+S7tueVjOmdouWwjeaHieaineebruS4iu+8jOWWruaTiuWPs+mNte+8jOWcqOW9iOWHuuWwjeipseahhumBuOaTh0V4dHJhY3RBbm5vdGF0aW9uc+OAguWcqOaPkOWPluazqOmHi+eahOWQjOaZgu+8jFpvdGZpbGXlnKjmr4/mop3ms6jph4vkuIvpgoTlibXlu7rkuobotoXpgKPntZDvvIzpu57plovms6jph4vmlofmnKzlvozpnaLnmoTol43oibLotoXpgKPntZDvvIzlsLHlj6/ku6XpoIbliKnlrprkvY3liLDkvaDnmoTnrYboqJjkvY3nva7jgILlnKjoroDkuIDnr4fplbfpgZTmlbjnmb7poIHnmoTntpzov7DvvIjlpoJDaGVtaWNhbCBSZXZpZXfku6Xlj4rmm7jnsY3vvInmmYLvvIzlj6/ku6XlhYjlgZrpq5jkuq7nrYboqJjvvIzlsI7lh7rms6jph4vvvIznlbbpnIDopoHmn6XplrHnmoTmmYLlgJnvvIznm7TmjqXpu57mk4rotoXpgKPntZDvvIzliLDpgZTnm67nmoTpoIHpnaLvvIzpnZ7luLjmlrnkvr8NCuWOn+aWh+e2suWdgO+8mmh0dHBzOi8va2tuZXdzLmNjL25ld3MvNHZreHpwcS5odG1sDQoNCjkuIOenu+WKqOaWh+S7tuWkueiAjHpvdGVyb+aXoOazleaJvuWIsOeahOaXtuWAme+8mmh0dHBzOi8vc3NwYWkuY29tL3Bvc3QvNTkwMzUNCg0KIyMjIOaJqeWxleS9v+eUqOeahOaVmeeoiw0KDQoxLiBodHRwczovL3d3dy55YW5nemhpcGluZy5jb20vdGVjaC96b3Rlcm81Lmh0bWwNCg0KIyMjIOaAjuS5iOWIpOaWreaWh+eroOeahOmHjeimgeaApw0KDQoxLiDkvZzogIXnmoTph43opoHmgKfvvJrmr5TlpoLjgJBI5oyH5pWw44CRDQogICANCjIuIOaWh+eMrueahOW8leeUqOasoeaVsO+8muavlOWmguOAkEdvb2dsZeWtpuacr+W8leeUqOasoeaVsOOAkQ0KLSDkuIvovb3mj5Lku7ZgaHR0cHM6Ly9naXRodWIuY29tL2JlbG9nbGF6b3Yvem90ZXJvLXNjaG9sYXItY2l0YXRpb25zYA0KLSDor6Xmj5Lku7blvIDlj5HogIXkuLrkuobpgb/lhY3lsIbkvaDmnaHnm67oh6rluKbnmoTjgJDlvJXnlKjmrKHmlbDjgJHlrZfmrrXkuI7jgJBHb29nbGXlrabmnK/lvJXnlKjmrKHmlbDjgJHlhrLnqoHvvIzmiYDku6XvvIzku5blsIblhbbkv53lrZjlnKjjgJDlhbblroPjgJHpgqPkuKrlrZfmrrXph4zpnaLljrvkuobjgILmgI7kuYjmmL7npLrlroPvvJ/lpoLkuIvlm77miYDnpLrvvJohW10oaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3poYW5nbGFudGlhbjIwMjEvcGljdHVyZS9tYWluL2ltZy96b3Rlcm8xLnBuZykNCiAgDQozLiDmlofnjK7nmoTlrabmnK/npL7kuqTlqpLkvZPlvbHlk43lipvvvIzmr5TlpoLjgJBhbHRtZXRyaWPliIbmlbDjgJENCuWwhui/meS4qumhtemdoueahOS5puetvmBodHRwOi8vd3d3LmFsdG1ldHJpYy5jb20vYm9va21hcmtsZXQucGhwYOaLluWIsENocm9tZeiPnOWNleagj+S4iuWNs+WPr+OAguaJk+W8gOaWh+eroOeahOWOn+aWh+e9kemhte+8jOeEtuWQjueCueWHu0Nocm9tZeS5puetvuagj+S4iu+8jOaIkeS7rOWcqOWJjeS4gOS4quatpemqpOWIm+W7uueahOS5puetvu+8mkFsdG1ldHJpYyBpdOOAguWlh+i/ueWPkeeUn+S6hu+8geaIkeS7rOiOt+W+l+S6huS4gOS4quWIhuaVsO+8jOS7peWPiuiOt+W+l+S6huWFqOS4lueVjOS4u+imgeeahOWqkuS9k+OAgeWNmuWuouOAgeaOqOeJueS7rOWvuei/meevh+aWh+eMrueahOiuqOiuuuOAguWug+aYr+ekvuS6pOWqkuS9k+S4remdnuW4uOeDremXqOeahOS4gOS4quiuqOiuuuivnemimOOAgg0KDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("use-zotero.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

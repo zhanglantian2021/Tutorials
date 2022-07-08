@@ -1,0 +1,353 @@
+---
+title: "use-latex"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+
+
+## 安装与下载
+1. 关于vs code中latex workshop的配置可以参看[这篇文章](https://zhuanlan.zhihu.com/p/38178015)，具体配置文件：
+
+```
+{
+    "r.rpath.windows": "D:\\software\\R\\R-4.1.1\\bin\\x64\\R.exe",
+    "r.rterm.windows": "D:\\software\\Anaconda\\Scripts\\radian.exe",
+    "r.bracketedPaste": true,
+    "r.rterm.option": [
+        "--no-site-file"
+    ],
+    
+    "latex-workshop.showContextMenu": true,
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.message.error.show": false,
+    "latex-workshop.message.warning.show": false,
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "XeLaTeX",
+            "tools": [
+                "xelatex"
+            ]
+        },
+        {
+            "name": "PDFLaTeX",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "BibTeX",
+            "tools": [
+                "bibtex"
+            ]
+        },
+        {
+            "name": "LaTeXmk",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "xelatex -> bibtex -> xelatex*2",
+            "tools": [
+                "xelatex",
+                "bibtex",
+                "xelatex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "pdflatex -> bibtex -> pdflatex*2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+    ],
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk"
+    ],
+    "latex-workshop.latex.autoClean.run": "onFailed",
+    "latex-workshop.latex.recipe.default": "lastUsed",
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "files.autoSave": "afterDelay",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "bracketPairColorizer.depreciation-notice": false,
+    //使用 SumatraPDF 预览编译好的PDF文件
+    // 设置VScode内部查看生成的pdf文件
+    "latex-workshop.view.pdf.viewer": "tab",
+    // PDF查看器用于在\ref上的[View on PDF]链接
+    "latex-workshop.view.pdf.ref.viewer":"auto",
+    // 使用外部查看器时要执行的命令。此功能不受官方支持。
+    "latex-workshop.view.pdf.external.viewer.command": "D:/software/SumatraPdf/SumatraPDF.exe", // 注意修改路径
+    // 使用外部查看器时，latex-workshop.view.pdf.external.view .command的参数。此功能不受官方支持。%PDF%是用于生成PDF文件的绝对路径的占位符。
+    "latex-workshop.view.pdf.external.viewer.args": [
+        "%PDF%"
+    ],
+    // 将synctex转发到外部查看器时要执行的命令。此功能不受官方支持。
+    "latex-workshop.view.pdf.external.synctex.command": "D:/software/SumatraPdf/SumatraPDF.exe", // 注意修改路径
+    // latex-workshop.view.pdf.external.synctex的参数。当同步到外部查看器时。%LINE%是行号，%PDF%是生成PDF文件的绝对路径的占位符，%TEX%是触发syncTeX的扩展名为.tex的LaTeX文件路径。
+    "latex-workshop.view.pdf.external.synctex.args": [
+        "-forward-search",
+        "%TEX%",
+        "%LINE%",
+        "-reuse-instance",
+        "-inverse-search",
+        "\"D:/software/Microsoft VS Code/Code.exe\" \"D:/software/Microsoft VS Code/resources/app/out/cli.js\" -r -g \"%f:%l\"", // 注意修改路径
+        "%PDF%"
+    ]
+}
+```
+   
+2. 为了能够实现实时预览功能，在设置里面把`Files：Auto Save`的选项改成`afterDElay`；并且把插件latex-workshop的`Auto Build`选项改成`onSave`
+
+## 文本内容表示
+1. 宏包：
+1.1 类似于插件，用来增强latex的功能，通常在`\documentclass`之后，在`\begin{document}`之前，将文章所需要涉及的宏包都罗列上。
+1.2 一般常用的宏包有：
+
+```
+\usepackage{amsmath}  %编辑数学公式的宏包
+\usepackage{amssymb} %编辑数学公式的宏包
+\usepackage{amsthm} %编辑数学定理和证明过程的宏包：
+\usepackage{graphicx} %插入图片的宏包
+\usepackage{multirow} %复杂表格的宏包
+```
+
+<br>
+
+2. 基本结构：
+2.1 其中在latex中用%表示注释，也就是在%后面的内容将不会被展示出来。
+2.2  `\usepackage[UTF8]{ctex}`中[ ] 代表可选项，[UTF8] 表示该文档采用UTF8编方式。调用ctex这个宏包后把文档类型改用为`\documentclass[UTF8]{ctexart}`，表该文档是中文论文。
+2.3  用`\LaTex`是专门用来显示LaTex的logo；用`\Tex`是专门用来显示Tex的logo。
+-  在一行的末尾使用`\\ `表示换行，即另起一行
+-  而两次按Enter表示另起一段落，即一个空行表示另起一段落。也可以用`\par`表示另起一段落。
+```
+\documentclass{article} %表示可以选择文档类型，还有report（报告）book（书籍beamer）， （幻灯片） 等
+\begin{document} %表示文档这个类型的开始
+\maketitle %制作封面
+\title{xxxx} %应用xxxx作为title格式
+    Hello World %此处是文档的内容\\
+    第二行的内容 \par
+    第二段的内容 %另起一段后是默认缩进两格的，若要取消则要在这段内容前加个`\noindent`
+\end {document} %表示文档的结束
+
+```
+<br>
+
+3. 标题和目录：
+- 对比以下两段代码会发现：第一段展示的一级标题是居中的（浅色部分是页眉）；第二段是正常，标题都居左了的。
+
+```
+\documentclass[UTF8]{ctexart}
+\begin{document}
+\section{一级标题1的内容}  %+标题下的正文内容
+\subsection{二级标题1.1的内容} %+标题下的正文内容
+\subsunsection{三级标题1.1.1的内容} %+标题下的正文内容
+\tableofcontents %将下文做成目录Contents
+\end {document} 
+
+```
+
+```
+\documentclass[UTF8]{ctexart}
+\CTEXsetup[name={第,章}]{section} 
+\CTEXsetup[format={\zihao{-3}\raggedright\bfseries}]{section}
+\begin{document}
+\section{一级标题1的内容}  %+标题下的正文内容
+\subsection{二级标题1.1的内容} %+标题下的正文内容
+\subsunsection{三级标题1.1.1的内容} %+标题下的正文内容
+\tableofcontents %将下文做成目录Contents
+\end {document} 
+```
+
+<br>
+
+4. 字体设置：
+- 段落的设置
+```
+paragraph{段落加粗内容}+之后的正文
+subparagraph{段落加粗内容}+之后的正文 %相比上一个要缩进一级
+```
+- 中英字体的设置：
+  中文字体应用的宏包是xeCJ，选了一般情况下字体是楷体，加粗的时候则是黑体；英文字体应用的宏包是setmainfont，选择的字体是 times new roman。
+```
+\usepackage{xeCJK} 
+\setCJKmainfont[BoldFont={黑体}]{楷体} 
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+```
+- 字号大小的设置：
+  下面这个代码会把第一级标题设置成3号字体，把内容都设置成2号字体，如果要单独把某几个字设成另外的字体，则需要用{}框住就可以了`{\zihao{3} Hello World}`，因为{}表示一个环境，环境内的格式控制语句只对环境中的文字起作用。
+
+```
+\documentclass[UTF8]{ctexart}
+\CTEXsetup[name={第,章}]{section} 
+\CTEXsetup[format={\zihao{-3}\raggedright\bfseries}]{section}
+\begin{document}
+    \section{第一章} 
+    \zihao{2} 
+    hahha
+    \subsection{次级章节} 
+    hahaha
+    \section{第二章}  
+\end {document} 
+```
+
+<br>
+
+5. 页面设置:
+- 纸张的设置：此时是设置成A4纸张
+```
+\documentclass [UTF8,a4paper]{ctexart}
+```
+- 页边距的设置：需要使用的是geometry包
+```
+\usepackage{geometry} 
+\geometry{left=2.5cm,right=2.5cm,top=2.0cm,bottom=2cm}
+```
+- 页眉页脚的设置：
+  ```
+  \pagestyle{headings} %表示为默认风格，默认为⻚眉显示章节标题和⻚码，⻚脚为空
+  \pagestyle{empty} &这个是取消页眉页脚的
+  ```
+
+<br>
+
+## 公式的应用：
+
+
+
+## 表格的应用：
+1. 一般格式如下：
+```
+\begin{center} %设置表格居中
+\begin{tabular}{|c|c|} %表格标签
+\hline %显示横线
+a & b \\ %a在（1，1）b在（1，2）
+\hline %隐藏横线
+c & d\\ %c在（2，1）d在（2，2）
+\hline %显示横线
+\end{tabular}
+\end{center}
+```
+2. 具体例子如下：
+
+```
+\begin{center}
+    %\footnotesize% fontsize
+    %\setlength{\tabcolsep}{4pt}% column separation
+    %\renewcommand{\arraystretch}{1.5}% row space 
+    \begin{tabular}{lcc}
+        \hline
+        %\multicolumn{num_of_cols_to_merge}{alignment}{contents} \\
+        %\cline{i-j}% partial hline from column i to column j
+        操作系统 & \LaTeX{}编译系统 & \LaTeX{}文本编辑器\\
+        \hline
+        Linux & \href{https://www.tug.org/texlive/acquire-netinstall.html}{\TeX{}Live Full} & \href{http://www.xm1math.net/texmaker/}{Texmaker} 或 Vim\\
+        MacOS & \href{https://www.tug.org/mactex/}{Mac\TeX{} Full} & \href{http://www.xm1math.net/texmaker/}{Texmaker} 或 Texshop\\
+        Windows & \href{https://www.tug.org/texlive/acquire-netinstall.html}{\TeX{}Live Full} 或 \href{https://miktex.org/download}{MiK\TeX{}} & \href{http://www.xm1math.net/texmaker/}{Texmaker}\\
+        \hline
+    \end{tabular}
+\end{center}
+```
+
+## Yaml部分
+```
+---
+title: "R语言简介"
+author:
+  - PurePlayer
+documentclass: ctexart
+geometry: "left=2.5cm,right=2cm,top=3cm,bottom=2.5cm"
+output:
+  rticles::ctex:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+classoption: "hyperref,"
+---
+```
+
+
+
+
+

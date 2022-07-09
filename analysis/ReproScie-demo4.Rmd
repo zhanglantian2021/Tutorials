@@ -10,7 +10,7 @@ wflow_build()
 ```
 wflow_build()
 wflow_view()
-wflow_publish(c("analysis/ReproScie-slides.Rmd"), "first") 
+wflow_publish(c("analysis"), "first") 
 wflow_build()
 wflow_status()
 ```

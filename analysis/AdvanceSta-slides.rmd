@@ -83,7 +83,7 @@ width="400" />
 ]
 
 .pull-right[
-<img src="../data/img/sta-slides2.png"
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-slides2.png"
 width="350" />
 ]
 
@@ -159,7 +159,7 @@ summary(glm1)$deviance
 
 .right-column[
 
-<img src="E:/academic_resources/Tutorials/data/img/sta-slides3.png"
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-slides3.png"
 width="800" />
 ]
 ]
@@ -522,7 +522,7 @@ confint.result
 .panel[.panel-name[Recall-ML]
 
 .pull-left[
-<img src="E:/academic_resources/Tutorials/data/img/sta-slides1.png"
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-slides1.png"
 width="400" />
 ]
 .pull-right[

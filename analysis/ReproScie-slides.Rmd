@@ -58,7 +58,7 @@ xaringanExtra::use_fit_screen()
 class: center, middle
 # REPRODUCIBLE?
 
-<img src="E:/academic_resources/note-tutorial/data/img/reproducible.png" width="600"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png" width="600"/>
 ---
 class: center, middle
 # Markdown
@@ -67,7 +67,7 @@ class: center, middle
 
 Markdown is a **lightweight markup** language for creating formatted text using a plain-text editor.
 
-<img src="E:/academic_resources/note-tutorial/data/img/markdown1.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/markdown1.png" width="300"/>
 
 ???
 A lightweight markup language (LML), also termed a simple or humane markup language, is a markup language with simple, unobtrusive syntax. It is designed to be easy to write using any generic text editor and easy to read in its raw form. Lightweight markup languages are used in applications where it may be necessary to read the raw document as well as the final rendered output.
@@ -100,7 +100,7 @@ class: center, middle
 ```
 install.packages("rmarkdown")
 ```
-<img src="E:/academic_resources/note-tutorial/data/img/Rmarkdown2.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
 
 
 
@@ -115,7 +115,7 @@ generate high quality reports that can be shared with others
 
 - YAML is a digestible data serialization language often used to create configuration files with any programming language
 
-<img src="E:/academic_resources/note-tutorial/data/img/yaml.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/yaml.png" width="300"/>
 
 ---
 ## The bridge of R and markdown-knitr
@@ -125,7 +125,7 @@ generate high quality reports that can be shared with others
 ```
 install.packages("knitr")Demo
 ```
-<img src="E:/academic_resources/note-tutorial/data/img/Rmarkdown2.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
 
 ---
 ## Basic grammar
@@ -144,19 +144,19 @@ class: center, middle
 ## what is Git?
 Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
-<img src="E:/academic_resources/note-tutorial/data/img/git10.jpg" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git10.jpg" width="300"/>
 
 ---
 ## what is Github?
 GitHub offers the distributed version control and source code management (SCM) functionality of Git, plus its own features such as bug tracking, feature requests, task management, continuous integration, and wikis for every project.
 
-<img src="E:/academic_resources/note-tutorial/data/img/github.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/github.png" width="300"/>
 
 ---
 ## What happen under version control?
 working directory -> repository
 
-<img src="E:/academic_resources/note-tutorial/data/img/git1.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git1.png" width="300"/>
 
 ---
 ## Basic grammar

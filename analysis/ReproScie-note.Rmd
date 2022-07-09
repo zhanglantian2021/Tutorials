@@ -3,8 +3,8 @@ title: "Reproducible-Science-note"
 author: "Zhangyixue"
 date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
 document: ctexart
-bibliography: E:/academic_resources/note-tutorial/data/format/MyLibrary.bib
-csl: E:/academic_resources/note-tutorial/data/format/journal-of-ecology.csl
+bibliography: ../data/format/MyLibrary.bib
+csl: ../data/format/journal-of-ecology.csl
 output: 
     workflowr::wflow_html:
         theme: cosmo
@@ -68,11 +68,11 @@ install.packages(c("tidyverse", "sf", "emo", "janitor", "palmerpenguins", "useth
 #给出下载数据的地址
 url<-"https://doi.org/10.1371/journal.pone.0166570.s001"
 #给下载下来的文件重命名为twitter_cit_data.csv，并且把该文件放入文件夹data下，需要指定是因为当前工作路径是data的上一级文件夹。以及读取该数据并且把里面的数据放入数据集destfile
-destfile <- "E:/academic_resources/note-tutorial/data/twitter_cit_data.csv"
+destfile <- "data/twitter_cit_data.csv"
 download.file(url, destfile)
 library(tidyverse)
 #读取文件(注意搜寻到工作路径文件夹的下一级文件夹)并且把放入数据集citations_raw
-citations_raw<-read_csv(file="E:/academic_resources/note-tutorial/data/twitter_cit_data.csv")
+citations_raw<-read_csv(file="data/twitter_cit_data.csv")
 ```
 
 
@@ -282,10 +282,10 @@ penguins %>%
 
 ```{r data, cache=TRUE}
 url <- "https://doi.org/10.1371/journal.pone.0166570.s001"
-destfile <- "E:/academic_resources/note-tutorial/data/twitter_cit_data.csv"
+destfile <- "data/twitter_cit_data.csv"
 download.file(url, destfile)
 library(tidyverse)
-citations_raw<-read_csv(file="E:/academic_resources/note-tutorial/data/twitter_cit_data.csv")
+citations_raw<-read_csv(file="data/twitter_cit_data.csv")
 citations <- citations_raw %>%
   rename(journal = 'Journal identity',
     impactfactor = '5-year journal impact factor',
@@ -588,13 +588,13 @@ title: "Reproducible-Science"
 author: "Zhangyixue"
 date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
 document: ctexart
-bibliography: data/format/MyLibrary.bib
-csl: data/format/journal-of-ecology.csl
+bibliography: ../data/format/MyLibrary.bib
+csl: ../data/format/journal-of-ecology.csl
 output: 
     html_document:
         code_download: true
         code_folding: show
-        css: data/format/bootstrap.css
+        css: ../data/format/bootstrap.css
         hightlight: tango
         df_print: paged
         fig_width: 10
@@ -626,14 +626,16 @@ output:
   - `fig_caption`：表示是否使得图片的输出带有标题
   -  `toc:true`表示生成目录；`number_sections: true`和`toc_depth: 3`表示生成目录以及生成目录的深度（也就是根据#生成目录，如果有###三级标题，那么目录会生成1，1.1和1.1.1）
   - `toc_float`表示将目录浮动到html内容的左侧，并且即使滚动文档，浮动目录也始终可见。 `collapsed: FALSE`控制目录不可以折叠，默认的是可折叠的TRUE;`smooth_scroll: true`表示目录可以滚动
-**注意：在csl、bibliography、css后面都是文件的名字，并且包含了其扩展名，而且这些文件要与rmd在同一文件夹下,如果不是要写明路径，例如csl与rmd文件不在同一个文件夹中，那么需要写`data/format/xxx.csl`（因为工作路径到ReproducibleScience为止）,另外冒号是英文形式，且一定要有个空格后再写具体规定是什么**
+**注意：在csl、bibliography、css后面都是文件的名字，并且包含了其扩展名，而且这些文件要与rmd在同一文件夹下,如果不是要写明路径，例如csl与rmd文件不在同一个文件夹中，那么需要写`../data/format/xxx.csl`（因为工作路径到Toturials为止,而其中有data和analysis文件夹，所以从该rmd位置搜索到csl和css等需要返回到上一级文件夹中，但如果是读入表格的话只要写./data/../...csv,因为工作路径就是到Toturials，从该路径往下搜索）,另外冒号是英文形式，且一定要有个空格后再写具体规定是什么**
 
 ## chunk的使用
 
 ### 代码框的全局控制
 1. 在rmd文件的YAML完成后在它下面写入以下图片中的代码：表示的是对于该文档内的所有代码框都设`echo=TRUE`，就是所有原始代码都可见（除非某个R代码框后又规定了`echo=FALSE`）,而`cache=TRUE`表示缓存所有代码块的结果。当启用缓存时，如果一个代码块之前被执行过且之后没有任何变化时，knitr 将跳过这个代码块的执行，从而大大缩短编译所需的时间。而当再次修改代码块时（如修改代码或块选项），之前的缓存将自动失效，并且 knitr 将再次运行并缓存该代码块。**但是需要谨慎使用，否则后面的结果会根据之前代码框运行的结果来运行**
 <br>
-![](E:/academic_resources/note-tutorial/data/img/setup-chunk.png)
+<img src="data/img/sta-slides1.png"
+
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/setup-chunk.png)
 <br>
 
 2. 在rmd文件的YAML完成后在它下面写入以下代码：表示的是对于该文档内字体大小的规定，`p{}`规定的是标题下直接输入的文本内容大小；`body, td {}`规定的是序列号1.2.3.等下面内容的字体大小;`pre{}`规定的是原始代码以及代码输出结果的字体大小。data/img中表示规定插入的markdown图片宽度为9px（或80%）；图片居中；图片边框为黑色，粗1px
@@ -709,11 +711,11 @@ There are `r nrow(penguins)` penguins in the dataset, and `r length(unique(pengu
 ### 图片的展示
 
 1. 文本中的展示：因为只要输出之后rmd文件自动会生成文件夹，包含了html或docx等各种数据的原始文件，例如所有图片都在其中自动生成的`note-ReproScie_files/figure-html`中，可以找到关于企鹅体重按物种分类的图片展示是`exercise-2.png`，所以要在文档中展示该本地图片则写`![](./note-ReproScie_files/figure-html/exercise-2.png)`即可
-![](E:/academic_resources/note-tutorial/docs/figure/ReproScie-note.Rmd/exercise-2.png)
+![](E:/academic_resources/Tutorials/docs/figure/ReproScie-note.Rmd/exercise-2.png)
 
 2. 另外生成pdf文件展示：r代码运行（例如hist函数）的结果想要以pdf形式（例如该结果文件叫firstHistogram.pdf）存于另一个文件夹（例如这个文件夹叫output）中，那么可以用一下代码，dev.off表示关闭绘图设备：
 ```
-pdf(file = 'E:/academic_resources/note-tutorial/output/firstHistogram.pdf')
+pdf(file = 'E:/academic_resources/Tutorials/output/firstHistogram.pdf')
 hist(whales$SST)
 dev.off()
 ```
@@ -751,13 +753,13 @@ cars %>%
 1. bibliography文件的生成:
 以zotero为例，使用其他文献管理器是同样的方法生成bib文件，在zotero里面把可能要引用到这篇文章的所有文章导出成.bib格式的文件，最好是选择整个文库导出,具体操作如图片所示：
 <br>
-![](E:/academic_resources/note-tutorial/data/img/zotero-bib1.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/zotero-bib1.png)
 <br>
 <br>
-![](E:/academic_resources/note-tutorial/data/img/zotero-bib2.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/zotero-bib2.png)
 <br>
 <br>
-![](E:/academic_resources/note-tutorial/data/img/zotero-bib3.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/zotero-bib3.png)
 <br>
 
 2. csl文件的生成：
@@ -765,10 +767,10 @@ cars %>%
 - 可以使用zotero找到特定的csl文件，并且把它复制粘贴到该rmd的文件夹中。如下图首先在zotero中下载插件[bitter bibtex](https://retorque.re/zotero-better-bibtex/)，然后在zotero中的顶部菜单点击编辑>首选项>Better Bibtex, 接着在窗口中选择特定的期刊引用参考文献样式，如果图一的列表中没有的话选择其中的➕，然后添加即可，再然后在首选项窗口中的顶部选择‘常规’，再选择文件和文件夹，复制数据存储的路径，在文件路径中如图三找到style文件夹，里面就是各类csl文件，找到需要到，把它复制粘贴到该rmd的文件夹中
 <br>
 <br>
-![](E:/academic_resources/note-tutorial/data/img/zotero-csl2.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/zotero-csl2.png)
 <br>
 <br>
-![](E:/academic_resources/note-tutorial/data/img/zotero-csl3.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/zotero-csl3.png)
 <br>
 <br>
 
@@ -779,7 +781,7 @@ cars %>%
 3. 下载该包后运行以下代码框的内容
 ```{r citr, message=FALSE, warning=FALSE}
 library("citr")
-md_cite("Cuny 2015", bib_file = "E:/academic_resources/note-tutorial/data/format/MyLibrary.bib")
+md_cite("Cuny 2015", bib_file = "./data/format/MyLibrary.bib")
 ```
 4. 运行上述代码后，会自动在MyLibrary中寻找cuny2015年的文章，然后把结果`[@cunyWoodyBiomassProduction2015]`复制粘贴到文本中，就会在文本中显示`(Cuny et al., 2015)`，并且也把该文章的所有信息列在最后的参考文献中，该样式都是根据yaml中csl文件产生的。
 5. 当你完成写作时候，最后参考文献的列表中可能有你不需要的文献信息（因为对写作时候有删除），以下代码框中的代码可以直接删除这些在最后列表中出现了但文章正文中没有引用的文献：注意此时你的rmd文件教report.rmd，用于放所有文献的文件叫references.bib
@@ -797,7 +799,7 @@ tidy_bib_file(
 3. 如果没有使用rstudio，那么需要按这个[操作](https://bookdown.org/yihui/rmarkdown-cookbook/install-pandoc.html)来下载[pandoc](https://pandoc.org/)后运行以下代码框中的命令来选择template,**注意的是先查看下当前路径是什么，因为template的文件会被创建在当下工作路径下，必要的时候要自己重设一下**
 ```
 getwd()
-setwd("E:/academic_resources/note-tutorial/ReproducibleSicence/data/format")
+setwd("E:/academic_resources/Tutorials/data/format")
 getwd()
 rmarkdown::draft(
     "MyJSSArticle.Rmd", template = "jss", package = "rticles"
@@ -806,7 +808,7 @@ rmarkdown::draft(
     "MyRJournalArticle", template = "rjournal", package = "rticles"
 )
 ```
-4. 运行上述代码之后就会在note-tutorial/data/format文件中得到jss和rjournal的模板rmd文件，按找其中格式输入自己文章的文本内容和图片之后knit就会得到该期刊或出版社正确要求格式的文献的pdf和word格式，该包中提供的其他模板请参考[该链接](https://github.com/rstudio/rticles)
+4. 运行上述代码之后就会在Tutorials/data/format文件中得到jss和rjournal的模板rmd文件，按找其中格式输入自己文章的文本内容和图片之后knit就会得到该期刊或出版社正确要求格式的文献的pdf和word格式，该包中提供的其他模板请参考[该链接](https://github.com/rstudio/rticles)
 - 如果想要自定义模板的样式，可以参考[该方法](https://rmarkdown.rstudio.com/articles_docx.html)
 
 ## overleaf简介
@@ -845,7 +847,7 @@ git config --global user.name "Your Name"
 5. 了解git工作的大致原理:
 当前目录文件夹是叫做工作区working directory，而在该工作区下面隐藏的文件.git是叫做版本库repository，Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。因此只有用git add指令把文件添加到暂存区才可以进一不用git commit提交到本地仓库中，最后才能用指令git push推送到github上远程仓库中去。
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git1.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git1.png)
 <br>
 
 ## Git bash的语法
@@ -907,26 +909,26 @@ git config --global user.name "Your Name"
 ### 发生冲突的情况
 当远程库上的仓库发生了改变，且本地做了不一样的改变并且通过git add和git commit到了本地仓库，那么再git push的时候就出现如图的情况
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git2.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git2.png)
 <br>
 
 - 首先先`git pull`:表示从远程仓库拉取文件下来（如果是头次拉取或者是有冲突的时候最好使用`git pull origin main`,main就是远程仓库的分支名字，可以在github那个特定的远程仓库点进去就可以查看到）
 - 然后在git bash中输入`vi README.md`就会进入文本编辑和查看模式，如下图所示发现冲突如下，`<<<HEAD`和===之间的为本地仓库的内容；===和`>>>8f`之间的为远程仓库的内容，仅仅比较的是二者的不同指出
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git4.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git4.png)
 <br>
 
 - 进入vi的模式之后按下键i进入文字编辑模式，编辑成如下是表示本地和远程仓库的内容都保留了,然后按键esc，在底部输入`:wq`后enter则保存该修改并且退出vi编辑器重新回到git bash模式
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git5.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git5.png)
 <br>
 
 - 相较于用git bash进入vi模式编辑，更好的方式是使用vscode中的git，会出现如图所示的选择，第一个选择表示接受本地仓库的更改，第二个选择是接受远程仓库的更改，第三个选择是两个都接受，都接受的结果如第二张图片所示
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git3.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git3.png)
 <br>
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git6.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git6.png)
 <br>
 
 - 使用命令`git add .`和命令`git commit`后再`git push`就可以成功上传远程库了。因此最好的选择是每次本地要编辑的时候先`git pull`一下。
@@ -934,12 +936,12 @@ git config --global user.name "Your Name"
 ### 版本的退回
 如下图的例子，每次添加一个图片都`git commit`一次，那么在使用`git reflog`的时候就会对每次操作都展示出来
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git9.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git9.png)
 <br>
 
 - `git reflog`: 查看每次提交的版本是什么
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git7.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git7.png)
 <br>
 
 - `git checkout 80bb63`：回到只加了一张图片的状态
@@ -950,7 +952,7 @@ git config --global user.name "Your Name"
 - `git checkout main`如果要再修改什么最好是回到本地分支main上做修改再做提交。
 - 使用vscode的插件git history会更加直观，而且每一次的更改都可以具体的预览出来
 <br>
-![](E:/academic_resources/note-tutorial/data/img/git8.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git8.png)
 <br>
 
 
@@ -959,12 +961,12 @@ git config --global user.name "Your Name"
 2. 该包最主要的三个作用是：使得数据有序（通过R markdown和自动创建的文件完成）；具有可重复性（通过R markdown和git实现）；具有分享性（通过网页的创建实现）
 3. 通过函数wflow_build()会建立已经组织好的能实现上述三项功能的各类文件
 - 子目录文件`analysis`是**必须，不能移除的**：这个目录包含了所有用于实现你的项目的数据分析的源R Markdown文件。它还包含一个特殊的R标记文件，`index.Rmd`，它不包含任何R代码，但将被用来生成`index.html`，即你用于分享的网站的主页。此外，这个目录包含重要的配置文件`_site.yml`，可以用它来编辑R Markdwon的Yaml部分，也就是关于主题、导航栏和其他网站美学，因此不要删除`index.Rmd`或`_site.yml`。
-- **关于—_site.yml文件内的内容可以看出规定网址的样式以及rmd格式的输出为html，可以自己进行更改，问题是如果analysis里的rmd文件有些是要输出slides模式的，那么应该删除output规定部分，只剩下以下代码部分，analysis内的其他各个形式的rmd的ymal部分自己规定(注意如果是输出其他格式由于yamal产生文件部分没有写workflowr会使得该文件不在Rproject管理下，因此其中所有路径都要写绝对路径而不是相对路径)，但是注意仍然是html格式输出时output的下面一行要写`workflowr::wflow_html:`而不是`html_document:`，否则的话所有代码运行产生的图片不会显示**
+- **关于—_site.yml文件内的内容可以看出规定网址的样式以及rmd格式的输出为html，可以自己进行更改，问题是如果analysis里的rmd文件有些是要输出slides模式的，那么应该删除output规定部分，只剩下以下代码部分，analysis内的其他各个形式的rmd的ymal部分自己规定，但是注意仍然是html格式输出时output的下面一行要写`workflowr::wflow_html:`而不是`html_document:`，否则的话所有代码运行产生的图片不会显示**
 ```
-name: "note-tutorial"
+name: "Tutorials"
 output_dir: ../docs
 navbar:
-  title: "note-tutorial"
+  title: "Tutorials"
   left:
   - text: Home
     href: index.html

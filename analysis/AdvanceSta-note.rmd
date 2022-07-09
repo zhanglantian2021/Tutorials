@@ -75,9 +75,9 @@ knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
 2. qqplot():Q-Q Plot 全名是 Quantile-Quantile Plot，是一种视觉化比较两项数据的分布是否相同的方法。
  - 判断方法一句话概括：把有興趣的數據，以及（相對應分位數的）理論常態分佈值，畫出散佈圖。如果呈現一直線，該數據就是常態分佈。
  - Quantile 的中文是 分位數，是用數據量來分割資料、而不是用數值本身來分割資料，簡單地講就是名次，那么Quantile-Quantile：兩組數據各自相同名次的比較，Q-Q Plot 的原理，是先幫有興趣的數據排名次，再為每個名次找出理論常態分配中、同樣名次對應到的值是多少。如果數據符合常態分配，各名次之間的數據值相對差異應該要符合特定模式。例如：
- ![](E:/academic_resources/note-tutorial/data/img/sta-01.png)
+ ![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-01.png)
  - Q-Q Plot 不是只有判斷「是否為直線」或者「是否為常態分配」，即使畫出來的不是直線，還是能看出資料分配的特性，例如：
- ![](E:/academic_resources/note-tutorial/data/img/sta-02.png)
+ ![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-02.png)
  - 非视觉化的统计学对正态性的检验：Shapiro-Wilk test；Kolmogorov-Smirnov test；Anderson-Darling test，[详情请点击](http://www.hmwu.idv.tw/web/R_AI/v2/hmwu_StatR-05-1_NonParametric_basic.pdf)
 
 [回到选项卡](#jump1)
@@ -103,7 +103,7 @@ knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
 1. **通过手动计算矩阵来理解如何估计参数：**
 ```{r Matrix1}
 #以下给出了所有原始数据的查看：
-fishspeed <-read.table(file="E:/academic_resources/note-tutorial/data/fishspeed.csv",header=T,row.names=NULL,sep=",")
+fishspeed <-read.table(file="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/fishspeed.csv",header=T,row.names=NULL,sep=",")
 fishspeed
 #告诉R，β0一整列是1
 b0 <- c(rep(1,dim(fishspeed)[1])) 
@@ -333,14 +333,14 @@ check_model(lm3)
 
 
 ### 正态分布Nomal
-没有边界，有均值μ和方差σ2；有两个参数；用于连续性数据。![](E:/academic_resources/note-tutorial/data/img/sta-normal.png)
+没有边界，有均值μ和方差σ2；有两个参数；用于连续性数据。![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-normal.png)
 <br>
 
 [回到选项卡](#jump4)
 
 
 ### 伽马分布Gamma
-边界时0到正无穷，但不包含0；有两个参数𝛼(shape)和𝛽(rate)，mean (μ = 𝛼 / 𝛽)variance (σ2 = 𝛼 / 𝛽2)；用于连续性的有边界的数据；当作是其他几个分布的先验(Normal, Poisson) ![](E:/academic_resources/note-tutorial/data/img/sta-gamma.png)
+边界时0到正无穷，但不包含0；有两个参数𝛼(shape)和𝛽(rate)，mean (μ = 𝛼 / 𝛽)variance (σ2 = 𝛼 / 𝛽2)；用于连续性的有边界的数据；当作是其他几个分布的先验(Normal, Poisson) ![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-gamma.png)
 <br>
 
 [回到选项卡](#jump4)
@@ -349,21 +349,21 @@ check_model(lm3)
 ### Beta分布
 边界在0到1且包含0和1；有两个参数 𝛼>0, 𝛽>0，也是通过这两个参数算出均值和方差；用于比例型连续数据,，当作是其他几个分布的先验(Binomial, Neg Bin, Geometric)
 
-![](E:/academic_resources/note-tutorial/data/img/sta-beta.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-beta.png)
 <br>
 
 [回到选项卡](#jump4)
 
 
 ### 泊松分布Poisson
-边界是从0到正无穷，而且包含0；而且均值等于方差，即：μ = σ2(=λ)；仅有一个参数 ；用于描述某一特定事件在某一时间或空间的发生次数。或者计数型数据，即使离散型数。![](E:/academic_resources/note-tutorial/data/img/sta-possion.png)
+边界是从0到正无穷，而且包含0；而且均值等于方差，即：μ = σ2(=λ)；仅有一个参数 ；用于描述某一特定事件在某一时间或空间的发生次数。或者计数型数据，即使离散型数。![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-possion.png)
 <br>
 
 [回到选项卡](#jump4)
 
 
 ### 二项式分布Binomial：
-边界在0到1且包含0和1；μ = np, success或yes的概率；σ2 = μ (1 – μ) ；用于二项式数据，如按0和1编码的数据，或二项式数据的比例之和等于给定的试验次数n，即离散型数![](E:/academic_resources/note-tutorial/data/img/sta-binomal.png)
+边界在0到1且包含0和1；μ = np, success或yes的概率；σ2 = μ (1 – μ) ；用于二项式数据，如按0和1编码的数据，或二项式数据的比例之和等于给定的试验次数n，即离散型数![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-binomal.png)
 <br>
 
 [回到选项卡](#jump4)
@@ -383,7 +383,7 @@ check_model(lm3)
 
 
 ### link-function 
-在glm中有一个link function，来把响应变量转换成一个没有边界的，线性的，适合进行回归分析的新回归变量，同时它也确保估计值受制于响应的原始分布的界限。![](E:/academic_resources/note-tutorial/data/img/sta-link.png)
+在glm中有一个link function，来把响应变量转换成一个没有边界的，线性的，适合进行回归分析的新回归变量，同时它也确保估计值受制于响应的原始分布的界限。![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-link.png)
 <br>
 
 [回到选项卡](#jump5)
@@ -786,11 +786,11 @@ sum(resid(glmp3, type='pearson')^2)/df.residual(glmp3)
 1. 模型表达形式：$y_i=X\beta+Zb+\varepsilon$而且$b\sim N(0,\psi)$;$\varepsilon\sim N(0,\sigma^2)$
 <br>
 2. 模型矩阵形式：
-![](E:/academic_resources/note-tutorial/data/img/sta-10.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-10.png)
 
 3. 参数的估计：
 - 在lm和glm中的估计参数矩阵都为$\hat{\beta}=(X'X)^{-1}X'y$，但是在lmm中不是。在lmm中把本事vector的error转变成了矩阵的形式，在协方差矩阵中，还表明了残差之间相互独立，方差同质（具体看动物模型一章）
-![](E:/academic_resources/note-tutorial/data/img/sta-13.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-13.png)
 <br>
 - 因此参数估计矩阵就变为：$\hat{\beta}=(X'V^{-1}X)^{-1}X'V^{-1}y$(实际上V矩阵要比这里的更复杂！)
 
@@ -1733,20 +1733,20 @@ ggplot(data=survive, aes(x=damage, y=survs/4)) + geom_point()+
 # 总结
 
 - 固定和随机效应的区别
-![](E:/academic_resources/note-tutorial/data/img/sta-14.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-14.png)
 
 <br>
 
 - 得到正确的预测值和置信区间需要明确的是：
-![](E:/academic_resources/note-tutorial/data/img/sta-21.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-21.png)
 
 <br>
 
 - 关于分布的总结（以下截图来自范欢师姐上课内容）
-![](E:/academic_resources/note-tutorial/data/img/sta-31.png)
-![](E:/academic_resources/note-tutorial/data/img/sta-32.png)
-![](E:/academic_resources/note-tutorial/data/img/sta-33.png)
-![](E:/academic_resources/note-tutorial/data/img/sta34.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-31.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-32.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta-33.png)
+![](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/sta34.png)
 
 
 

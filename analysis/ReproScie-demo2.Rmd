@@ -30,7 +30,7 @@ H-hide;S-show;N-don't run;Y-run
 ### HcodeSresult
 
 ```{r HcodeSresult, echo=FALSE }
-whales <- read.csv(file = 'E:/academic_resources/note-tutorial/data/bbmroData.csv')
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
 hist(whales$SST)
 require(ggplot3)
@@ -38,7 +38,7 @@ require(ggplot3)
 
 ### Hresult-SNcode
 ```{r HresultSNcode, eval=FALSE }
-whales <- read.csv(file = 'E:/academic_resources/note-tutorial/data/bbmroData.csv')
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
 hist(whales$SST)
 require(ggplot3)
@@ -46,7 +46,7 @@ require(ggplot3)
 
 ### Hresult-HYcode
 ```{r Hresult-HYcode, include=FALSE }
-whales <- read.csv(file = 'E:/academic_resources/note-tutorial/data/bbmroData.csv')
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
 hist(whales$SST)
 require(ggplot3)
@@ -54,7 +54,7 @@ require(ggplot3)
 
 ### Sresult-HYcode
 ```{r Hresult-SYcode, results="hide"}
-whales <- read.csv(file = 'E:/academic_resources/note-tutorial/data/bbmroData.csv')
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
 hist(whales$SST)
 require(ggplot3)
@@ -63,7 +63,7 @@ require(ggplot3)
 ### Hfigure 
 
 ```{r Hfigure, fig.show="hide"}
-whales <- read.csv(file = 'E:/academic_resources/note-tutorial/data/bbmroData.csv')
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
 hist(whales$SST)
 require(ggplot3)
@@ -72,7 +72,7 @@ require(ggplot3)
 ### other-setup
 ```{r ohter, echo=TRUE, message=FALSE, warning=FALSE, fig_width=3, fig_height=5, fig.align="center"}
 
-whales <- read.csv(file = 'E:/academic_resources/note-tutorial/data/bbmroData.csv')
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
 hist(whales$SST)
 require(ggplot3)
@@ -103,11 +103,11 @@ see the last example
 ## picture
 1. input:
 
-![](E:/academic_resources/note-tutorial/docs/figure/ReproScie-note.Rmd/exercise-2.png)
+![](E:/academic_resources/Tutorials/docs/figure/ReproScie-note.Rmd/exercise-2.png)
 
 2. output:
 ```{r output}
-pdf(file = 'E:/academic_resources/note-tutorial/output/firstHistogram.pdf')
+pdf(file = 'E:/academic_resources/Tutorials/output/firstHistogram.pdf')
 hist(whales$SST)
 dev.off()
 ```
@@ -123,7 +123,7 @@ turn to zotero to create bib and csl files
 - or just run the code 
 ```{r citr, message=FALSE, warning=FALSE}
 library("citr")
-md_cite("Cuny 2015", bib_file = "E:/academic_resources/note-tutorial/data/format/MyLibrary.bib")
+md_cite("Cuny 2015", bib_file = "E:/academic_resources/Tutorials/data/format/MyLibrary.bib")
 ```
 
 - copy the results:"[@cunyWoodyBiomassProduction2015]
@@ -139,7 +139,7 @@ such as:@diogoverissimoIntroducingConservationMarketing2016; @kollmussMindGapWhy
 - run code to get the template
 ```{r rticle, eval=FALSE}
 getwd()
-setwd("E:/academic_resources/note-tutorial/data/format")
+setwd("E:/academic_resources/Tutorials/data/format")
 getwd()
 rmarkdown::draft(
     "pnas-template.Rmd", template = "pnas", package = "rticles"

@@ -43,15 +43,15 @@ this is about hightlight code in a block
 
 2. picture：
 
-![reproducible](E:/academic_resources/note-tutorial/data/img/reproducible.png "可重复性")
+![reproducible](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png "可重复性")
 
-<img src="E:/academic_resources/note-tutorial/data/img/reproducible.png" alt="reproducible" width="300" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png" alt="reproducible" width="300" style="display: block; margin: auto;" />
 
 ![](https://img2.baidu.com/it/u=3821871392,3723723380&fm=253&fmt=auto&app=138&f=JPEG?w=706&h=500)
 
 1. Local Documents
 
-- [sheet](E:/academic_resources/note-tutorial/data/twitter_cit_data.csv)
+- [sheet](E:/academic_resources/Tutorials/data/twitter_cit_data.csv)
   
 - [pdf](E:/academic_resources/202110_AFFC-X-Traning/AFEC-X_2021_schedule.pdf)
   

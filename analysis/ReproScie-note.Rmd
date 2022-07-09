@@ -1041,6 +1041,11 @@ wflow_publish("analysis/_site.yml", republish = TRUE, dry_run = TRUE)
 #另外一旦重新开启终端或输出部分，要重新设置路径的时候应该是直接链接到myproject，否则无法正常运行，可以用wflow_status()来查看是否已经连上该文件夹，并且各级文件状态。
 setwd("E:/academic_resources/myproject")
 wflow_status()
+
+#一旦用语句wflow_start("myproject")创建了总文件夹项目myproject在"E:/academic_resources",那么就自动创建Rproject，且工作路径就被设定为"E:/academic_resources/myproject"，那么在各种读入表格，本地图片时候都可以使用相对路径.例如"./data"就是从myproject到文件夹data中，但是注意的是在yaml读入文件的时候是要用"../data",因为yaml是从该rmd所在的文件夹(analysis)的位置搜索起的,因此要用../返回到myproject中。
+
+#使用wflow_build()相当于把所有改动的rmd文件等重新knit编织一遍输出结果并且保存，wflow_publish()相当于把git add和git commit两个动作，但是区别在于，如果在git bash里面把文件夹analysis和docs（例如）全部文件`git add .`以及`git commit -m"xxx"`和`git pushorigin master`了，但是在github的网页版本中结果html依旧不会更新，因为workflowr是把所有文件串联起来，其中一些做更改动作的文件没被push上去，因此正确操作是要么用wflow_build()，wflow_publish()，git push ；要么一个个文件全knit出更新了html结果后，在项目路径myproject下把所有文件`git add .`后commit和push（后者方法似乎更快，用前面方法很慢而且总是最后push超时失败，还要保证所有文件knit是不会出错的。）
+
 ```
 
 

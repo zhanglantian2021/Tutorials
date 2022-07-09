@@ -78,12 +78,12 @@ here is the example 1, the response variable is about Admission Qualifications, 
 - Deviance is difference between 
 likelihoods and the saturated Lik
 .pull-left[
-<img src="E:/academic_resources/Tutorials/data/img/sta-slides1.png"
+<img src="../data/img/sta-slides1.png"
 width="400" />
 ]
 
 .pull-right[
-<img src="E:/academic_resources/Tutorials/data/img/sta-slides2.png"
+<img src="../data/img/sta-slides2.png"
 width="350" />
 ]
 

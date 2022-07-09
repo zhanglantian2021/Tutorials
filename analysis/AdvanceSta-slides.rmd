@@ -8,7 +8,7 @@ output:
             highlightStyle: github
             highlightLines: true
             ratio: 16:9
-            countIncrementalSlides: true           
+            countIncrementalSlides: true         
 ---
 
 ```{css echo=FALSE}
@@ -78,12 +78,12 @@ here is the example 1, the response variable is about Admission Qualifications, 
 - Deviance is difference between 
 likelihoods and the saturated Lik
 .pull-left[
-<img src="E:/academic_resources/note-tutorial/data/img/sta-slides1.png"
+<img src="E:/academic_resources/Tutorials/data/img/sta-slides1.png"
 width="400" />
 ]
 
 .pull-right[
-<img src="E:/academic_resources/note-tutorial/data/img/sta-slides2.png"
+<img src="E:/academic_resources/Tutorials/data/img/sta-slides2.png"
 width="350" />
 ]
 
@@ -159,7 +159,7 @@ summary(glm1)$deviance
 
 .right-column[
 
-<img src="E:/academic_resources/note-tutorial/data/img/sta-slides3.png"
+<img src="E:/academic_resources/Tutorials/data/img/sta-slides3.png"
 width="800" />
 ]
 ]
@@ -522,7 +522,7 @@ confint.result
 .panel[.panel-name[Recall-ML]
 
 .pull-left[
-<img src="E:/academic_resources/note-tutorial/data/img/sta-slides1.png"
+<img src="E:/academic_resources/Tutorials/data/img/sta-slides1.png"
 width="400" />
 ]
 .pull-right[

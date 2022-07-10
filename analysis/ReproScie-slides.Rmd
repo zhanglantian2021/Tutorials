@@ -193,7 +193,7 @@ generate high quality reports that can be shared with others
 </font>
 ---
 class: center, middle
-# Git$Github
+# Git $ Github
 ---
 ## What is Git?
 
@@ -242,6 +242,6 @@ class: center, middle
 [Demo4](../docs/ReproScie-demo4.html)
 
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr.jpg" width="650"/>
-
-
 ---
+class: center, middle
+# THANKS

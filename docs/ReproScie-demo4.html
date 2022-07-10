@@ -280,19 +280,40 @@ $(document).ready(function () {
 
 <div id="workflowr" class="section level1">
 <h1>Workflowr</h1>
-<pre><code>library(&quot;workflowr&quot;)
+<div id="build-the-projectstart" class="section level2">
+<h2>build the project(start)</h2>
+<pre><code>#install.packages(&quot;workflowr&quot;)
+library(&quot;workflowr&quot;)
+#set the work directory
 getwd()
-setwd(&quot;E:/academic_resources/Tutorials&quot;)
-wflow_start(&quot;Tutorials&quot;)
+setwd(&quot;E:/academic_resources&quot;)
+#build the file(project)
+wflow_start(&quot;myrepo&quot;)
+#output the result(if the file changed)
 wflow_build()</code></pre>
+<p><img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr1.png" width="300"/></p>
+<p><img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr2.png" width="300"/></p>
+</div>
+<div id="go-to-the-local-repository" class="section level2">
+<h2>go to the local repository</h2>
 <pre><code>wflow_build()
+#look what the project of web like
 wflow_view()
+#publish to your local repository
 wflow_publish(c(&quot;analysis&quot;), &quot;first&quot;) 
+#check if the changed files were output
 wflow_build()
+#check if the files were published to repository
 wflow_status()</code></pre>
-<pre><code>wflow_use_github(&quot;zhanglantian2021&quot;)
+</div>
+<div id="go-to-the-remote-repository" class="section level2">
+<h2>go to the remote repository</h2>
+<pre><code>#link to your github account
+wflow_use_github(&quot;zhanglantian2021&quot;)
+# pubulish to your github
 wflow_git_push()
 </code></pre>
+</div>
 </div>
 
 

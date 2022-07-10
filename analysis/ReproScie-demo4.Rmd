@@ -1,22 +1,40 @@
 # Workflowr
+
+## build the project(start)
 ```
+#install.packages("workflowr")
 library("workflowr")
+#set the work directory
 getwd()
-setwd("E:/academic_resources/Tutorials")
-wflow_start("Tutorials")
+setwd("E:/academic_resources")
+#build the file(project)
+wflow_start("myrepo")
+#output the result(if the file changed)
 wflow_build()
 ```
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr1.png" width="300"/>
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr2.png" width="300"/>
+
+
+## go to the local repository 
 
 ```
 wflow_build()
+#look what the project of web like
 wflow_view()
+#publish to your local repository
 wflow_publish(c("analysis"), "first") 
+#check if the changed files were output
 wflow_build()
+#check if the files were published to repository
 wflow_status()
 ```
-
+## go to the remote repository
 ```
+#link to your github account
 wflow_use_github("zhanglantian2021")
+# pubulish to your github
 wflow_git_push()
 
 ```

@@ -1,5 +1,5 @@
 ---
-title: "Reproducible-Science-slides"
+title: "Reproducible-Science"
 author: Zhang Yixue
 date: July , 2022
 output: 
@@ -11,19 +11,7 @@ output:
             countIncrementalSlides: true          
 ---
 
-```{css include=FALSE}
-<style type="text/css">
-body, td {
-   font-size: 20px;
-}
-code.r{
-  font-size: 19px;
-}
-pre {
-  font-size: 70px
-}
-</style>
-```
+
 
 
 
@@ -76,32 +64,43 @@ methods, laboratories, etc.
 class: center, middle
 ## Why is important?
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/messydesk.jpg" width="300"/>
+.pull-left[
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/lost.png" width="300"/>
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reback.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/messydesk.jpg" width="300" height="200" />
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/lost.png" width="300" height="200" />
+]
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/trouble.jpg" width="300"/>
-
+.pull-right[
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reback.jpg" width="300" height="200" />
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/trouble.jpg" width="300" height="200" />
+]
 
 
 ---
 class: center, middle
 # Markdown
 ---
-## What is Markdown?
+## What is Markdown ?
+<font size=6> 
+.pull-left[
+- Markdown is a <mark>lightweight markup </mark> language for creating formatted text using a plain-text editor.
 
-Markdown is a **lightweight markup** language for creating formatted text using a plain-text editor.
+- People use it to create websites, documents, notes, books, presentations, email messages, and technical documentation. 
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/markdown1.png" width="300"/>
+</font>
+]
+
+.pull-right[
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/markdown1.png" width="400"  />
+]
 
 ???
 A lightweight markup language (LML), also termed a simple or humane markup language, is a markup language with simple, unobtrusive syntax. It is designed to be easy to write using any generic text editor and easy to read in its raw form. Lightweight markup languages are used in applications where it may be necessary to read the raw document as well as the final rendered output.
 ---
 ## Basic grammar
 
-[Demo1](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo1.html)
-
+<font size=6> 
+.pull-left[
 1. Headings&list&checkbox
 
 2. Font-color&shape
@@ -114,19 +113,31 @@ A lightweight markup language (LML), also termed a simple or humane markup langu
 
 6. sheet
 
+[Demo1](../docs/ReproScie-demo1.html)
+]
+</font>
+
+
 ---
 class: center, middle
 # Rmarkdown
 ---
-## What is Rmarkdown
+## What is Rmarkdown ?
+<font size=6> 
+.pull-left[
 - R Markdown provides an authoring framework for data science
 
 - R Markdown documents are fully reproducible and support dozens of static and dynamic output formats.
 
-```
-install.packages("rmarkdown")
-```
+  ```
+  install.packages("rmarkdown")
+  ```
+]
+</font>
+.pull-right[
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
+
+]
 
 
 
@@ -137,64 +148,100 @@ generate high quality reports that can be shared with others
 ---
 ## Yaml
 
-[Demo2](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo2.html)
-
+<font size=6>
+.pull-left[
 - YAML is a digestible data serialization language often used to create configuration files with any programming language
+
+  [Demo2](../docs/ReproScie-demo2.html)
+]
+</font>
 
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/yaml.png" width="300"/>
 
 ---
 ## The bridge of R and markdown-knitr
+
+<font size=6> 
+.pull-left[
 - It is a package in the programming language R that enables integration of R code into LaTeX, HTML, Markdown,etc . 
 - The purpose of knitr is to allow reproducible research in R through the means of literate programming
 
-```
-install.packages("knitr")Demo
-```
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
+  ```
+  install.packages("knitr")Demo
+  ```
+]
+</font>
 
+.pull-right[
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
+]
 ---
 ## Basic grammar
-[Demo2](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo2.html)
 
+<font size=6>
+.pull-left[
 1. chunk：global & single
 
-2. display：result；sheet；picture
+2. display：result & sheet &  picture
 
 3. cite：format & template
 
+
+
+  [Demo2](../docs/ReproScie-demo2.html)
+]
+</font>
 ---
 class: center, middle
 # Git$Github
 ---
-## what is Git?
+## What is Git?
+
+<font size=6>
+.pull-left[
+
 Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+]
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git10.jpg" width="300"/>
-
+.pull-right[
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git10.jpg" width="400"/>
+]
 ---
-## what is Github?
+## What is Github?
+<font size=6>
+.pull-left[
+
 GitHub offers the distributed version control and source code management (SCM) functionality of Git, plus its own features such as bug tracking, feature requests, task management, continuous integration, and wikis for every project.
+]
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/github.png" width="300"/>
-
+.pull-right[
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/github.png" width="400"/>
+]
 ---
 ## What happen under version control?
+<font size=6>
 working directory -> repository
+<font>
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git1.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git1.png" width="650"/>
 
 ---
 ## Basic grammar
-
-[Demo3](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo3.html)
-
+<font size=6>
+.pull-left[
 1. Manipulate documents
 2. Back up
 3. Roll back
 
+[Demo3](../docs/ReproScie-demo3.html)
+]
+</font>
 ---
 class: center, middle
 # Workflowr
-[Demo4](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo4.html)
+[Demo4](../docs/ReproScie-demo4.html)
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr.jpg" width="650"/>
+
+
 ---

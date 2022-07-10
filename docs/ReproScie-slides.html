@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Reproducible-Science-slides</title>
+    <title>Reproducible-Science</title>
     <meta charset="utf-8" />
     <meta name="author" content="Zhang Yixue" />
     <script src="site_libs/header-attrs/header-attrs.js"></script>
@@ -9,7 +9,7 @@
     <link href="site_libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="site_libs/tile-view/tile-view.css" rel="stylesheet" />
     <script src="site_libs/tile-view/tile-view.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xdf0f9315b184c318e4932db9d83d071","expires":1}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"c180627e0ed44c8aa88411f76de6a215","expires":1}</script>
     <script src="site_libs/himalaya/himalaya.js"></script>
     <script src="site_libs/js-cookie/js.cookie.js"></script>
     <link href="site_libs/editable/editable.css" rel="stylesheet" />
@@ -26,7 +26,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Reproducible-Science-slides
+# Reproducible-Science
 ### Zhang Yixue
 ### July , 2022
 
@@ -55,24 +55,61 @@ class: center, middle, inverse, title-slide
 class: center, middle
 # REPRODUCIBLE?
 
-&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png" width="600"/&gt;
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible1.png" width="600"/&gt;
+
+???
+**repriducibilty**
+- Aim to verifying a data analysis
+"Can we trust this analysis?
+- New investigators, same data,
+same methods
+**replication
+- Aim to verifying a science claim
+Question: "Is this claim true?"
+- New investigators, data,
+methods, laboratories, etc.
+
+---
+class: center, middle
+## Why is important?
+
+.pull-left[
+
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/messydesk.jpg" width="300" height="200" /&gt;
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/lost.png" width="300" height="200" /&gt;
+]
+
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reback.jpg" width="300" height="200" /&gt;
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/trouble.jpg" width="300" height="200" /&gt;
+]
+
+
 ---
 class: center, middle
 # Markdown
 ---
-## What is Markdown?
+## What is Markdown ?
+&lt;font size=6&gt; 
+.pull-left[
+- Markdown is a &lt;mark&gt;lightweight markup &lt;/mark&gt; language for creating formatted text using a plain-text editor.
 
-Markdown is a **lightweight markup** language for creating formatted text using a plain-text editor.
+- People use it to create websites, documents, notes, books, presentations, email messages, and technical documentation. 
 
-&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/markdown1.png" width="300"/&gt;
+&lt;/font&gt;
+]
+
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/markdown1.png" width="400"  /&gt;
+]
 
 ???
 A lightweight markup language (LML), also termed a simple or humane markup language, is a markup language with simple, unobtrusive syntax. It is designed to be easy to write using any generic text editor and easy to read in its raw form. Lightweight markup languages are used in applications where it may be necessary to read the raw document as well as the final rendered output.
 ---
 ## Basic grammar
 
-[Demo1](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo1.html)
-
+&lt;font size=6&gt; 
+.pull-left[
 1. Headings&amp;list&amp;checkbox
 
 2. Font-color&amp;shape
@@ -85,19 +122,31 @@ A lightweight markup language (LML), also termed a simple or humane markup langu
 
 6. sheet
 
+[Demo1](../docs/ReproScie-demo1.html)
+]
+&lt;/font&gt;
+
+
 ---
 class: center, middle
 # Rmarkdown
 ---
-## What is Rmarkdown
+## What is Rmarkdown ?
+&lt;font size=6&gt; 
+.pull-left[
 - R Markdown provides an authoring framework for data science
 
 - R Markdown documents are fully reproducible and support dozens of static and dynamic output formats.
 
-```
-install.packages("rmarkdown")
-```
+  ```
+  install.packages("rmarkdown")
+  ```
+]
+&lt;/font&gt;
+.pull-right[
 &lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/&gt;
+
+]
 
 
 
@@ -108,66 +157,102 @@ generate high quality reports that can be shared with others
 ---
 ## Yaml
 
-[Demo2](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo2.html)
-
+&lt;font size=6&gt;
+.pull-left[
 - YAML is a digestible data serialization language often used to create configuration files with any programming language
+
+  [Demo2](../docs/ReproScie-demo2.html)
+]
+&lt;/font&gt;
 
 &lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/yaml.png" width="300"/&gt;
 
 ---
 ## The bridge of R and markdown-knitr
+
+&lt;font size=6&gt; 
+.pull-left[
 - It is a package in the programming language R that enables integration of R code into LaTeX, HTML, Markdown,etc . 
 - The purpose of knitr is to allow reproducible research in R through the means of literate programming
 
-```
-install.packages("knitr")Demo
-```
-&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/&gt;
+  ```
+  install.packages("knitr")Demo
+  ```
+]
+&lt;/font&gt;
 
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/&gt;
+]
 ---
 ## Basic grammar
-[Demo2](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo2.html)
 
+&lt;font size=6&gt;
+.pull-left[
 1. chunk：global &amp; single
 
-2. display：result；sheet；picture
+2. display：result &amp; sheet &amp;  picture
 
 3. cite：format &amp; template
 
+
+
+  [Demo2](../docs/ReproScie-demo2.html)
+]
+&lt;/font&gt;
 ---
 class: center, middle
 # Git$Github
 ---
-## what is Git?
+## What is Git?
+
+&lt;font size=6&gt;
+.pull-left[
+
 Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+]
 
-&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git10.jpg" width="300"/&gt;
-
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git10.jpg" width="400"/&gt;
+]
 ---
-## what is Github?
+## What is Github?
+&lt;font size=6&gt;
+.pull-left[
+
 GitHub offers the distributed version control and source code management (SCM) functionality of Git, plus its own features such as bug tracking, feature requests, task management, continuous integration, and wikis for every project.
+]
 
-&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/github.png" width="300"/&gt;
-
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/github.png" width="400"/&gt;
+]
 ---
 ## What happen under version control?
+&lt;font size=6&gt;
 working directory -&gt; repository
+&lt;font&gt;
 
-&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git1.png" width="300"/&gt;
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/git1.png" width="650"/&gt;
 
 ---
 ## Basic grammar
-
-[Demo3](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo3.html)
-
+&lt;font size=6&gt;
+.pull-left[
 1. Manipulate documents
 2. Back up
 3. Roll back
 
+[Demo3](../docs/ReproScie-demo3.html)
+]
+&lt;/font&gt;
 ---
 class: center, middle
 # Workflowr
-[Demo4](E:/academic_resources/note-tutorial/ReproducibleSice/slides-CodeDemo4.html)
+[Demo4](../docs/ReproScie-demo4.html)
+
+&lt;img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr.jpg" width="650"/&gt;
+
+
 ---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

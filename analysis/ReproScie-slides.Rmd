@@ -58,7 +58,7 @@ xaringanExtra::use_fit_screen()
 class: center, middle
 # REPRODUCIBLE?
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png" width="600"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible1.png" width="600"/>
 
 ???
 **repriducibilty**
@@ -69,6 +69,21 @@ same methods
 **replication
 - Aim to verifying a science claim
 Question: "Is this claim true?"
+- New investigators, data,
+methods, laboratories, etc.
+
+---
+class: center, middle
+## Why is important?
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/messydesk.jpg" width="300"/>
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/lost.png" width="300"/>
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reback.png" width="300"/>
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/trouble.jpg" width="300"/>
+
+
 
 ---
 class: center, middle

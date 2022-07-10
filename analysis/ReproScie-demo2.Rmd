@@ -3,6 +3,8 @@ title: "Reproducible-Science-demo2"
 author: "Zhangyixue"
 date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
 document: ctexart
+bibliography: ../data/format/MyLibrary.bib
+csl: ../data/format/journal-of-ecology.csl
 output: 
     workflowr::wflow_html:
         theme: cosmo
@@ -21,6 +23,7 @@ output:
 ---
 # Yaml
 see the top 
+
 # chunk
 
 ## chunk-single

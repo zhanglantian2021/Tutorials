@@ -59,6 +59,17 @@ class: center, middle
 # REPRODUCIBLE?
 
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png" width="600"/>
+
+???
+**repriducibilty**
+- Aim to verifying a data analysis
+"Can we trust this analysis?
+- New investigators, same data,
+same methods
+**replication
+- Aim to verifying a science claim
+Question: "Is this claim true?"
+
 ---
 class: center, middle
 # Markdown

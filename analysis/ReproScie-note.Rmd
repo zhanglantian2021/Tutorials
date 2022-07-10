@@ -1046,6 +1046,8 @@ wflow_status()
 
 #使用wflow_build()相当于把所有改动的rmd文件等重新knit编织一遍输出结果并且保存，wflow_publish()相当于把git add和git commit两个动作，但是区别在于，如果在git bash里面把文件夹analysis和docs（例如）全部文件`git add .`以及`git commit -m"xxx"`和`git pushorigin master`了，但是在github的网页版本中结果html依旧不会更新，因为workflowr是把所有文件串联起来，其中一些做更改动作的文件没被push上去，因此正确操作是要么用wflow_build()，wflow_publish()，git push ；要么一个个文件全knit出更新了html结果后，在项目路径myproject下把所有文件`git add .`后commit和push（后者方法似乎更快，用前面方法很慢而且总是最后push超时失败，还要保证所有文件knit是不会出错的。）
 
+#当yaml使用了    workflowr::wflow_html:
+会导致vscode的preview插件无法使用，也就是无法预览，只能先`wflow_build()`该文件的更改然后就会自动弹出workflowr的viewer来预览内容了。如果单单使用`wflow_view()`就只能预览的是整个项目文件的总页面，也就是index.html文件。
 ```
 
 

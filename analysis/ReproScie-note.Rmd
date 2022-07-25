@@ -19,7 +19,7 @@ output:
         toc_depth: 3
         toc_float:  
              collapsed: FALSE
-             smooth_scroll: true   
+             smooth_scroll: true
 ---
 
 
@@ -882,7 +882,7 @@ git config --global user.name "Your Name"
 23. `git reflog`展示每一次commit并且展示指针的次序，并且有对应的每次的一个id号码，而相较于上一个展示每一个commit的方法，该方法更好，因为会展示出版本退回或退回后又返回等等的操作记录
 25. `git show id`：显示某一次commit的具体操作和操作人
 26. `git diff id1 id2`比较两次commit操作的区别
-27. `vi file-name.txt`：进入改文件的文本编辑模式，修改完后如果要退出那么先按esc保证不在文本的编辑状态了，再打`:q`或`:q!`enter后强制退出，回到git bash
+27. `vi file-name.txt`：按i进入改文件的文本编辑模式，修改完后如果要退出那么先按esc保证不在文本的编辑状态了，然后在底行输入“wq”保存并且退出！打`:q`或`:q!`enter后强制退出，回到git bash
 28. `git clone remote-SSH（此处也就是别人仓库的ssh地址）`：克隆别人的仓库到自己电脑上。
 29. `git branch`表示查看当前本地的分支；`git branch -r`表示查看当前远程分支；
 

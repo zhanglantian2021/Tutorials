@@ -1,7 +1,7 @@
 ---
 title: "use-git"
 author: "Zhangyixue"
-date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+date: 2022/7/22
 document: ctexart
 output: 
     workflowr::wflow_html:
@@ -19,6 +19,7 @@ output:
              collapsed: FALSE
              smooth_scroll: true   
 ---
+
 
 教程来源：https://www.liaoxuefeng.com/wiki/896043488029600
 

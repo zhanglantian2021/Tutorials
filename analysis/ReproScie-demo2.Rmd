@@ -19,7 +19,6 @@ output:
         toc_depth: 3
         toc_float:  
              collapsed: FALSE
-             smooth_scroll: true   
 ---
 # Yaml
 see the top 
@@ -55,7 +54,7 @@ hist(whales$SST)
 require(ggplot3)
 ```
 
-### Sresult-HYcode
+### Sresult-SYcode
 ```{r Hresult-SYcode, results="hide"}
 whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 summary(whales)
@@ -110,6 +109,7 @@ see the last example
 
 2. output:
 ```{r output}
+whales <- read.csv(file = 'E:/academic_resources/Tutorials/data/bbmroData.csv')
 pdf(file = 'E:/academic_resources/Tutorials/output/firstHistogram.pdf')
 hist(whales$SST)
 dev.off()
@@ -133,7 +133,10 @@ md_cite("Cuny 2015", bib_file = "E:/academic_resources/Tutorials/data/format/MyL
 
 - open zotero and use the plug in"citation picker for zotero", 
 use'shift+alt+z' and choose
+@kornerClimaticTreelinesConventions2007
 such as:@diogoverissimoIntroducingConservationMarketing2016; @kollmussMindGapWhy2002
+@cunyLifeStrategiesIntraannual2012
+@baumanModernityHolocaust2007; @cunninghamProblemSethOrigin2011; @markowetzFiveSelfishReasons2015
 
 
 ## rticles-package

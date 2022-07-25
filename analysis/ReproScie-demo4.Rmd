@@ -1,5 +1,5 @@
 ---
-title: "Reproducible-Science-demo3"
+title: "Reproducible-Science-demo4"
 author: "Zhangyixue"
 date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
 document: ctexart
@@ -25,11 +25,14 @@ output:
 ```
 #install.packages("workflowr")
 library("workflowr")
+
 #set the work directory
 getwd()
 setwd("E:/academic_resources")
+
 #build the file(project)
 wflow_start("myrepo")
+
 #output the result(if the file changed)
 wflow_build()
 ```
@@ -44,10 +47,12 @@ wflow_build()
 wflow_build()
 #look what the project of web like
 wflow_view()
+
 #publish to your local repository
 wflow_publish(c("analysis"), "first") 
 #check if the changed files were output
 wflow_build()
+
 #check if the files were published to repository
 wflow_status()
 ```
@@ -55,6 +60,7 @@ wflow_status()
 ```
 #link to your github account
 wflow_use_github("zhanglantian2021")
+
 # pubulish to your github
 wflow_git_push()
 

@@ -49,16 +49,8 @@ class: center, middle
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible1.png" width="600"/>
 
 ???
-**repriducibilty**
-- Aim to verifying a data analysis
-"Can we trust this analysis?
-- New investigators, same data,
-same methods
-**replication
-- Aim to verifying a science claim
-Question: "Is this claim true?"
-- New investigators, data,
-methods, laboratories, etc.
+what is reproducible? let's see this picture, we always talk about replication, and we konw that it means we are asking "Is this claim true?" As for reproduciblity, is is means we are asking  Can we trust this analysis. So simply, their purposes are different, replication  aims to Aim to verifying a science claim and reproducibility aims to verifying a data analysis. Therefore,let's review this picture. the some conclusion we could get from differnt pathways under theses four concepts, as you could see: .....
+
 
 ---
 class: center, middle
@@ -74,6 +66,17 @@ class: center, middle
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reback.jpg" width="300" height="200" />
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/trouble.jpg" width="300" height="200" />
 ]
+???
+So why reproducible is so important, 
+except for proving your authenticity in the academic research process, just Imagine such kind of situation: when you writing your paper or thesis, are you put a lot of pdf or word files on your desktop? when your advisor or supervisor ask for the version with out picture1 , what would you do? searching for that version for a long time ,and open the file one by one to check? or if you are asked  to modify the specific picture or result , are you open the file with messy code and modify it and rerun the whole file and then add it to your new word file? or when you loss your one of version of word file what would you do??? 
+---
+class: center, middle
+## How to achieve reproducibility
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/workflowr.jpg" width="650"/>
+
+???
+So basically, we would use these software, procedures or packages to ahieve it.and finally we combine all of these by workflow to finish our own project systematically and sharebly
 
 
 ---
@@ -95,19 +98,20 @@ class: center, middle
 ]
 
 ???
-A lightweight markup language (LML), also termed a simple or humane markup language, is a markup language with simple, unobtrusive syntax. It is designed to be easy to write using any generic text editor and easy to read in its raw form. Lightweight markup languages are used in applications where it may be necessary to read the raw document as well as the final rendered output.
+A markup language is a computer language that uses tags to define elements within a document. It is human-readable, meaning markup files contain standard words, rather than typical programming syntax. 
+It is designed to be easy to write using any generic text editor and easy to read in its raw form. Simply, it uses some symbols via the keyboard to tell the computer what you want to do instead of cliking some button which represent different funtions. let's see the examples.
 ---
 ## Basic grammar
 
 <font size=6> 
 .pull-left[
-1. Headings&list&checkbox
+1. Headings & list & checkbox
 
-2. Font-color&shape
+2. Font-color & shape
 
-3. Link&picture
+3. Link & picture
 
-4. Formula&latex
+4. Formula & latex
 
 5. Content
 
@@ -116,6 +120,9 @@ A lightweight markup language (LML), also termed a simple or humane markup langu
 [Demo1](../docs/ReproScie-demo1.html)
 ]
 </font>
+
+???
+For example, in the word file ,if you want to make the font bold , you need to select the sentence and click the button of bold, but in markdown, you just need to enter the symbols of 4 stars to make it bold. let's see the demo which is more intuitive.
 
 
 ---
@@ -145,6 +152,26 @@ class: center, middle
 You can use a single R Markdown file to save and execute code and
 generate high quality reports that can be shared with others
 
+
+---
+## The bridge of R and markdown-knitr
+
+<font size=6> 
+.pull-left[
+- It is a package in the programming language R that enables integration of R code into LaTeX, HTML, Markdown,etc . 
+- The purpose of knitr is to allow reproducible research in R through the means of literate programming
+
+  ```
+  install.packages("knitr")
+  ```
+
+]
+</font>
+
+.pull-right[
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
+]
+
 ---
 ## Yaml
 
@@ -158,23 +185,8 @@ generate high quality reports that can be shared with others
 
 <img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/yaml.png" width="300"/>
 
----
-## The bridge of R and markdown-knitr
-
-<font size=6> 
-.pull-left[
-- It is a package in the programming language R that enables integration of R code into LaTeX, HTML, Markdown,etc . 
-- The purpose of knitr is to allow reproducible research in R through the means of literate programming
-
-  ```
-  install.packages("knitr")Demo
-  ```
-]
-</font>
-
-.pull-right[
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/Rmarkdown2.png" width="300"/>
-]
+???
+Basically, the Rmarkdown file consists of 3 parts, the first one is yaml and second is your content of text , the third one is your content of code. and the part of text content, its usage almost totally the sanme se markdown, so I would talk about what is yaml first, YAML is a digestible data serialization language often used to create configuration files with any programming language. Simply, yaml is kand of like the Navigation to your output format of RMD file, it control about converting the rmd file to html file or pdf file, and what your Catalogue looks like, and enven the size of figure. anyway. let's see the demo
 ---
 ## Basic grammar
 

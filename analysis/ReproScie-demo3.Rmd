@@ -119,4 +119,8 @@ git push origin HEAD:main(master!!)
 
 #cherry-up
 git cherry-pick id
+
+#unlink
+git remote -v
+git remote rm origin
 ```

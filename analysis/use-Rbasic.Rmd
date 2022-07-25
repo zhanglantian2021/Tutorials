@@ -32,10 +32,68 @@ output:
 
 ## R包的下载与安装
 1. 检查r包安装路径`.libpaths()`
-2. 检查包的安装路径：
+2. 检查包的版本：
 `packageVersion("包名")`
 3. 更新所有的包`update.packages(repos = "https://mirrors.ustc.edu.cn/CRAN/",ask='graphics',checkBuilt=TRUE)`
 4. 当下载包显示包不可用时，`chooseCRANmirror()`,这行代码用来重新选择镜像。
+
+5. 使用rmd转换成pdf或word的时候出现问题一般是中间latex的转换有问题，因此可以下载tinytex包，可以使用`install.packages`或以下方法在github上下载
+```
+#下载
+devtools::install_github('yihui/tinytex') 
+#检查tinytex什么文件缺失了导致无法编译
+tinytex::parse_packages()
+#安装tinytex
+tinytex::install_tinytex()
+#卸载旧的tinytex
+tinytex::uninstall_tinytex(force =TRUE)
+#测试是否能编译
+tinytex::pdflatex('test.tex')
+
+```
+
+6. 另外还可能出现的问题是rlang包有问题，导致下载加载包的时候有loadname的问题，通常是已有的rlang版本和所需要运行的版本不一致等问题，而且该包也是在vscode中运行R的必要包，使用以下代码可以安装特定的rlang版本。
+```
+install.packages("https://cran.r-project.org/src/contrib/Archive/rlang/rlang_1.0.3.tar.gz", repo=NULL, type="source")
+```
+
+7. 关于数据缺省值的处理：
+http://www.tastones.com/zh-tw/stackoverflow/r-language/missing-values/omitting_or_replacing_missing_values/
+
+8. 
+- 如果pdf出现转译错误提示找不到：tinytex::reinstall_tinytex()
+- 如果出现错误提示：` LaTeX Error: Unicode character ： (U+FF1A)；not set up for use with LaTeX.`。有可能的问题是把其他地方粘贴过来的：转成tex过程中无法识别，需要在文件中重新输入，有可能是转译器的问题，可以在yaml下加入以下：
+```
+output: 
+    pdf_document:
+         latex_engine: xelatex
+```
+- 如果出现转出的pdf中的代码超出代码框和纸张边界，可以用以下方式修改:
+```
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+再不行的话用以下方式：
+```
+         includes:
+            in_header: "wrap-code.tex"
+```
+然后创建同这个rmd一目录下的wrap-code.tex文件，并且其中输入
+```
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+```
+
+9. 当rmd输出pdf时候表格和图片的排序会凌乱了，因为在latex里面一般表格自动生成在最后，因此可以用kable的时候加入语句`latex_options = c("hold_position")`，具体例子如下：
+```
+kable(Anova(mod.run),format.args = list(scientific = TRUE),digits = 2, "latex") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F, position = "center", latex_options = c("hold_position"))
+```
+
+
+
+
+
+
 
 
 

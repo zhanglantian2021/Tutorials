@@ -9,8 +9,6 @@
 ## Headings and list
 
 Checkbox
-"markdown-pdf.outputDirectory" : "output",
-"markdown-pdf.outputDirectoryRelativePathFile": true,
 
 - [x] A
 - [ ] D
@@ -25,11 +23,11 @@ Checkbox
 4. ~~strikethrough~~
 5. ~~***italic&bold&strikethrough***~~
 6. <u>underline</u>
-6. <mark>mark</mark>；
-7. <font color=red>red font</font>
+7. <mark>mark</mark>；
+8. <font color=red>red font</font>
 
-8. <font color=gray size=6>text</font>
-9. 
+9.  <font color=gray size=6>text</font>
+10. 
 this is about `hightligt code`, it woudl not run
 ```
 this is about hightlight code in a block
@@ -43,9 +41,11 @@ this is about hightlight code in a block
 
 2. picture：
 
-![reproducible](https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png "可重复性")
+![reproducible](../data/img/reproducible1.png "可重复性")
 
-<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible.png" alt="reproducible" width="300" style="display: block; margin: auto;" />
+<br>
+
+<img src="https://raw.githubusercontent.com/zhanglantian2021/Tutorials/master/data/img/reproducible1.png" alt="reproducible" width="300" style="display: block; margin: auto;" />
 
 ![](https://img2.baidu.com/it/u=3821871392,3723723380&fm=253&fmt=auto&app=138&f=JPEG?w=706&h=500)
 
@@ -106,7 +106,7 @@ surperise!
 
 ## sheet
 
-|name|sex|age|nation|
+|name|sex|age|nationality|
 |--:|:--:|--|:--|
 |Kate Williams|F|23|CHN|
 |Jay|Male|18|UAS|

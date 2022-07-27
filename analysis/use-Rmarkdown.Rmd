@@ -361,5 +361,46 @@ xaringanExtra::use_logo(
 )
 ```
 
+# 问题以及解决
+1. 转译成pdf过程中的错误 
+- 如果pdf出现转译错误提示找不到：tinytex::reinstall_tinytex()
+- 如果出现错误提示：` LaTeX Error: Unicode character ： (U+FF1A)；not set up for use with LaTeX.`。有可能的问题是把其他地方粘贴过来的：转成tex过程中无法识别，需要在文件中重新输入，有可能是转译器的问题，可以在yaml下加入以下：
+```
+output: 
+    pdf_document:
+         latex_engine: xelatex
+```
+- 如果出现转出的pdf中的代码超出代码框和纸张边界，可以用以下方式修改:
+```
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+再不行的话用以下方式,现在yaml的output输出格式下面写入以下代码
+```
+         includes:
+            in_header: "wrap-code.tex"
+```
+然后创建同这个rmd一目录下的wrap-code.tex文件，并且其中输入
+```
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+```
+
+2. 当rmd输出pdf时候表格和图片的排序会凌乱了，因为在latex里面一般表格自动生成在最后，因此可以用kable的时候加入语句`latex_options = c("hold_position")`，具体例子如下：
+```
+kable(Anova(mod.run),format.args = list(scientific = TRUE),digits = 2, "latex") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F, position = "center", latex_options = c("hold_position"))
+```
+
+3. 在rmd文本中如果需要转译出来的某处在pdf中是分页的那么加入该代码即可`\pagebreak`
+
+
+
+
+
+
+
+
+
+
 
 

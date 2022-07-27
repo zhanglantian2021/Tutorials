@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Zhangyixue" />
+
+
+<title>R-statistics</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/zhanglantian2021/Tutorials">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">R-statistics</h1>
+<h4 class="author">Zhangyixue</h4>
+<h4 class="date">This document was last updated on 周二 7月 26 2022 17:15:24</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-07-26
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 2
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Tutorials/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220708code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220708)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220708code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220708)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+</p>
+</div>
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div class="panel-body">
+The following chunks had caches available:
+<ul>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>R-statistics_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstreef8655d34a92ede16ff3782370ac995439608c71ctargetblankf8655d3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/zhanglantian2021/Tutorials/tree/f8655d34a92ede16ff3782370ac995439608c71c" target="_blank">f8655d3</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstreef8655d34a92ede16ff3782370ac995439608c71ctargetblankf8655d3a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/zhanglantian2021/Tutorials/tree/f8655d34a92ede16ff3782370ac995439608c71c" target="_blank">f8655d3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/R-statistics_cache/
+    Ignored:    analysis/ReproScie-note_cache/
+
+Untracked files:
+    Untracked:  analysis/R-statistics.rmd
+    Untracked:  analysis/R-visualisation.rmd
+    Untracked:  analysis/wrap-code.tex
+
+Unstaged changes:
+    Modified:   analysis/use-Rbasic.Rmd
+    Modified:   analysis/use-Rmarkdown.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="零膨胀处理" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> 零膨胀处理</h1>
+<div id="在glmm模型中" class="section level2" number="1.1">
+<h2 number="1.1"><span class="header-section-number">1.1</span> 在glmm模型中</h2>
+<p>主要使用的包是glmmTMB，以下是关于该包的介绍：</p>
+</div>
+</div>
+<div id="异常值处理" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> 异常值处理</h1>
+<div id="方法一cooks-distance" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> 方法一：cook’s distance</h2>
+<ol style="list-style-type: decimal">
+<li><code>cooksd &lt;- cooks.distance(mod,data=datset,infl = influence(mod, do.coef = FALSE),res = infl$pear.res,ispersion = summary(mod)$dispersion)</code>:准备数据</li>
+<li><code>sample_size &lt;- nrow(datset)</code>：确认好纵坐标</li>
+<li><code>plot(cooksd, pch="*", cex=2, main="Influential Obs by Cooks distance")</code>：绘制出库克距离</li>
+<li><code>abline(h = 4/sample_size, col="red")</code> ：增加删除线（在删除线纵轴方向以上的将被判断为异常值）</li>
+<li><code>text(x=1:length(cooksd)+1, y=cooksd, labels=ifelse(cooksd&gt;4/sample_size, names(cooksd),""), col="red")</code>：对被判断为异常值的标注红色标记。</li>
+<li><code>influential &lt;- as.numeric(names(cooksd)[(cooksd &gt; (4/sample_size))])</code>：用上面的cook’s distance判断完异常点后用这个方法获取具体异常点。</li>
+<li><code>dataset_ro1 &lt;- dataset[-influential, ]</code>：删除被判断为异常点的异常点</li>
+<li><code>nrow(dataset_ro1)</code>：检查一共被删除了多少个异常点。 <br></li>
+</ol>
+</div>
+<div id="方法二testoutliers" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> 方法二：testOutliers()</h2>
+<ol style="list-style-type: decimal">
+<li><code>simulationOutput &lt;- simulateResiduals(fittedModel = mod, nSim=250, seed=123)</code>：先得到模型的残差, 一般来说最好设置seed固定数值，这样的话产生的随机残差才具有可重复性。</li>
+<li><code>testOutliers(simulationOutput, type = "bootstrap",nBoot=100)</code>：然后检验是否有异常值，一般来说样本量小于500用bootstrap方法，否则有binomial的方法，使用bootstrap的时候设置nBoot要小于等于上一个产生残差函数的nSim数值。一般越大结果越不容易显著，如果显著了那么就是有异常值了。</li>
+<li><code>outliers(simulationOutput0,return="index")</code>：接着查看异常值所在数据集的位置信息。</li>
+<li>直接删除异常点 <br></li>
+</ol>
+</div>
+<div id="方法三四分位法" class="section level2" number="2.3">
+<h2 number="2.3"><span class="header-section-number">2.3</span> 方法三：四分位法</h2>
+<p>由于该数据antdat2其中变量是binomial数据，因此用来做y的是由两列数据y1和y2计算出来的，在以下方法中是先删除y1的异常值再删除y2的异常值，也许可以对cbind了的y1和y2那列数据进行异常值剔除</p>
+<ol style="list-style-type: decimal">
+<li><p><code>antdat2rr=antdat2[!is.na(antdat2$Total.number.of.ants.before.disturbance),]</code>：先删除y1的含有NA的行，否则使用quantile函数出错，假设删除了8行</p></li>
+<li><p><code>antdat2r=antdat2rr[!is.na(antdat2rr$new.Total.number.of.ants.after.disturbance),]</code>：再删除了y2的含有NA的行，又被删除了8行，则一共因为NA值被删除了15行数据。(在检查删除了多少数据过程中使用<code>nrow(data-name)</code>来检查)</p></li>
+<li><p><code>Q11 &lt;- quantile(antdat2r$Total.number.of.ants.before.disturbance, .25)</code>:得到y1的四分之一位的数值</p></li>
+<li><p><code>Q31 &lt;- quantile(antdat2r$Total.number.of.ants.before.disturbance, .75)</code>:得到y1的四分之三位的数值</p></li>
+<li><p><code>IQR1 &lt;- IQR(antdat2r$Total.number.of.ants.before.disturbance)</code>:得到y1的四分位数的范围</p></li>
+<li></li>
+</ol>
+<pre><code>antdat2_ro22 &lt;- subset(antdat2r, antdat2r$Total.number.of.ants.before.disturbance&gt; (Q11 - 1.5*IQR1) &amp; antdat2r$Total.number.of.ants.before.disturbance&lt; (Q31 + 1.5*IQR1))</code></pre>
+<p>：对不在四分位数范围的y1的数值判断为异常值并且进行删除，使用nrow()函数检查删除了多少个异常值，假设删除了3个异常值</p>
+<ol start="7" style="list-style-type: decimal">
+<li><p><code>Q12 &lt;- quantile(antdat2_ro22$new.Total.number.of.ants.after.disturbance, .25)</code>：得到y2的四分之一位数，注意在这一步中使用的是上一步已经经过剔除部分异常值的antdat2_ro22数据集，如若不这样，还要y1和y2分开剔除后要把两列数据集提取出来合并到新的数据集中。</p></li>
+<li><p><code>Q32 &lt;- quantile(antdat2_ro22$new.Total.number.of.ants.after.disturbance, .75)</code>：得到y2的四分之三位数</p></li>
+<li><p><code>IQR2 &lt;- IQR(antdat2_ro22$new.Total.number.of.ants.after.disturbance)</code>：得到四分位数的范围。</p></li>
+<li></li>
+</ol>
+<pre><code>antdat2_ro2 &lt;- subset(antdat2_ro22, antdat2_ro22$new.Total.number.of.ants.after.disturbance&gt; (Q12 - 1.5*IQR2) &amp; antdat2_ro22$new.Total.number.of.ants.after.disturbance&lt; (Q32 + 1.5*IQR2))</code></pre>
+<p>：对不在四分位数范围的y2的数值判断为异常值并且进行删除，使用nrow()函数检查删除了多少个异常值，假设一共删除了7个异常值。 <br></p>
+</div>
+<div id="方法四盖帽法" class="section level2" number="2.4">
+<h2 number="2.4"><span class="header-section-number">2.4</span> 方法四：盖帽法</h2>
+<p>由于该数据antdat2其中变量是binomial数据，因此用来做y的是由两列数据y1和y2计算出来的，在以下方法中是取y1的1%-99%的数据，再取得y2的1%-99%数据，也许可以对cbind了的y1和y2那列数据进行盖帽法。</p>
+<ol style="list-style-type: decimal">
+<li><p><code>antdat2rr=antdat2[!is.na(antdat2$Total.number.of.ants.before.disturbance),]</code>：也是先删除y1的含有NA的行，否则使用quantile函数出错，假设删除了8行</p></li>
+<li><p><code>antdat2r=antdat2rr[!is.na(antdat2rr$new.Total.number.of.ants.after.disturbance),]</code>：也是再删除了y2的含有NA的行，又被删除了8行，则一共因为NA值被删除了15行数据。(在检查删除了多少数据过程中使用<code>nrow(data-name)</code>来检查)</p></li>
+<li><p><code>q1&lt;- quantile(antdat2r$Total.number.of.ants.before.disturbance, 0.01)</code>: 取得时y1的1%时的变量值</p></li>
+<li><p><code>q99&lt;- quantile(antdat2r$Total.number.of.ants.before.disturbance, 0.99)</code>: 取得时y1的99%时的变量值</p></li>
+<li><p><code>antdat2r[antdat2r$Total.number.of.ants.before.disturbance &lt; q1,]$Total.number.of.ants.before.disturbance &lt;- q1</code>：用y1的1%时的数据替代小于1%范围的数据。</p></li>
+<li><p><code>antdat2r[antdat2r$Total.number.of.ants.before.disturbance &gt; q99,]$Total.number.of.ants.before.disturbance &lt; - q99</code>：用y1的99%时的数据替代大于99%范围的数据。</p></li>
+<li><p><code>antdat2_ro33 &lt;- antdat2r</code>：把已经删除了不在1%-99%范围内数据的数据集antdat2r赋值到新的变量上防止和旧的混淆。</p></li>
+<li><p><code>p1&lt;- quantile(antdat2_ro33$new.Total.number.of.ants.after.disturbance, 0.01)</code>：取得时y2的1%时的变量值</p></li>
+<li><p><code>p99&lt;- quantile(antdat2_ro33$new.Total.number.of.ants.after.disturbance, 0.99)</code>：取得时y2的99%时的变量值</p></li>
+<li><p><code>antdat2_ro33[antdat2_ro33$new.Total.number.of.ants.after.disturbance &lt; p1,]$new.Total.number.of.ants.after.disturbance &lt;- p1</code>：用y2的1%时的数据替代小于1%范围的数据。</p></li>
+<li><p><code>antdat2_ro33[antdat2_ro33$new.Total.number.of.ants.after.disturbance &gt; p99,]$new.Total.number.of.ants.after.disturbance &lt; - p99</code>：用y2的99%时的数据替代大于99%范围的数据。</p></li>
+<li><p><code>antdat2_ro3 &lt;- antdat2_ro33</code>：把已经删除了不在1%-99%范围内数据的数据集antdat2_ro33赋值到新的变量上防止和旧的混淆。antdat2_ro3就是最终删除了所有异常值的数据集。</p></li>
+</ol>
+<p><strong>最后使用删除了异常值的新数据集重新跑一遍模型并且再次进行异常值检测！！！！</strong>（简便直观的检测方法是做boxplot和errorbar，在其上下范围之外有点被显示到图上的就是异常值的点。）</p>
+</div>
+</div>
+<div id="缺失值处理" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> 缺失值处理</h1>
+<div id="检测" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> 检测</h2>
+<pre><code>sum(is.na(data))                #查看data里缺失值个数
+sum(is.na(data$DINNER_PRICE)    #查看data里维度DINNER_PRICE缺失值个数
+data=data[!is.na(data$DINNER_PRICE),]     #删除DINNER_PRICE缺失样本
+data=na.omit(data)              #去除有NA的行(方法1)
+data[complete.cases(data),]     #去除有NA的行(方法2)
+data[complete.cases(data[,5:6]),]    #只过滤第5列，第6列中含有NA的行</code></pre>
+<pre><code>sum(complete.cases(data))   #不含缺失值记录 
+sum(!complete.cases(data))    #含缺失值记录
+mean(!complete.cases(data))       #有缺失值记录比例  
+head(data[!complete.cases(data),])  #筛选出有缺失值的记录 
+sum(is.na(data))     #数据集中缺失值总计数量</code></pre>
+<pre><code>sum(complete.cases(data$CHANNEL_GRADE))   #不含缺失值 
+sum(!complete.cases(data$CHANNEL_GRADE))    #含缺失值
+mean(!complete.cases(data$CHANNEL_GRADE))       #有缺失值占比
+head(data[!complete.cases(data$CHANNEL_GRADE),])    #筛选出CHANNEL_GRADE有缺失值的记录</code></pre>
+<pre><code>#把缺失值数据集、非缺失值数据集分开
+sub &lt;- which(is.na(data$CHANNEL_GRADE))  #识别CHANNEL_GRADE中缺失值所在行数  
+inputfile1 &lt;- inputfile[-sub,]   #将数据集分成完整数据和缺失数据两部分  
+inputfile2 &lt;- inputfile[sub,] </code></pre>
+</div>
+<div id="处理" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> 处理</h2>
+<div id="均值插补" class="section level3" number="3.2.1">
+<h3 number="3.2.1"><span class="header-section-number">3.2.1</span> 均值插补：</h3>
+<ul>
+<li>如果缺失值是数值型的，就以该属性存在值的平均值来插补缺失值；如果缺失值是类别型的，就根据统计学中的众数原理，用该属性的众数(即出现频率最高的值)来补齐缺失的值；</li>
+<li>利用同类均值插补：同均值插补的方法都属于单值插补，不同的是，它用层次聚类模型预测缺失变量的类型，再以该类型的均值插补。首先对信息完全的变量或其子集行聚类，然后按缺失个体所属类来插补不同类的均值；</li>
+</ul>
+</div>
+<div id="极大似然估计" class="section level3" number="3.2.2">
+<h3 number="3.2.2"><span class="header-section-number">3.2.2</span> 极大似然估计</h3>
+<p>（Max Likelihood） - 在缺失类型为随机缺失的条件下，假设模型对于完整的样本是正确的，那么通过观测数据的边际分布可以对未知参数进行极大似然估计。这种方法也被称为忽略缺失值的极大似然估计，对于极大似然的参数估计实际中常采用的计算方法是期望值最大化(EM）。该方法比删除个案和单值插补更有吸引力，它一个重要前提：适用于大样本。可以保证ML估计值是渐近无偏的并服从正态分布。但该方法可能会陷入局部极值，收敛速度也不是很快，并且计算很复杂。</p>
+</div>
+<div id="多重插补" class="section level3" number="3.2.3">
+<h3 number="3.2.3"><span class="header-section-number">3.2.3</span> 多重插补</h3>
+<p>（Multiple Imputation） - 思想来源于贝叶斯估计，认为待插补的值是随机的，它的值来自于已观测到的值。具体实践上通常是估计出待插补的值，然后再加上不同的噪声，形成多组可选插补值。根据某种选择依据，选取最合适的插补值。分为三个步骤：①为每个空值产生一套可能的插补值，这些值反映了无响应模型的不确定性；每个值都可以被用来插补数据集中的缺失值，产生若干个完整数据集合。②每个插补数据集合都用针对完整数据集的统计方法进行统计分析。③对来自各个插补数据集的结果，根据评分函数进行选择，产生最终的插补值。</p>
+</div>
+</div>
+</div>
+<div id="方差异质性问题" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> 方差异质性问题</h1>
+</div>
+<div id="数据相关性问题" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> 数据相关性问题</h1>
+<div id="地理空间自相关" class="section level2" number="5.1">
+<h2 number="5.1"><span class="header-section-number">5.1</span> 地理空间自相关</h2>
+</div>
+<div id="系统发育自相关" class="section level2" number="5.2">
+<h2 number="5.2"><span class="header-section-number">5.2</span> 系统发育自相关</h2>
+</div>
+<div id="时间序列自相关" class="section level2" number="5.3">
+<h2 number="5.3"><span class="header-section-number">5.3</span> 时间序列自相关</h2>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Chinese (Simplified)_China.utf8 
+[2] LC_CTYPE=Chinese (Simplified)_China.utf8   
+[3] LC_MONETARY=Chinese (Simplified)_China.utf8
+[4] LC_NUMERIC=C                               
+[5] LC_TIME=Chinese (Simplified)_China.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.9       knitr_1.39       magrittr_2.0.3   workflowr_1.7.0 
+ [5] R6_2.5.1         rlang_1.0.4      fastmap_1.1.0    fansi_1.0.3     
+ [9] stringr_1.4.0    tools_4.2.1      xfun_0.31        utf8_1.2.2      
+[13] cli_3.3.0        git2r_0.30.1     jquerylib_0.1.4  htmltools_0.5.2 
+[17] ellipsis_0.3.2   rprojroot_2.0.3  yaml_2.3.5       digest_0.6.29   
+[21] tibble_3.1.7     lifecycle_1.0.1  formatR_1.12.1   later_1.3.0     
+[25] sass_0.4.2       vctrs_0.4.1      promises_1.2.0.1 fs_1.5.2        
+[29] cachem_1.0.6     glue_1.6.2       evaluate_0.15    rmarkdown_2.14  
+[33] stringi_1.7.8    bslib_0.4.0      compiler_4.2.1   pillar_1.8.0    
+[37] jsonlite_1.8.0   httpuv_1.6.5     pkgconfig_2.0.3 </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlItc3RhdGlzdGljcyINCmF1dGhvcjogIlpoYW5neWl4dWUiDQpkYXRlOiBUaGlzIGRvY3VtZW50IHdhcyBsYXN0IHVwZGF0ZWQgb24gYHIgZm9ybWF0KFN5cy50aW1lKCksICIlYSAlYiAlZCAlWSAlSDolTTolUyIpYA0KZG9jdW1lbnQ6IGN0ZXhhcnQNCm91dHB1dDogDQogICAgd29ya2Zsb3dyOjp3Zmxvd19odG1sOg0KICAgICAgICB0aGVtZTogY29zbW8NCiAgICAgICAgaGlnaGxpZ2h0OiB0ZXh0bWF0ZQ0KICAgICAgICBjb2RlX2Rvd25sb2FkOiB0cnVlDQogICAgICAgIGNvZGVfZm9sZGluZzogc2hvdw0KICAgICAgICBoaWdodGxpZ2h0OiB0YW5nbw0KICAgICAgICBkZl9wcmludDogcGFnZWQNCiAgICAgICAgZmlnX2NhcHRpb246IHRydWUNCiAgICAgICAgdG9jOiB0cnVlDQogICAgICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KICAgICAgICB0b2NfZGVwdGg6IDMNCiAgICAgICAgdG9jX2Zsb2F0OiAgDQogICAgICAgICAgICAgY29sbGFwc2VkOiBGQUxTRQ0KICAgICAgICAgICAgIHNtb290aF9zY3JvbGw6IHRydWUgICANCi0tLQ0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9NjApLHRpZHk9VFJVRSwgY2FjaGU9VFJVRSkNCmBgYA0KDQojIOmbtuiGqOiDgOWkhOeQhg0KIyMg5ZyoZ2xtbeaooeWei+S4rQ0K5Li76KaB5L2/55So55qE5YyF5pivZ2xtbVRNQu+8jOS7peS4i+aYr+WFs+S6juivpeWMheeahOS7i+e7je+8mg0KDQoNCiMg5byC5bi45YC85aSE55CGDQoNCiMjIOaWueazleS4gO+8mmNvb2sncyBkaXN0YW5jZQ0KMS4gYGNvb2tzZCA8LSBjb29rcy5kaXN0YW5jZShtb2QsZGF0YT1kYXRzZXQsaW5mbCA9IGluZmx1ZW5jZShtb2QsIGRvLmNvZWYgPSBGQUxTRSkscmVzID0gaW5mbCRwZWFyLnJlcyxpc3BlcnNpb24gPSBzdW1tYXJ5KG1vZCkkZGlzcGVyc2lvbilgOuWHhuWkh+aVsOaNrg0KMi4gYHNhbXBsZV9zaXplIDwtIG5yb3coZGF0c2V0KWDvvJrnoa7orqTlpb3nurXlnZDmoIcNCjMuIGBwbG90KGNvb2tzZCwgcGNoPSIqIiwgY2V4PTIsIG1haW49IkluZmx1ZW50aWFsIE9icyBieSBDb29rcyBkaXN0YW5jZSIpYO+8mue7mOWItuWHuuW6k+WFi+i3neemuw0KNC4gYGFibGluZShoID0gNC9zYW1wbGVfc2l6ZSwgY29sPSJyZWQiKWAg77ya5aKe5Yqg5Yig6Zmk57q/77yI5Zyo5Yig6Zmk57q/57q16L205pa55ZCR5Lul5LiK55qE5bCG6KKr5Yik5pat5Li65byC5bi45YC877yJDQo1LiBgdGV4dCh4PTE6bGVuZ3RoKGNvb2tzZCkrMSwgeT1jb29rc2QsIGxhYmVscz1pZmVsc2UoY29va3NkPjQvc2FtcGxlX3NpemUsIG5hbWVzKGNvb2tzZCksIiIpLCBjb2w9InJlZCIpYO+8muWvueiiq+WIpOaWreS4uuW8guW4uOWAvOeahOagh+azqOe6ouiJsuagh+iusOOAgg0KNi4gYGluZmx1ZW50aWFsIDwtIGFzLm51bWVyaWMobmFtZXMoY29va3NkKVsoY29va3NkID4gKDQvc2FtcGxlX3NpemUpKV0pYO+8mueUqOS4iumdoueahGNvb2sncyBkaXN0YW5jZeWIpOaWreWujOW8guW4uOeCueWQjueUqOi/meS4quaWueazleiOt+WPluWFt+S9k+W8guW4uOeCueOAgg0KNy4gYGRhdGFzZXRfcm8xIDwtIGRhdGFzZXRbLWluZmx1ZW50aWFsLCBdYO+8muWIoOmZpOiiq+WIpOaWreS4uuW8guW4uOeCueeahOW8guW4uOeCuQ0KOC4gYG5yb3coZGF0YXNldF9ybzEpYO+8muajgOafpeS4gOWFseiiq+WIoOmZpOS6huWkmuWwkeS4quW8guW4uOeCueOAgg0KPGJyPg0KDQojIyDmlrnms5XkuozvvJp0ZXN0T3V0bGllcnMoKQ0KMS4gYHNpbXVsYXRpb25PdXRwdXQgPC0gc2ltdWxhdGVSZXNpZHVhbHMoZml0dGVkTW9kZWwgPSBtb2QsIG5TaW09MjUwLCBzZWVkPTEyMylg77ya5YWI5b6X5Yiw5qih5Z6L55qE5q6L5beuLCDkuIDoiKzmnaXor7TmnIDlpb3orr7nva5zZWVk5Zu65a6a5pWw5YC877yM6L+Z5qC355qE6K+d5Lqn55Sf55qE6ZqP5py65q6L5beu5omN5YW35pyJ5Y+v6YeN5aSN5oCn44CCDQoyLiBgdGVzdE91dGxpZXJzKHNpbXVsYXRpb25PdXRwdXQsIHR5cGUgPSAiYm9vdHN0cmFwIixuQm9vdD0xMDApYO+8mueEtuWQjuajgOmqjOaYr+WQpuacieW8guW4uOWAvO+8jOS4gOiIrOadpeivtOagt+acrOmHj+Wwj+S6jjUwMOeUqGJvb3RzdHJhcOaWueazle+8jOWQpuWImeaciWJpbm9taWFs55qE5pa55rOV77yM5L2/55SoYm9vdHN0cmFw55qE5pe25YCZ6K6+572ubkJvb3TopoHlsI/kuo7nrYnkuo7kuIrkuIDkuKrkuqfnlJ/mrovlt67lh73mlbDnmoRuU2lt5pWw5YC844CC5LiA6Iis6LaK5aSn57uT5p6c6LaK5LiN5a655piT5pi+6JGX77yM5aaC5p6c5pi+6JGX5LqG6YKj5LmI5bCx5piv5pyJ5byC5bi45YC85LqG44CCDQozLiBgb3V0bGllcnMoc2ltdWxhdGlvbk91dHB1dDAscmV0dXJuPSJpbmRleCIpYO+8muaOpeedgOafpeeci+W8guW4uOWAvOaJgOWcqOaVsOaNrumbhueahOS9jee9ruS/oeaBr+OAgg0KNC4g55u05o6l5Yig6Zmk5byC5bi454K5DQo8YnI+DQoNCiMjIOaWueazleS4ie+8muWbm+WIhuS9jeazlQ0K55Sx5LqO6K+l5pWw5o2uYW50ZGF0MuWFtuS4reWPmOmHj+aYr2Jpbm9taWFs5pWw5o2u77yM5Zug5q2k55So5p2l5YGaeeeahOaYr+eUseS4pOWIl+aVsOaNrnkx5ZKMeTLorqHnrpflh7rmnaXnmoTvvIzlnKjku6XkuIvmlrnms5XkuK3mmK/lhYjliKDpmaR5MeeahOW8guW4uOWAvOWGjeWIoOmZpHky55qE5byC5bi45YC877yM5Lmf6K645Y+v5Lul5a+5Y2JpbmTkuobnmoR5MeWSjHky6YKj5YiX5pWw5o2u6L+b6KGM5byC5bi45YC85YmU6ZmkDQoNCjEuIGBhbnRkYXQycnI9YW50ZGF0MlshaXMubmEoYW50ZGF0MiRUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UpLF1g77ya5YWI5Yig6ZmkeTHnmoTlkKvmnIlOQeeahOihjO+8jOWQpuWImeS9v+eUqHF1YW50aWxl5Ye95pWw5Ye66ZSZ77yM5YGH6K6+5Yig6Zmk5LqGOOihjA0KDQoyLiBgYW50ZGF0MnI9YW50ZGF0MnJyWyFpcy5uYShhbnRkYXQycnIkbmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlKSxdYO+8muWGjeWIoOmZpOS6hnky55qE5ZCr5pyJTkHnmoTooYzvvIzlj4jooqvliKDpmaTkuoY46KGM77yM5YiZ5LiA5YWx5Zug5Li6TkHlgLzooqvliKDpmaTkuoYxNeihjOaVsOaNruOAgijlnKjmo4Dmn6XliKDpmaTkuoblpJrlsJHmlbDmja7ov4fnqIvkuK3kvb/nlKhgbnJvdyhkYXRhLW5hbWUpYOadpeajgOafpSkNCg0KMy4gYFExMSA8LSBxdWFudGlsZShhbnRkYXQyciRUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UsIC4yNSlgOuW+l+WIsHkx55qE5Zub5YiG5LmL5LiA5L2N55qE5pWw5YC8DQoNCjQuIGBRMzEgPC0gcXVhbnRpbGUoYW50ZGF0MnIkVG90YWwubnVtYmVyLm9mLmFudHMuYmVmb3JlLmRpc3R1cmJhbmNlLCAuNzUpYDrlvpfliLB5MeeahOWbm+WIhuS5i+S4ieS9jeeahOaVsOWAvA0KDQo1LiBgSVFSMSA8LSBJUVIoYW50ZGF0MnIkVG90YWwubnVtYmVyLm9mLmFudHMuYmVmb3JlLmRpc3R1cmJhbmNlKWA65b6X5YiweTHnmoTlm5vliIbkvY3mlbDnmoTojIPlm7QNCg0KNi4gDQpgYGANCmFudGRhdDJfcm8yMiA8LSBzdWJzZXQoYW50ZGF0MnIsIGFudGRhdDJyJFRvdGFsLm51bWJlci5vZi5hbnRzLmJlZm9yZS5kaXN0dXJiYW5jZT4gKFExMSAtIDEuNSpJUVIxKSAmIGFudGRhdDJyJFRvdGFsLm51bWJlci5vZi5hbnRzLmJlZm9yZS5kaXN0dXJiYW5jZTwgKFEzMSArIDEuNSpJUVIxKSkNCmBgYA0K77ya5a+55LiN5Zyo5Zub5YiG5L2N5pWw6IyD5Zu055qEeTHnmoTmlbDlgLzliKTmlq3kuLrlvILluLjlgLzlubbkuJTov5vooYzliKDpmaTvvIzkvb/nlKhucm93KCnlh73mlbDmo4Dmn6XliKDpmaTkuoblpJrlsJHkuKrlvILluLjlgLzvvIzlgYforr7liKDpmaTkuoYz5Liq5byC5bi45YC8DQoNCjcuIGBRMTIgPC0gcXVhbnRpbGUoYW50ZGF0Ml9ybzIyJG5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZSwgLjI1KWDvvJrlvpfliLB5MueahOWbm+WIhuS5i+S4gOS9jeaVsO+8jOazqOaEj+WcqOi/meS4gOatpeS4reS9v+eUqOeahOaYr+S4iuS4gOatpeW3sue7j+e7j+i/h+WJlOmZpOmDqOWIhuW8guW4uOWAvOeahGFudGRhdDJfcm8yMuaVsOaNrumbhu+8jOWmguiLpeS4jei/meagt++8jOi/mOimgXkx5ZKMeTLliIblvIDliZTpmaTlkI7opoHmiorkuKTliJfmlbDmja7pm4bmj5Dlj5blh7rmnaXlkIjlubbliLDmlrDnmoTmlbDmja7pm4bkuK3jgIINCg0KOC4gYFEzMiA8LSBxdWFudGlsZShhbnRkYXQyX3JvMjIkbmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlLCAuNzUpYO+8muW+l+WIsHky55qE5Zub5YiG5LmL5LiJ5L2N5pWwDQoNCjkuIGBJUVIyIDwtIElRUihhbnRkYXQyX3JvMjIkbmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlKWDvvJrlvpfliLDlm5vliIbkvY3mlbDnmoTojIPlm7TjgIINCg0KMTAuIA0KYGBgDQphbnRkYXQyX3JvMiA8LSBzdWJzZXQoYW50ZGF0Ml9ybzIyLCBhbnRkYXQyX3JvMjIkbmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlPiAoUTEyIC0gMS41KklRUjIpICYgYW50ZGF0Ml9ybzIyJG5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZTwgKFEzMiArIDEuNSpJUVIyKSkNCmBgYA0K77ya5a+55LiN5Zyo5Zub5YiG5L2N5pWw6IyD5Zu055qEeTLnmoTmlbDlgLzliKTmlq3kuLrlvILluLjlgLzlubbkuJTov5vooYzliKDpmaTvvIzkvb/nlKhucm93KCnlh73mlbDmo4Dmn6XliKDpmaTkuoblpJrlsJHkuKrlvILluLjlgLzvvIzlgYforr7kuIDlhbHliKDpmaTkuoY35Liq5byC5bi45YC844CCDQo8YnI+DQoNCiMjIOaWueazleWbm++8muebluW4veazlQ0K55Sx5LqO6K+l5pWw5o2uYW50ZGF0MuWFtuS4reWPmOmHj+aYr2Jpbm9taWFs5pWw5o2u77yM5Zug5q2k55So5p2l5YGaeeeahOaYr+eUseS4pOWIl+aVsOaNrnkx5ZKMeTLorqHnrpflh7rmnaXnmoTvvIzlnKjku6XkuIvmlrnms5XkuK3mmK/lj5Z5MeeahDElLTk5JeeahOaVsOaNru+8jOWGjeWPluW+l3ky55qEMSUtOTkl5pWw5o2u77yM5Lmf6K645Y+v5Lul5a+5Y2JpbmTkuobnmoR5MeWSjHky6YKj5YiX5pWw5o2u6L+b6KGM55uW5bi95rOV44CCDQoNCjEuIGBhbnRkYXQycnI9YW50ZGF0MlshaXMubmEoYW50ZGF0MiRUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UpLF1g77ya5Lmf5piv5YWI5Yig6ZmkeTHnmoTlkKvmnIlOQeeahOihjO+8jOWQpuWImeS9v+eUqHF1YW50aWxl5Ye95pWw5Ye66ZSZ77yM5YGH6K6+5Yig6Zmk5LqGOOihjA0KDQoyLiBgYW50ZGF0MnI9YW50ZGF0MnJyWyFpcy5uYShhbnRkYXQycnIkbmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlKSxdYO+8muS5n+aYr+WGjeWIoOmZpOS6hnky55qE5ZCr5pyJTkHnmoTooYzvvIzlj4jooqvliKDpmaTkuoY46KGM77yM5YiZ5LiA5YWx5Zug5Li6TkHlgLzooqvliKDpmaTkuoYxNeihjOaVsOaNruOAgijlnKjmo4Dmn6XliKDpmaTkuoblpJrlsJHmlbDmja7ov4fnqIvkuK3kvb/nlKhgbnJvdyhkYXRhLW5hbWUpYOadpeajgOafpSkNCg0KMy4gYHExPC0gcXVhbnRpbGUoYW50ZGF0MnIkVG90YWwubnVtYmVyLm9mLmFudHMuYmVmb3JlLmRpc3R1cmJhbmNlLCAwLjAxKWA6IOWPluW+l+aXtnkx55qEMSXml7bnmoTlj5jph4/lgLwNCg0KNC4gYHE5OTwtIHF1YW50aWxlKGFudGRhdDJyJFRvdGFsLm51bWJlci5vZi5hbnRzLmJlZm9yZS5kaXN0dXJiYW5jZSwgMC45OSlgOiDlj5blvpfml7Z5MeeahDk5JeaXtueahOWPmOmHj+WAvA0KDQo1LiBgYW50ZGF0MnJbYW50ZGF0MnIkVG90YWwubnVtYmVyLm9mLmFudHMuYmVmb3JlLmRpc3R1cmJhbmNlIDwgcTEsXSRUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UgPC0gcTFg77ya55SoeTHnmoQxJeaXtueahOaVsOaNruabv+S7o+Wwj+S6jjEl6IyD5Zu055qE5pWw5o2u44CCDQoNCjYuIGBhbnRkYXQyclthbnRkYXQyciRUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UgPiBxOTksXSRUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UgPCAtIHE5OWDvvJrnlKh5MeeahDk5JeaXtueahOaVsOaNruabv+S7o+Wkp+S6jjk5JeiMg+WbtOeahOaVsOaNruOAgg0KDQo3LiBgYW50ZGF0Ml9ybzMzIDwtIGFudGRhdDJyYO+8muaKiuW3sue7j+WIoOmZpOS6huS4jeWcqDElLTk5JeiMg+WbtOWGheaVsOaNrueahOaVsOaNrumbhmFudGRhdDJy6LWL5YC85Yiw5paw55qE5Y+Y6YeP5LiK6Ziy5q2i5ZKM5pen55qE5re35reG44CCDQoNCjguIGBwMTwtIHF1YW50aWxlKGFudGRhdDJfcm8zMyRuZXcuVG90YWwubnVtYmVyLm9mLmFudHMuYWZ0ZXIuZGlzdHVyYmFuY2UsIDAuMDEpYO+8muWPluW+l+aXtnky55qEMSXml7bnmoTlj5jph4/lgLwNCg0KOS4gYHA5OTwtIHF1YW50aWxlKGFudGRhdDJfcm8zMyRuZXcuVG90YWwubnVtYmVyLm9mLmFudHMuYWZ0ZXIuZGlzdHVyYmFuY2UsIDAuOTkpYO+8muWPluW+l+aXtnky55qEOTkl5pe255qE5Y+Y6YeP5YC8DQoNCjEwLiBgYW50ZGF0Ml9ybzMzW2FudGRhdDJfcm8zMyRuZXcuVG90YWwubnVtYmVyLm9mLmFudHMuYWZ0ZXIuZGlzdHVyYmFuY2UgPCBwMSxdJG5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZSA8LSBwMWDvvJrnlKh5MueahDEl5pe255qE5pWw5o2u5pu/5Luj5bCP5LqOMSXojIPlm7TnmoTmlbDmja7jgIINCg0KMTEuIGBhbnRkYXQyX3JvMzNbYW50ZGF0Ml9ybzMzJG5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZSA+IHA5OSxdJG5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZSA8IC0gcDk5YO+8mueUqHky55qEOTkl5pe255qE5pWw5o2u5pu/5Luj5aSn5LqOOTkl6IyD5Zu055qE5pWw5o2u44CCDQoNCjEyLiBgYW50ZGF0Ml9ybzMgPC0gYW50ZGF0Ml9ybzMzYO+8muaKiuW3sue7j+WIoOmZpOS6huS4jeWcqDElLTk5JeiMg+WbtOWGheaVsOaNrueahOaVsOaNrumbhmFudGRhdDJfcm8zM+i1i+WAvOWIsOaWsOeahOWPmOmHj+S4iumYsuatouWSjOaXp+eahOa3t+a3huOAgmFudGRhdDJfcm8z5bCx5piv5pyA57uI5Yig6Zmk5LqG5omA5pyJ5byC5bi45YC855qE5pWw5o2u6ZuG44CCDQoNCioq5pyA5ZCO5L2/55So5Yig6Zmk5LqG5byC5bi45YC855qE5paw5pWw5o2u6ZuG6YeN5paw6LeR5LiA6YGN5qih5Z6L5bm25LiU5YaN5qyh6L+b6KGM5byC5bi45YC85qOA5rWL77yB77yB77yB77yBKirvvIjnroDkvr/nm7Top4LnmoTmo4DmtYvmlrnms5XmmK/lgZpib3hwbG905ZKMZXJyb3JiYXLvvIzlnKjlhbbkuIrkuIvojIPlm7TkuYvlpJbmnInngrnooqvmmL7npLrliLDlm77kuIrnmoTlsLHmmK/lvILluLjlgLznmoTngrnjgILvvIkNCg0KDQoNCiMg57y65aSx5YC85aSE55CGDQoNCiMjIOajgOa1iw0KYGBgDQpzdW0oaXMubmEoZGF0YSkpICAgICAgICAgICAgICAgICPmn6XnnItkYXRh6YeM57y65aSx5YC85Liq5pWwDQpzdW0oaXMubmEoZGF0YSRESU5ORVJfUFJJQ0UpICAgICPmn6XnnItkYXRh6YeM57u05bqmRElOTkVSX1BSSUNF57y65aSx5YC85Liq5pWwDQpkYXRhPWRhdGFbIWlzLm5hKGRhdGEkRElOTkVSX1BSSUNFKSxdICAgICAj5Yig6ZmkRElOTkVSX1BSSUNF57y65aSx5qC35pysDQpkYXRhPW5hLm9taXQoZGF0YSkgICAgICAgICAgICAgICPljrvpmaTmnIlOQeeahOihjCjmlrnms5UxKQ0KZGF0YVtjb21wbGV0ZS5jYXNlcyhkYXRhKSxdICAgICAj5Y676Zmk5pyJTkHnmoTooYwo5pa55rOVMikNCmRhdGFbY29tcGxldGUuY2FzZXMoZGF0YVssNTo2XSksXSAgICAj5Y+q6L+H5ruk56ysNeWIl++8jOesrDbliJfkuK3lkKvmnIlOQeeahOihjA0KYGBgDQpgYGANCnN1bShjb21wbGV0ZS5jYXNlcyhkYXRhKSkgICAj5LiN5ZCr57y65aSx5YC86K6w5b2VIA0Kc3VtKCFjb21wbGV0ZS5jYXNlcyhkYXRhKSkgICAgI+WQq+e8uuWkseWAvOiusOW9lQ0KbWVhbighY29tcGxldGUuY2FzZXMoZGF0YSkpICAgICAgICPmnInnvLrlpLHlgLzorrDlvZXmr5TkvosgIA0KaGVhZChkYXRhWyFjb21wbGV0ZS5jYXNlcyhkYXRhKSxdKSAgI+etm+mAieWHuuaciee8uuWkseWAvOeahOiusOW9lSANCnN1bShpcy5uYShkYXRhKSkgICAgICPmlbDmja7pm4bkuK3nvLrlpLHlgLzmgLvorqHmlbDph48NCmBgYA0KYGBgDQpzdW0oY29tcGxldGUuY2FzZXMoZGF0YSRDSEFOTkVMX0dSQURFKSkgICAj5LiN5ZCr57y65aSx5YC8IA0Kc3VtKCFjb21wbGV0ZS5jYXNlcyhkYXRhJENIQU5ORUxfR1JBREUpKSAgICAj5ZCr57y65aSx5YC8DQptZWFuKCFjb21wbGV0ZS5jYXNlcyhkYXRhJENIQU5ORUxfR1JBREUpKSAgICAgICAj5pyJ57y65aSx5YC85Y2g5q+UDQpoZWFkKGRhdGFbIWNvbXBsZXRlLmNhc2VzKGRhdGEkQ0hBTk5FTF9HUkFERSksXSkgICAgI+etm+mAieWHukNIQU5ORUxfR1JBREXmnInnvLrlpLHlgLznmoTorrDlvZUNCmBgYA0KDQpgYGANCiPmiornvLrlpLHlgLzmlbDmja7pm4bjgIHpnZ7nvLrlpLHlgLzmlbDmja7pm4bliIblvIANCnN1YiA8LSB3aGljaChpcy5uYShkYXRhJENIQU5ORUxfR1JBREUpKSAgI+ivhuWIq0NIQU5ORUxfR1JBREXkuK3nvLrlpLHlgLzmiYDlnKjooYzmlbAgIA0KaW5wdXRmaWxlMSA8LSBpbnB1dGZpbGVbLXN1YixdICAgI+WwhuaVsOaNrumbhuWIhuaIkOWujOaVtOaVsOaNruWSjOe8uuWkseaVsOaNruS4pOmDqOWIhiAgDQppbnB1dGZpbGUyIDwtIGlucHV0ZmlsZVtzdWIsXSANCmBgYA0KDQojIyDlpITnkIYNCg0KIyMjIOWdh+WAvOaPkuihpe+8mg0KLSDlpoLmnpznvLrlpLHlgLzmmK/mlbDlgLzlnovnmoTvvIzlsLHku6Xor6XlsZ7mgKflrZjlnKjlgLznmoTlubPlnYflgLzmnaXmj5LooaXnvLrlpLHlgLzvvJvlpoLmnpznvLrlpLHlgLzmmK/nsbvliKvlnovnmoTvvIzlsLHmoLnmja7nu5/orqHlrabkuK3nmoTkvJfmlbDljp/nkIbvvIznlKjor6XlsZ7mgKfnmoTkvJfmlbAo5Y2z5Ye6546w6aKR546H5pyA6auY55qE5YC8Keadpeihpem9kOe8uuWkseeahOWAvO+8mw0KLSDliKnnlKjlkIznsbvlnYflgLzmj5LooaXvvJrlkIzlnYflgLzmj5LooaXnmoTmlrnms5Xpg73lsZ7kuo7ljZXlgLzmj5LooaXvvIzkuI3lkIznmoTmmK/vvIzlroPnlKjlsYLmrKHogZrnsbvmqKHlnovpooTmtYvnvLrlpLHlj5jph4/nmoTnsbvlnovvvIzlho3ku6Xor6XnsbvlnovnmoTlnYflgLzmj5LooaXjgILpppblhYjlr7nkv6Hmga/lrozlhajnmoTlj5jph4/miJblhbblrZDpm4booYzogZrnsbvvvIznhLblkI7mjInnvLrlpLHkuKrkvZPmiYDlsZ7nsbvmnaXmj5LooaXkuI3lkIznsbvnmoTlnYflgLzvvJsNCg0KIyMjIOaegeWkp+S8vOeEtuS8sOiuoQ0K77yITWF4IExpa2VsaWhvb2TvvIkNCi0g5Zyo57y65aSx57G75Z6L5Li66ZqP5py657y65aSx55qE5p2h5Lu25LiL77yM5YGH6K6+5qih5Z6L5a+55LqO5a6M5pW055qE5qC35pys5piv5q2j56Gu55qE77yM6YKj5LmI6YCa6L+H6KeC5rWL5pWw5o2u55qE6L656ZmF5YiG5biD5Y+v5Lul5a+55pyq55+l5Y+C5pWw6L+b6KGM5p6B5aSn5Ly854S25Lyw6K6h44CC6L+Z56eN5pa55rOV5Lmf6KKr56ew5Li65b+955Wl57y65aSx5YC855qE5p6B5aSn5Ly854S25Lyw6K6h77yM5a+55LqO5p6B5aSn5Ly854S255qE5Y+C5pWw5Lyw6K6h5a6e6ZmF5Lit5bi46YeH55So55qE6K6h566X5pa55rOV5piv5pyf5pyb5YC85pyA5aSn5YyWKEVN77yJ44CC6K+l5pa55rOV5q+U5Yig6Zmk5Liq5qGI5ZKM5Y2V5YC85o+S6KGl5pu05pyJ5ZC45byV5Yqb77yM5a6D5LiA5Liq6YeN6KaB5YmN5o+Q77ya6YCC55So5LqO5aSn5qC35pys44CC5Y+v5Lul5L+d6K+BTUzkvLDorqHlgLzmmK/muJDov5Hml6DlgY/nmoTlubbmnI3ku47mraPmgIHliIbluIPjgILkvYbor6Xmlrnms5Xlj6/og73kvJrpmbflhaXlsYDpg6jmnoHlgLzvvIzmlLbmlZvpgJ/luqbkuZ/kuI3mmK/lvojlv6vvvIzlubbkuJTorqHnrpflvojlpI3mnYLjgIINCg0KIyMjIOWkmumHjeaPkuihpQ0K77yITXVsdGlwbGUgSW1wdXRhdGlvbu+8iQ0KLSDmgJ3mg7PmnaXmupDkuo7otJ3lj7bmlq/kvLDorqHvvIzorqTkuLrlvoXmj5LooaXnmoTlgLzmmK/pmo/mnLrnmoTvvIzlroPnmoTlgLzmnaXoh6rkuo7lt7Lop4LmtYvliLDnmoTlgLzjgILlhbfkvZPlrp7ot7XkuIrpgJrluLjmmK/kvLDorqHlh7rlvoXmj5LooaXnmoTlgLzvvIznhLblkI7lho3liqDkuIrkuI3lkIznmoTlmarlo7DvvIzlvaLmiJDlpJrnu4Tlj6/pgInmj5LooaXlgLzjgILmoLnmja7mn5Dnp43pgInmi6nkvp3mja7vvIzpgInlj5bmnIDlkIjpgILnmoTmj5LooaXlgLzjgILliIbkuLrkuInkuKrmraXpqqTvvJrikaDkuLrmr4/kuKrnqbrlgLzkuqfnlJ/kuIDlpZflj6/og73nmoTmj5LooaXlgLzvvIzov5nkupvlgLzlj43mmKDkuobml6Dlk43lupTmqKHlnovnmoTkuI3noa7lrprmgKfvvJvmr4/kuKrlgLzpg73lj6/ku6XooqvnlKjmnaXmj5LooaXmlbDmja7pm4bkuK3nmoTnvLrlpLHlgLzvvIzkuqfnlJ/oi6XlubLkuKrlrozmlbTmlbDmja7pm4blkIjjgILikaHmr4/kuKrmj5LooaXmlbDmja7pm4blkIjpg73nlKjpkojlr7nlrozmlbTmlbDmja7pm4bnmoTnu5/orqHmlrnms5Xov5vooYznu5/orqHliIbmnpDjgILikaLlr7nmnaXoh6rlkITkuKrmj5LooaXmlbDmja7pm4bnmoTnu5PmnpzvvIzmoLnmja7or4TliIblh73mlbDov5vooYzpgInmi6nvvIzkuqfnlJ/mnIDnu4jnmoTmj5LooaXlgLzjgIINCg0KIyDmlrnlt67lvILotKjmgKfpl67popgNCg0KDQoNCiMg5pWw5o2u55u45YWz5oCn6Zeu6aKYDQojIyDlnLDnkIbnqbrpl7Toh6rnm7jlhbMNCiMjIOezu+e7n+WPkeiCsuiHquebuOWFsw0KIyMg5pe26Ze05bqP5YiX6Ieq55u45YWzDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("R-statistics.rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

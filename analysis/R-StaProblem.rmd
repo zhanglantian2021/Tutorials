@@ -1,0 +1,171 @@
+---
+title: "R-statistics"
+author: "Zhangyixue"
+date: This document was last updated on `r format(Sys.time(), "%a %b %d %Y %H:%M:%S")`
+document: ctexart
+output: 
+    workflowr::wflow_html:
+        theme: cosmo
+        highlight: textmate
+        code_download: true
+        code_folding: show
+        hightlight: tango
+        df_print: paged
+        fig_caption: true
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:  
+             collapsed: FALSE
+             smooth_scroll: true   
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE, cache=TRUE)
+```
+
+# 数据的操纵
+
+# 零膨胀处理
+## 在glmm模型中
+主要使用的包是glmmTMB，以下是关于该包的介绍：
+
+
+# 异常值处理
+
+## 方法一：cook's distance
+1. `cooksd <- cooks.distance(mod,data=datset,infl = influence(mod, do.coef = FALSE),res = infl$pear.res,ispersion = summary(mod)$dispersion)`:准备数据
+2. `sample_size <- nrow(datset)`：确认好纵坐标
+3. `plot(cooksd, pch="*", cex=2, main="Influential Obs by Cooks distance")`：绘制出库克距离
+4. `abline(h = 4/sample_size, col="red")` ：增加删除线（在删除线纵轴方向以上的将被判断为异常值）
+5. `text(x=1:length(cooksd)+1, y=cooksd, labels=ifelse(cooksd>4/sample_size, names(cooksd),""), col="red")`：对被判断为异常值的标注红色标记。
+6. `influential <- as.numeric(names(cooksd)[(cooksd > (4/sample_size))])`：用上面的cook's distance判断完异常点后用这个方法获取具体异常点。
+7. `dataset_ro1 <- dataset[-influential, ]`：删除被判断为异常点的异常点
+8. `nrow(dataset_ro1)`：检查一共被删除了多少个异常点。
+<br>
+
+## 方法二：testOutliers()
+1. `simulationOutput <- simulateResiduals(fittedModel = mod, nSim=250, seed=123)`：先得到模型的残差, 一般来说最好设置seed固定数值，这样的话产生的随机残差才具有可重复性。
+2. `testOutliers(simulationOutput, type = "bootstrap",nBoot=100)`：然后检验是否有异常值，一般来说样本量小于500用bootstrap方法，否则有binomial的方法，使用bootstrap的时候设置nBoot要小于等于上一个产生残差函数的nSim数值。一般越大结果越不容易显著，如果显著了那么就是有异常值了。
+3. `outliers(simulationOutput0,return="index")`：接着查看异常值所在数据集的位置信息。
+4. 直接删除异常点
+<br>
+
+## 方法三：四分位法
+由于该数据antdat2其中变量是binomial数据，因此用来做y的是由两列数据y1和y2计算出来的，在以下方法中是先删除y1的异常值再删除y2的异常值，也许可以对cbind了的y1和y2那列数据进行异常值剔除
+
+1. `antdat2rr=antdat2[!is.na(antdat2$Total.number.of.ants.before.disturbance),]`：先删除y1的含有NA的行，否则使用quantile函数出错，假设删除了8行
+
+2. `antdat2r=antdat2rr[!is.na(antdat2rr$new.Total.number.of.ants.after.disturbance),]`：再删除了y2的含有NA的行，又被删除了8行，则一共因为NA值被删除了15行数据。(在检查删除了多少数据过程中使用`nrow(data-name)`来检查)
+
+3. `Q11 <- quantile(antdat2r$Total.number.of.ants.before.disturbance, .25)`:得到y1的四分之一位的数值
+
+4. `Q31 <- quantile(antdat2r$Total.number.of.ants.before.disturbance, .75)`:得到y1的四分之三位的数值
+
+5. `IQR1 <- IQR(antdat2r$Total.number.of.ants.before.disturbance)`:得到y1的四分位数的范围
+
+6. 
+```
+antdat2_ro22 <- subset(antdat2r, antdat2r$Total.number.of.ants.before.disturbance> (Q11 - 1.5*IQR1) & antdat2r$Total.number.of.ants.before.disturbance< (Q31 + 1.5*IQR1))
+```
+：对不在四分位数范围的y1的数值判断为异常值并且进行删除，使用nrow()函数检查删除了多少个异常值，假设删除了3个异常值
+
+7. `Q12 <- quantile(antdat2_ro22$new.Total.number.of.ants.after.disturbance, .25)`：得到y2的四分之一位数，注意在这一步中使用的是上一步已经经过剔除部分异常值的antdat2_ro22数据集，如若不这样，还要y1和y2分开剔除后要把两列数据集提取出来合并到新的数据集中。
+
+8. `Q32 <- quantile(antdat2_ro22$new.Total.number.of.ants.after.disturbance, .75)`：得到y2的四分之三位数
+
+9. `IQR2 <- IQR(antdat2_ro22$new.Total.number.of.ants.after.disturbance)`：得到四分位数的范围。
+
+10. 
+```
+antdat2_ro2 <- subset(antdat2_ro22, antdat2_ro22$new.Total.number.of.ants.after.disturbance> (Q12 - 1.5*IQR2) & antdat2_ro22$new.Total.number.of.ants.after.disturbance< (Q32 + 1.5*IQR2))
+```
+：对不在四分位数范围的y2的数值判断为异常值并且进行删除，使用nrow()函数检查删除了多少个异常值，假设一共删除了7个异常值。
+<br>
+
+## 方法四：盖帽法
+由于该数据antdat2其中变量是binomial数据，因此用来做y的是由两列数据y1和y2计算出来的，在以下方法中是取y1的1%-99%的数据，再取得y2的1%-99%数据，也许可以对cbind了的y1和y2那列数据进行盖帽法。
+
+1. `antdat2rr=antdat2[!is.na(antdat2$Total.number.of.ants.before.disturbance),]`：也是先删除y1的含有NA的行，否则使用quantile函数出错，假设删除了8行
+
+2. `antdat2r=antdat2rr[!is.na(antdat2rr$new.Total.number.of.ants.after.disturbance),]`：也是再删除了y2的含有NA的行，又被删除了8行，则一共因为NA值被删除了15行数据。(在检查删除了多少数据过程中使用`nrow(data-name)`来检查)
+
+3. `q1<- quantile(antdat2r$Total.number.of.ants.before.disturbance, 0.01)`: 取得时y1的1%时的变量值
+
+4. `q99<- quantile(antdat2r$Total.number.of.ants.before.disturbance, 0.99)`: 取得时y1的99%时的变量值
+
+5. `antdat2r[antdat2r$Total.number.of.ants.before.disturbance < q1,]$Total.number.of.ants.before.disturbance <- q1`：用y1的1%时的数据替代小于1%范围的数据。
+
+6. `antdat2r[antdat2r$Total.number.of.ants.before.disturbance > q99,]$Total.number.of.ants.before.disturbance < - q99`：用y1的99%时的数据替代大于99%范围的数据。
+
+7. `antdat2_ro33 <- antdat2r`：把已经删除了不在1%-99%范围内数据的数据集antdat2r赋值到新的变量上防止和旧的混淆。
+
+8. `p1<- quantile(antdat2_ro33$new.Total.number.of.ants.after.disturbance, 0.01)`：取得时y2的1%时的变量值
+
+9. `p99<- quantile(antdat2_ro33$new.Total.number.of.ants.after.disturbance, 0.99)`：取得时y2的99%时的变量值
+
+10. `antdat2_ro33[antdat2_ro33$new.Total.number.of.ants.after.disturbance < p1,]$new.Total.number.of.ants.after.disturbance <- p1`：用y2的1%时的数据替代小于1%范围的数据。
+
+11. `antdat2_ro33[antdat2_ro33$new.Total.number.of.ants.after.disturbance > p99,]$new.Total.number.of.ants.after.disturbance < - p99`：用y2的99%时的数据替代大于99%范围的数据。
+
+12. `antdat2_ro3 <- antdat2_ro33`：把已经删除了不在1%-99%范围内数据的数据集antdat2_ro33赋值到新的变量上防止和旧的混淆。antdat2_ro3就是最终删除了所有异常值的数据集。
+
+**最后使用删除了异常值的新数据集重新跑一遍模型并且再次进行异常值检测！！！！**（简便直观的检测方法是做boxplot和errorbar，在其上下范围之外有点被显示到图上的就是异常值的点。）
+
+
+
+# 缺失值处理
+
+## 检测
+```
+sum(is.na(data))                #查看data里缺失值个数
+sum(is.na(data$DINNER_PRICE)    #查看data里维度DINNER_PRICE缺失值个数
+data=data[!is.na(data$DINNER_PRICE),]     #删除DINNER_PRICE缺失样本
+data=na.omit(data)              #去除有NA的行(方法1)
+data[complete.cases(data),]     #去除有NA的行(方法2)
+data[complete.cases(data[,5:6]),]    #只过滤第5列，第6列中含有NA的行
+```
+```
+sum(complete.cases(data))   #不含缺失值记录 
+sum(!complete.cases(data))    #含缺失值记录
+mean(!complete.cases(data))       #有缺失值记录比例  
+head(data[!complete.cases(data),])  #筛选出有缺失值的记录 
+sum(is.na(data))     #数据集中缺失值总计数量
+```
+```
+sum(complete.cases(data$CHANNEL_GRADE))   #不含缺失值 
+sum(!complete.cases(data$CHANNEL_GRADE))    #含缺失值
+mean(!complete.cases(data$CHANNEL_GRADE))       #有缺失值占比
+head(data[!complete.cases(data$CHANNEL_GRADE),])    #筛选出CHANNEL_GRADE有缺失值的记录
+```
+
+```
+#把缺失值数据集、非缺失值数据集分开
+sub <- which(is.na(data$CHANNEL_GRADE))  #识别CHANNEL_GRADE中缺失值所在行数  
+inputfile1 <- inputfile[-sub,]   #将数据集分成完整数据和缺失数据两部分  
+inputfile2 <- inputfile[sub,] 
+```
+
+## 处理
+
+### 均值插补：
+- 如果缺失值是数值型的，就以该属性存在值的平均值来插补缺失值；如果缺失值是类别型的，就根据统计学中的众数原理，用该属性的众数(即出现频率最高的值)来补齐缺失的值；
+- 利用同类均值插补：同均值插补的方法都属于单值插补，不同的是，它用层次聚类模型预测缺失变量的类型，再以该类型的均值插补。首先对信息完全的变量或其子集行聚类，然后按缺失个体所属类来插补不同类的均值；
+
+### 极大似然估计
+（Max Likelihood）
+- 在缺失类型为随机缺失的条件下，假设模型对于完整的样本是正确的，那么通过观测数据的边际分布可以对未知参数进行极大似然估计。这种方法也被称为忽略缺失值的极大似然估计，对于极大似然的参数估计实际中常采用的计算方法是期望值最大化(EM）。该方法比删除个案和单值插补更有吸引力，它一个重要前提：适用于大样本。可以保证ML估计值是渐近无偏的并服从正态分布。但该方法可能会陷入局部极值，收敛速度也不是很快，并且计算很复杂。
+
+### 多重插补
+（Multiple Imputation）
+- 思想来源于贝叶斯估计，认为待插补的值是随机的，它的值来自于已观测到的值。具体实践上通常是估计出待插补的值，然后再加上不同的噪声，形成多组可选插补值。根据某种选择依据，选取最合适的插补值。分为三个步骤：①为每个空值产生一套可能的插补值，这些值反映了无响应模型的不确定性；每个值都可以被用来插补数据集中的缺失值，产生若干个完整数据集合。②每个插补数据集合都用针对完整数据集的统计方法进行统计分析。③对来自各个插补数据集的结果，根据评分函数进行选择，产生最终的插补值。
+
+# 方差异质性问题
+
+
+
+# 数据相关性问题
+## 地理空间自相关
+## 系统发育自相关
+## 时间序列自相关
+

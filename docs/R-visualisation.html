@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Zhangyixue" />
+
+
+<title>R-visualisation</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/zhanglantian2021/Tutorials">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">R-visualisation</h1>
+<h4 class="author">Zhangyixue</h4>
+<h4 class="date">This document was last updated on 周三 7月 27 2022 17:33:28</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-07-27
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 4 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 3
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Tutorials/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220708code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220708)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220708code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220708)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+</p>
+</div>
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div class="panel-body">
+The following chunks had caches available:
+<ul>
+<li>
+bubble1
+</li>
+<li>
+comparision
+</li>
+<li>
+diplay2
+</li>
+<li>
+display1-1
+</li>
+<li>
+display1
+</li>
+<li>
+doubleAxis
+</li>
+<li>
+prepare-data
+</li>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+<li>
+sheet-anova
+</li>
+<li>
+sheet-summary
+</li>
+<li>
+sigNote-way1
+</li>
+<li>
+sigNote-way2
+</li>
+<li>
+sigNote-way3
+</li>
+<li>
+unnamed-chunk-1
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>R-visualisation_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
+</p>
+</div>
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Using absolute paths to the files within your workflowr project makes it difficult for you and others to run your code on a different machine. Change the absolute path(s) below to the suggested relative path(s) to make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+E:/academic_resources/Tutorials/analysis
+</td>
+<td style="text-align:left;">
+analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstreef8655d34a92ede16ff3782370ac995439608c71ctargetblankf8655d3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/zhanglantian2021/Tutorials/tree/f8655d34a92ede16ff3782370ac995439608c71c" target="_blank">f8655d3</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomzhanglantian2021Tutorialstreef8655d34a92ede16ff3782370ac995439608c71ctargetblankf8655d3a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/zhanglantian2021/Tutorials/tree/f8655d34a92ede16ff3782370ac995439608c71c" target="_blank">f8655d3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/R-statistics_cache/
+    Ignored:    analysis/R-visualisation_cache/
+    Ignored:    analysis/ReproScie-note_cache/
+
+Untracked files:
+    Untracked:  analysis/Advancesta-multiDe.rmd
+    Untracked:  analysis/R-StaProblem.rmd
+    Untracked:  analysis/R-visualisation.rmd
+    Untracked:  analysis/wrap-code.tex
+    Untracked:  data/data.csv
+    Untracked:  data/datapstay.csv
+
+Unstaged changes:
+    Modified:   analysis/use-Rbasic.Rmd
+    Modified:   analysis/use-Rmarkdown.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="图片的排列方式" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> 图片的排列方式：</h1>
+<div id="方法一par函数" class="section level2" number="1.1">
+<h2 number="1.1"><span class="header-section-number">1.1</span> 方法一：par()函数</h2>
+<ul>
+<li>注意要在绘图函数的前面使用！</li>
+<li>例如下面所创建的绘图按两行两列排列</li>
+</ul>
+<pre class="r"><code>library(palmerpenguins)
+head(penguins)
+par(mfrow=c(2,2))
+hist(penguins$bill_length_mm)
+hist(penguins$bill_depth_mm) 
+hist(penguins$flipper_length_mm)
+hist(penguins$body_mass_g)</code></pre>
+<p><img src="figure/R-visualisation.rmd/display1-1.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dev.off()#如果不加这个的话在rmd文件中运行绘图下一个chunk里hist会直接叠加上去</code></pre>
+<ul>
+<li>其中还一个参数是fig，如以下代码，因为画布是一个从左下角坐标点（0，0）到右上角坐标点（1，1）的平面坐标系。ig=c(0,0.8,0.55,1)则是指直方图的横坐标从0到0.8，纵坐标从0.55到1，也即直方图在画布中的具体位置。函数mtex表示加在画布上的标题名。</li>
+</ul>
+<pre class="r"><code>par(fig=c(0,0.8,0.55,1),new=TRUE)
+hist(penguins$body_mass_g)
+mtext(&quot;histogram&quot;, side=3,outer=TRUE, line=-3)</code></pre>
+<p><img src="figure/R-visualisation.rmd/display1-1-1.png" width="2700" style="display: block; margin: auto;" /></p>
+</div>
+<div id="方法二layout函数" class="section level2" number="1.2">
+<h2 number="1.2"><span class="header-section-number">1.2</span> 方法二：layout()函数</h2>
+<ul>
+<li>注意使用该函数时，里面的第一个参数为一个矩阵，用于指定图片的位置！</li>
+<li>例如下面所创建的绘图第一行包含一张图片，而第二行包含两张图片，还可以用widths和heights来控制图片大小</li>
+</ul>
+<pre class="r"><code>layout(matrix(c(1, 1,
+                2, 3), nrow=2, byrow=TRUE))
+layout.show(n=3)</code></pre>
+<p><img src="figure/R-visualisation.rmd/diplay2-1.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hist(penguins$bill_length_mm)
+hist(penguins$bill_depth_mm) 
+hist(penguins$flipper_length_mm)</code></pre>
+<p><img src="figure/R-visualisation.rmd/diplay2-2.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#表示展示三张图片，如果n为2则只展示两张图，也就是不显示bill_length_mm的图片，如果为1则只显示flipper_length_mm的图片，也就是从下往上的代码进行编号的，但是在使用matrix把画布分裂成2*2的cell的时候，是按绘图代码的从上往下编号，也就是bill_length_mm的图会填充进编号为1的cell的位置中，bill_depth_mm的图会填充进编号为2的cell的位置中（也就是第二行的左边）</code></pre>
+</div>
+<div id="方法三cowplot包" class="section level2" number="1.3">
+<h2 number="1.3"><span class="header-section-number">1.3</span> 方法三：cowplot包</h2>
+<ul>
+<li>注意针对的是ggplot的对象！</li>
+<li>具体教程<a href="https://wilkelab.org/cowplot/articles/aligning_plots.html">见此</a>(注意从顶部菜单栏articles处可以选择不同方面功能查看)</li>
+</ul>
+</div>
+</div>
+<div id="表格的展示" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> 表格的展示</h1>
+<p><strong>主要使用的包是kableExtra</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>关于在pdf中展示表格见<a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_pdf.pdf">此处</a></p></li>
+<li><p>关于在html中展示表格见<a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html">此处</a></p></li>
+</ol>
+<div id="准备数据" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> 准备数据</h2>
+<pre class="r"><code>setwd(&quot;E:/academic_resources/Tutorials/analysis&quot;)
+antdat &lt;- read.csv(&quot;../data/data.csv&quot;,header = T)
+str(antdat)
+antdat$tree&lt;-as.factor(antdat$tree)
+antdat$habitat&lt;-as.factor(antdat$habitat)
+antdat$observer&lt;-as.factor(antdat$observer)
+antdat$group&lt;-as.factor(antdat$group)
+antdat2 &lt;- read.csv(&#39;../data/datapstay.csv&#39;)
+summary(antdat2)
+antdat2$habitat &lt;- as.factor(antdat2$habitat)
+antdat2$group &lt;- as.factor(antdat2$group)
+antdat2$observer &lt;- as.factor(antdat2$observer)
+library(car)#for family=binomial(lgoit)
+library(lme4)#for glmer model
+library(emmeans) #for pairwise comparisons
+
+mod.run&lt;- glmer(cbind(new.Total.number.of.ants.after.disturbance,
+                       Total.number.of.ants.before.disturbance-new.Total.number.of.ants.after.disturbance
+                       ) ~habitat*group + (1|observer),  data = antdat, family=binomial(logit), na.action=na.omit)
+library(kableExtra)</code></pre>
+<p><strong>注意生成表格的格式是html，适合用于rmd文件的用于html输出中或者仅仅用于预览，如果是在rmd的pdf输出中应该改为latex</strong></p>
+</div>
+<div id="anova的展示" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Anova的展示</h2>
+<pre class="r"><code>#scientific = TRUE表示使用科学计数法；digits = 2表示保留两位小数。
+#bootstrap_options表示网页中表格的一些形式，例如&quot;striped&quot;表示给表格加上斑马纹, &quot;hover&quot;表示给表格加上悬浮效果, &quot;condensed&quot;表示使得每行不那么宽，更紧凑点, &quot;responsive&quot;表示让表格样式随屏幕宽度变化，更适合手机屏。
+#full_width = F是为了防止表格过宽。
+#position = &quot;center&quot;表示表格在网页或文本中的位置，也就是居中
+#latex_options = c(&quot;hold_position&quot;)表示使得表格就在固定位置，如果不写这个，那么在rmd生成pdf文件时，表格会被统一放到图片后面
+#另外还可以在kable中写入font_size = 7来调整表格中的字体大小。
+kable(Anova(mod.run),format.args = list(scientific = TRUE),digits = 2, &quot;html&quot;) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;), full_width = F, position = &quot;center&quot;, latex_options = c(&quot;hold_position&quot;))</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Chisq
+</th>
+<th style="text-align:right;">
+Df
+</th>
+<th style="text-align:right;">
+Pr(&gt;Chisq)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+habitat
+</td>
+<td style="text-align:right;">
+2.6635e+02
+</td>
+<td style="text-align:right;">
+2e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:right;">
+3.7076e+02
+</td>
+<td style="text-align:right;">
+1e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+habitat:group
+</td>
+<td style="text-align:right;">
+2.7980e+01
+</td>
+<td style="text-align:right;">
+2e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="summary的展示" class="section level2" number="2.3">
+<h2 number="2.3"><span class="header-section-number">2.3</span> Summary的展示</h2>
+<pre class="r"><code>#因为只需要展示summary中表示固定因子是否显著的信息，因此使用coef函数，如果直接把summary放进去是无法展示的。
+kable(coef(summary(mod.run)),format.args = list(scientific = TRUE),digits = 2, &quot;html&quot;) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;), full_width = F, position = &quot;center&quot;, latex_options = c(&quot;hold_position&quot;))</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Std. Error
+</th>
+<th style="text-align:right;">
+z value
+</th>
+<th style="text-align:right;">
+Pr(&gt;|z|)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+2.66e+00
+</td>
+<td style="text-align:right;">
+4.0e-01
+</td>
+<td style="text-align:right;">
+6.64e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+habitatfruit_garden
+</td>
+<td style="text-align:right;">
+-6.20e-01
+</td>
+<td style="text-align:right;">
+9.0e-02
+</td>
+<td style="text-align:right;">
+-7.29e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+habitatrainforest
+</td>
+<td style="text-align:right;">
+-2.40e-01
+</td>
+<td style="text-align:right;">
+1.0e-01
+</td>
+<td style="text-align:right;">
+-2.44e+00
+</td>
+<td style="text-align:right;">
+1e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+grouptreatment
+</td>
+<td style="text-align:right;">
+-4.80e-01
+</td>
+<td style="text-align:right;">
+9.0e-02
+</td>
+<td style="text-align:right;">
+-5.33e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+habitatfruit_garden:grouptreatment
+</td>
+<td style="text-align:right;">
+-3.00e-01
+</td>
+<td style="text-align:right;">
+1.1e-01
+</td>
+<td style="text-align:right;">
+-2.79e+00
+</td>
+<td style="text-align:right;">
+1e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+habitatrainforest:grouptreatment
+</td>
+<td style="text-align:right;">
+-6.40e-01
+</td>
+<td style="text-align:right;">
+1.2e-01
+</td>
+<td style="text-align:right;">
+-5.25e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="多重比较的展示" class="section level2" number="2.4">
+<h2 number="2.4"><span class="header-section-number">2.4</span> 多重比较的展示</h2>
+<pre class="r"><code>#因为只需要展示emmeans中表示固定因子下各个水平的差异是否显著的信息，因此使用[[]]进行对结果信息的选择，如果直接把emmeans放进去是无法展示的。
+kable(emmeans(mod.run, pairwise~group,by=&quot;habitat&quot;, adjust=&quot;tukey&quot;)[[2]],format.args = list(scientific = TRUE),digits = 2, &quot;html&quot;) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;), full_width = F, position = &quot;center&quot;, latex_options = c(&quot;hold_position&quot;))</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:left;">
+habitat
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+z.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control - treatment
+</td>
+<td style="text-align:left;">
+eco_forest
+</td>
+<td style="text-align:right;">
+4.80e-01
+</td>
+<td style="text-align:right;">
+9e-02
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+5.330e+00
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - treatment
+</td>
+<td style="text-align:left;">
+fruit_garden
+</td>
+<td style="text-align:right;">
+7.80e-01
+</td>
+<td style="text-align:right;">
+6e-02
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+1.263e+01
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - treatment
+</td>
+<td style="text-align:left;">
+rainforest
+</td>
+<td style="text-align:right;">
+1.11e+00
+</td>
+<td style="text-align:right;">
+8e-02
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+1.428e+01
+</td>
+<td style="text-align:right;">
+0e+00
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="双坐标轴和随机数生成" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> 双坐标轴和随机数生成：</h1>
+<pre class="r"><code>#set.seed用来设置随机种子 如过设置了随机种子，那么每次的随机数相同，便于重复。
+set.seed(123)
+#使用sample函数是为了生成1-10范围内15个整数，当replace=T时是在[a,b]内有放回的随机抽出n个整数。
+a &lt;- sample(1:100,15,replace=T)
+#使用runif函数是为了生成1-10范围内，符合均匀分布的15个小数
+b &lt;- runif(15,1,10)
+#使用rnorm函数是生成符合正态分布，均值为7，标准差为2的15个数据（如果默认则是mean=0，sd=1的标准正态分布）
+c &lt;- rnorm(150, mean = 7, sd = 2)
+d &lt;- rnorm(150, mean = 4, sd = 2)
+#使用rep函数产生5个20，4个40，6个70.
+e &lt;- rep(c(20,40,70),times=c(5,4,6))
+#使用cbind表示把向量abcde按列合并成数据框,如果有向量其中数字的个数不一样的，会使用重复来向最长的那个对齐
+#做点图和线图叠加，发现坐标轴范围差异很大因此有许多问题，这时就需要做双坐标了
+datf &lt;- as.data.frame(cbind(a,b,c,d,e))
+datf
+ggplot(data=datf)+
+    geom_line(aes(x=c,y=d))+ #可以看出做线的数据来源x和y的范围都是在1-10
+    geom_point(aes(x=a,y=e),color=&quot;red&quot;,size=6)#以看出做点的数据来源x和y的范围都是在1-100</code></pre>
+<p><img src="figure/R-visualisation.rmd/doubleAxis-1.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#为图片添加双x轴和双y轴。
+ggplot(data=datf)+
+    scale_y_continuous(name = &quot;E&quot;, limits = c(1,100), sec.axis = sec_axis(~(10/100)*., name = &quot;D&quot;))+ #做双y轴，注意范围为1-100的e在主轴，范围1-10的d在次轴
+    scale_x_continuous(name = &quot;A&quot;, limits = c(1,100), sec.axis = sec_axis(~(10/100)*., name = &quot;C&quot;))+ #做双x轴，注意范围为1-100的a在主轴，范围1-10的c在次轴
+    geom_line(aes(x=c*(100/10),y=d*(100/10)))+ #可以看出做线的数据来源x和y的范围都是在1-10 #注意因为c，d在次轴，因此数据源大小也要根据轴的比例做更改了，否则将无法显示在图片上
+    geom_point(aes(x=a,y=e),color=&quot;red&quot;,size=6)+ #注意因为a，e在次轴，因此数据源大小不需要根据轴的比例做更改了。
+    theme(axis.text.y=element_text(size=rel(0.5)),axis.text.y.right=element_text(size=rel(4)))#这个是调整y坐标轴刻度数字的大小，x是同样的，前者axis调的是主轴的，后者axis调的是次轴的。</code></pre>
+<p><img src="figure/R-visualisation.rmd/doubleAxis-2.png" width="2700" style="display: block; margin: auto;" /></p>
+</div>
+<div id="小提琴图和显著性标签" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> 小提琴图和显著性标签</h1>
+<div id="方法一" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> 方法一：</h2>
+<pre class="r"><code>setwd(&quot;E:/academic_resources/Tutorials/analysis&quot;)
+library(car)#for family=binomial(lgoit)
+library(lme4)#for glmer model
+library(tidyverse)#for  %&gt;% 
+library(emmeans) #for pairwise comparisons
+library(ggplot2)# for plotting
+library(rstatix)#for function of add_xy_position()
+library(ggpubr)#for function of stat_pvalue_manual()
+
+#准备数据
+antdat &lt;- read.csv(&quot;../data/data.csv&quot;,header = T)
+str(antdat)
+antdat$tree&lt;-as.factor(antdat$tree)
+antdat$habitat&lt;-as.factor(antdat$habitat)
+antdat$observer&lt;-as.factor(antdat$observer)
+antdat$group&lt;-as.factor(antdat$group)
+antdat2 &lt;- read.csv(&#39;../data/datapstay.csv&#39;)
+summary(antdat2)
+antdat2$habitat &lt;- as.factor(antdat2$habitat)
+antdat2$group &lt;- as.factor(antdat2$group)
+antdat2$observer &lt;- as.factor(antdat2$observer)
+
+#建立模型
+mod.run&lt;- glmer(cbind(new.Total.number.of.ants.after.disturbance,
+                       Total.number.of.ants.before.disturbance-new.Total.number.of.ants.after.disturbance
+                       ) ~habitat*group + (1|observer),  data = antdat, family=binomial(logit), na.action=na.omit)
+                       
+
+#得到glmm模型的预测值
+##创建含有x的新数据集preddat
+preddat &lt;- expand.grid(habitat=c(&#39;eco_forest&#39;, &#39;fruit_garden&#39;,&#39;rainforest&#39;),
+                        group=c(&#39;control&#39;, &#39;treatment&#39;),
+                        observer =c(&#39;lpy&#39;, &#39;wg&#39;, &#39;wyd&#39;, &#39;zyx&#39;))
+summary(preddat)
+preddat 
+##检查并确保含有x的新数据集preddat与原数据集中的名字和数量一样
+levels(preddat$habitat)
+levels(antdat$habitat)
+levels(preddat$group) 
+levels(antdat$group) 
+levels(preddat$observer) 
+levels(antdat$observer)
+##把使用predict函数根据模型创建出来的新y（受了固定因子和随机因子的影响）放入新数据集preddat当中。
+preddat$pred.fix1 &lt;- predict(mod.run, newdata=preddat, re.form=NULL, type= &#39;response&#39;) 
+head(preddat,n=12)
+preddat$pred.fix1
+
+#得到用于绘制显著性标签的信息（包括在图中应该的位置，星号等）
+##只是为了得到用于绘制标签的数据框，但其中计算的方法p值是错的
+a1_step&lt;- preddat %&gt;% group_by(group) %&gt;%
+  tukey_hsd(pred.fix1 ~habitat) %&gt;%
+  add_xy_position(x = &quot;habitat&quot;, dodge = 0.8) 
+##得到真正的p值,并且提取所需要的信息
+b1_step&lt;- emmeans(mod.run, pairwise~habitat,by=&quot;group&quot;, adjust=&quot;tukey&quot;)
+pval1 &lt;- as.data.frame(b1_step$contrasts)$p.value
+groupname1 &lt;- as.data.frame(b1_step$contrasts) $contrast
+##把提取的信息合成另一个含有真正p值信息的数据框
+c1_step &lt;- data.frame(groupname1,pval1)
+##增加星号表示显著性的信息
+d1_step&lt;- c1_step %&gt;% adjust_pvalue(p.col = &quot;pval1&quot;, method = &quot;bonferroni&quot;) %&gt;%
+  add_significance(p.col = &quot;pval1.adj&quot;)
+##把两个数据框合并
+e1_step&lt;-cbind(a1_step,d1_step$pval1,d1_step$pval1.adj.signif)
+
+#绘制小提琴图，最后再加上显著性的标签
+##创建图层使用ggplot(),在这其中不像一般那样加入了数据来源和xy轴的信息，是因为下面使用了图层叠加的方式，各个图层的数据来源都有可能不一样
+## 使用geom_jitter而不是geom——point把原始数据绘上去是因为前者能够为每个原始数据点的位置增加了少量的随机变化，是处理较小数据集的离散性造成的过度绘图的一个有用方法。
+##geom_violin是用来绘制小提琴图的，它比箱线图更灵活是因为它还展现了数据分布密度曲线。
+##stat_summary是用来绘制error bar的。
+##theme_bw(base_size = 25)表示图片背景是包含线条的白色，还有其他选择，里面的参数base_size = 25是用来调整主要图中包括点和线和小提琴等图片信息与图注信息的大小比例的。
+##
+##facet_wrap(.~group,nrow=1)是表示图片按照group这个固定因在分面，分成了两张图片放在一起，例如group下有两个水平，是treatment和control，因此是两张图片包含这两组中habitat和pstay的关系信息，nrow就表示这两张图片都在一行，如果是nrow=2，那么将会排场一列。如果再nrow的参数后面在添加参数`scales = &quot;free_x&quot;`那么将使得分面的图的x坐标是更灵活更适应那组信息本身，否则几个面的x轴都是固定一致的，有时候会发生x信息拥挤在一起的状况。
+#scale_y_continuous是用来调整y轴的信息，例如数值范围和数值间隔等
+##stat_pvalue_manual就是用来绘制显著性标签的了，其中bracket.size表示标签线条的大小，hide.ns = F表示不因此非显著的信息
+ggplot()+
+    geom_jitter(data=antdat2,aes(x=habitat,y = pstay,fill=habitat,group=group,alpha=0.6,color=habitat),size=5)+
+    geom_violin(data=antdat2,aes(x=habitat,y = pstay),colour=&quot;#200808f0&quot;,fill=NA)+
+    stat_summary(data=antdat2,aes(x=habitat,y = pstay),fun.data = &quot;mean_sd&quot;,position=position_dodge(0.15),geom = &quot;errorbar&quot;,width = .1)+
+    stat_summary(data=antdat2,aes(x=habitat,y = pstay),fun = &quot;mean&quot;, geom = &quot;point&quot;, position=position_dodge(0.15),show.legend = F)+
+    scale_size_continuous(range=c(1,10))+
+    theme_bw(base_size = 25)+
+    facet_wrap(.~group,nrow=1)+
+    theme(legend.position = &quot;none&quot;) +
+    scale_y_continuous(name = &quot;Pstay&quot;, limits = c(0,1.50), breaks=c(0,0.25,0.5,0.75,1.0,1.25,1.50))+
+    stat_pvalue_manual(e1_step,label=&quot;d1_step$pval1.adj.signif&quot;,
+                         y.position =c(1.2,1.3,1.4),
+                         color = &quot;#010101&quot;, label.size=8,bracket.size=0.5,hide.ns = F)</code></pre>
+<p><img src="figure/R-visualisation.rmd/sigNote-way1-1.png" width="2700" style="display: block; margin: auto;" /></p>
+</div>
+<div id="方法二" class="section level2" number="4.2">
+<h2 number="4.2"><span class="header-section-number">4.2</span> 方法二：</h2>
+<pre class="r"><code>library(introdataviz)#for function of geom_split_violin
+library(ggtext)#for function of geom_text()
+library(ggprism)#for `guide = &quot;prism_offset_minor&quot;`
+#数据和其他包接上一个chunk
+#与上一组使用facet_wrap(.~group,nrow=1)来分面绘制图片，这个分裂小提琴表示的信息也是一样的，也是用来分组来反应信息的，但是只能是两两的对比，因此这里是根据固定因子habitat来分面，而且在这里，不用facet_wrap了，而是用group_by提前先把数据分好类再绘图！！
+#在这里添加显著性信息的方法是geom_text，更灵活，是因为可以自己规定xy的位置以及内容，但是没用横着的中括号了，仅有label的信息，因为单个的分裂小提琴本事就包含了是两组信息的对比，因此只要把这两组的显著性信息标于其上就可以了。
+##但是缺点是要提前先跑一下`emmeans(mod.run, pairwise~group,by=&quot;habitat&quot;, adjust=&quot;tukey&quot;)`来查看一下p值，然后在在geom_text中自定义
+antdat2_t &lt;- antdat2 %&gt;% group_by(habitat) 
+ggplot(antdat2_t,aes(x = habitat, y = pstay,fill= group))+
+  geom_split_violin(trim =F,color = NA,adjust = 1.5,alpha=0.7)+
+  guides(fill=guide_legend(title=&quot;group&quot;))+
+  scale_fill_manual(values = c(&quot;#abd1f7&quot;,&quot;#f79489f7&quot;))+
+  stat_summary(fun.data = &quot;mean_sd&quot;,position=position_dodge(0.15),geom = &quot;errorbar&quot;,width = .1)+
+  stat_summary(fun = &quot;mean&quot;, geom = &quot;point&quot;, position=position_dodge(0.15),show.legend = F)+
+  scale_y_continuous(limits = c(0,1.50), breaks=c(0,0.25,0.5,0.75,1.0,1.25,1.50),guide = &quot;prism_offset_minor&quot;)+
+  theme_bw(base_size = 25)+
+  geom_text(label=&quot;***&quot;, x=&quot;eco_forest&quot;, y=1.4, size=10)+
+  geom_text(label=&quot;***&quot;, x=&quot;fruit_garden&quot;, y=1.4, size=10)+
+  geom_text(label=&quot;***&quot;, x=&quot;rainforest&quot;, y=1.4, size=10)</code></pre>
+<p><img src="figure/R-visualisation.rmd/sigNote-way2-1.png" width="2700" style="display: block; margin: auto;" /></p>
+</div>
+<div id="方法三" class="section level2" number="4.3">
+<h2 number="4.3"><span class="header-section-number">4.3</span> 方法三：</h2>
+<pre class="r"><code>setwd(&quot;E:/academic_resources/Tutorials/analysis&quot;)
+library(lme4)#for lmm model
+library(data.table)# for function of melt
+library(emmeans) #for  comparisons
+library(ggplot2)# for plotting
+library(ggpubr)#for function of stat_pvalue_manual()
+library(SOfun)#for function of mc_tribble()
+library(tidyverse)#for function of tribble()
+library(Rmisc)#for function of summarySE
+
+#准备数据
+pests &lt;- read.csv(&#39;../data/Pesticide.csv&#39;)
+pests$station &lt;- as.factor(pests$station)
+pests$trt &lt;- as.factor(pests$trt)
+
+#建立模型
+LMM.fit&lt;- glmer(N~trt+(1|station),pests,family=poisson())
+
+#准备为绘制显著性标签的信息
+##得到含有p值信息的数据框
+p.val.test&lt;-pwpm(emmeans(LMM.fit,  ~ trt),means = FALSE, flip = TRUE,reverse = TRUE)
+p.val.test&lt;-sub(&quot;[&lt;&gt;]&quot;, &quot;&quot;, p.val.test)
+p.matx&lt;-matrix(as.numeric((p.val.test)),nrow = length(p.val.test[,1]),ncol = length(p.val.test[,1])) #if your factor has 5 levels ncol and nrow=5
+rownames(p.matx) &lt;- colnames(p.matx) &lt;-colnames(p.val.test)
+p.matx[upper.tri(p.matx, diag=FALSE)] &lt;- NA
+stat.test&lt;-subset(melt(p.matx),!is.na(value))
+names(stat.test)&lt;-c(&quot;group1&quot;,&quot;group2&quot;,&quot;p.adj&quot;)
+##添加p值大小与星号个数相对应的信息
+stat.test[stat.test$p.adj&lt;=0.001,&quot;p.adj.signif&quot;]&lt;-&quot;***&quot;
+stat.test[stat.test$p.adj&gt;0.001 &amp; stat.test$p.adj&lt;=0.01,&quot;p.adj.signif&quot;]&lt;-&quot;**&quot;
+stat.test[stat.test$p.adj&gt;0.01 &amp; stat.test$p.adj&lt;=0.05,&quot;p.adj.signif&quot;]&lt;-&quot;*&quot;
+stat.test[ stat.test$p.adj&gt;0.05,&quot;p.adj.signif&quot;]&lt;-&quot;ns&quot;
+
+##运行下面这第一行代码已得到真正的数据框形式的数据集，再把结果粘贴后把结果运行一遍
+stat.test&lt;-mc_tribble(stat.test) # copy &amp; paste the result of this line before the line of ggboxplot!!
+stat.test &lt;- tribble(
+        ~group1, ~group2, ~p.adj, ~p.adj.signif,
+        &quot;fungicide&quot;,&quot;control&quot;,1e-04,&quot;***&quot;,
+        &quot;insecticide&quot;,&quot;control&quot;,1e-04,&quot;***&quot;,
+        &quot;insecticide&quot;,&quot;fungicide&quot;,1e-04,&quot;***&quot;)
+
+#绘制箱线图并且加上显著性的信息
+##此处是绘制箱线图
+bxp&lt;-ggboxplot(pests, x = &quot;trt&quot;, y = &quot;N&quot;,color = &quot;trt&quot;, palette = &quot;jco&quot;,add = &quot;jitter&quot;,bxp.errorbar=T) 
+##此处是为了得到绘制显著性标签的位置信息
+pests_count &lt;- summarySE(pests,measurevar = &quot;N&quot;,
+                           groupvars = c(&quot;trt&quot;),
+                           na.rm = TRUE)
+##此处是给箱线图加上显著性信息
+bxp + stat_pvalue_manual(stat.test,xmin=&quot;group2&quot;,xmax=&quot;group1&quot;,
+                         y.position = max(pests$N)+pests_count$sd,
+                         color = &quot;midnightblue&quot;)</code></pre>
+<p><img src="figure/R-visualisation.rmd/sigNote-way3-1.png" width="2700" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="旭日图" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> 旭日图</h1>
+</div>
+<div id="相关性热图" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> 相关性热图</h1>
+</div>
+<div id="相关性气泡图" class="section level1" number="7">
+<h1 number="7"><span class="header-section-number">7</span> 相关性气泡图</h1>
+<pre class="r"><code>#数据准备
+library(tidyverse)#为了使用 %&gt;% 
+library(corrplot)#为了做气泡图
+library(car)#为了展示数据集
+mtcars
+
+#绘制表示相关性大小的气泡图
+##method = &quot;circle：表示用圆圈表示相关性大小； &quot;square&quot;表示用方形表示； &quot;ellipse&quot;表示用椭圆形；&quot;number&quot;表示用相关系数大小； &quot;shade&quot;表示用方块和阴影； &quot;color&quot;表示用方块马赛克效果；&quot;pie&quot;表示用饼图
+##order中：&#39;original&#39;表示原始顺序（默认）。AOE&#39;表示特征向量的角度顺序。&#39;FPC&#39;为第一主成分顺序。&#39;hclust&#39;为分层聚类的顺序。&#39;alphabet&#39;为字母顺序。
+##type = &quot;full&quot;表示图全展示，其实是对称的，因此可以选择只展示一般，写入参数upper或lower
+##tl.col = &quot;black&quot;表示用来看相关性比较序列的变量的名称的颜色
+cor(mtcars) %&gt;% corrplot(method = &quot;pie&quot;,order = &quot;hclust&quot;,
+type = &quot;upper&quot;,tl.srt = 45,tl.col = &quot;black&quot;)</code></pre>
+<p><img src="figure/R-visualisation.rmd/bubble1-1.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#联合相关性的显著性结果一起显示
+##先对相关性是否显著进行计算
+res1 &lt;- cor.mtest(mtcars)
+
+##sig.level = -1，表示显示所有p值；如果=.05，则会将所有在p值&gt; 0.05的圆圈上打X；如果=.01，那么在p值&gt; 0.01的点上打X
+cor(mtcars)%&gt;% corrplot(type=&quot;lower&quot;, order=&quot;hclust&quot;,tl.srt = 45,
+                        tl.col = &quot;black&quot;,
+                        p.mat = res1$p,insig = &quot;p-value&quot;,sig.level = -1)</code></pre>
+<p><img src="figure/R-visualisation.rmd/bubble1-2.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##insig = &quot;p-value&quot;，显示不显著点的p值，如果是insig = &quot;blank&quot;则表示将不显著的点用空表示
+cor(mtcars)%&gt;% corrplot(type=&quot;lower&quot;, order=&quot;hclust&quot;, 
+                        p.mat = res1$p,insig = &quot;blank&quot;)</code></pre>
+<p><img src="figure/R-visualisation.rmd/bubble1-3.png" width="2700" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##将p值大小转化为星号叠加在图上
+cor(mtcars) %&gt;% corrplot(type=&quot;lower&quot;, order=&quot;hclust&quot;,
+p.mat = res1$p,insig = &quot;label_sig&quot;,
+           sig.level = c(.001, .01, .05),
+           pch.cex = .9, pch.col = &quot;white&quot;,
+           tl.srt = 45,tl.col = &quot;black&quot;)</code></pre>
+<p><img src="figure/R-visualisation.rmd/bubble1-4.png" width="2700" style="display: block; margin: auto;" /></p>
+</div>
+<div id="地图的绘制" class="section level1" number="8">
+<h1 number="8"><span class="header-section-number">8</span> 地图的绘制*</h1>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlItdmlzdWFsaXNhdGlvbiINCmF1dGhvcjogIlpoYW5neWl4dWUiDQpkYXRlOiBUaGlzIGRvY3VtZW50IHdhcyBsYXN0IHVwZGF0ZWQgb24gYHIgZm9ybWF0KFN5cy50aW1lKCksICIlYSAlYiAlZCAlWSAlSDolTTolUyIpYA0KZG9jdW1lbnQ6IGN0ZXhhcnQNCm91dHB1dDogDQogICAgd29ya2Zsb3dyOjp3Zmxvd19odG1sOg0KICAgICAgICB0aGVtZTogY29zbW8NCiAgICAgICAgaGlnaGxpZ2h0OiB0ZXh0bWF0ZQ0KICAgICAgICBjb2RlX2Rvd25sb2FkOiB0cnVlDQogICAgICAgIGNvZGVfZm9sZGluZzogc2hvdw0KICAgICAgICBoaWdodGxpZ2h0OiB0YW5nbw0KICAgICAgICBkZl9wcmludDogcGFnZWQNCiAgICAgICAgZmlnX2NhcHRpb246IHRydWUNCiAgICAgICAgdG9jOiB0cnVlDQogICAgICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KICAgICAgICB0b2NfZGVwdGg6IDMNCiAgICAgICAgdG9jX2Zsb2F0OiAgDQogICAgICAgICAgICAgY29sbGFwc2VkOiBGQUxTRQ0KICAgICAgICAgICAgIHNtb290aF9zY3JvbGw6IHRydWUgICANCi0tLQ0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQprbml0cjo6b3B0c19jaHVuayRzZXQod2FybmluZyA9IEZBTFNFLCBtZXNzYWdlPUZBTFNFLCBjYWNoZT1UUlVFLCBmaWcud2lkdGg9MTgsZmlnLmFzcD0wLjYxOCwgZHBpPTE1MCwgZmlnLmFsaWduPSJjZW50ZXIiLHJlc3VsdHM9ImhpZGUiLCBhdXRvZGVwID0gVFJVRSkNCmBgYA0KDQojIOWbvueJh+eahOaOkuWIl+aWueW8j++8mg0KDQojIyDmlrnms5XkuIDvvJpwYXIoKeWHveaVsA0KLSDms6jmhI/opoHlnKjnu5jlm77lh73mlbDnmoTliY3pnaLkvb/nlKjvvIENCi0g5L6L5aaC5LiL6Z2i5omA5Yib5bu655qE57uY5Zu+5oyJ5Lik6KGM5Lik5YiX5o6S5YiXDQpgYGB7ciBkaXNwbGF5MX0NCmxpYnJhcnkocGFsbWVycGVuZ3VpbnMpDQpoZWFkKHBlbmd1aW5zKQ0KcGFyKG1mcm93PWMoMiwyKSkNCmhpc3QocGVuZ3VpbnMkYmlsbF9sZW5ndGhfbW0pDQpoaXN0KHBlbmd1aW5zJGJpbGxfZGVwdGhfbW0pIA0KaGlzdChwZW5ndWlucyRmbGlwcGVyX2xlbmd0aF9tbSkNCmhpc3QocGVuZ3VpbnMkYm9keV9tYXNzX2cpDQpkZXYub2ZmKCkj5aaC5p6c5LiN5Yqg6L+Z5Liq55qE6K+d5Zyocm1k5paH5Lu25Lit6L+Q6KGM57uY5Zu+5LiL5LiA5LiqY2h1bmvph4xoaXN05Lya55u05o6l5Y+g5Yqg5LiK5Y67DQpgYGANCi0g5YW25Lit6L+Y5LiA5Liq5Y+C5pWw5pivZmln77yM5aaC5Lul5LiL5Luj56CB77yM5Zug5Li655S75biD5piv5LiA5Liq5LuO5bem5LiL6KeS5Z2Q5qCH54K577yIMO+8jDDvvInliLDlj7PkuIrop5LlnZDmoIfngrnvvIgx77yMMe+8ieeahOW5s+mdouWdkOagh+ezu+OAgmlnPWMoMCwwLjgsMC41NSwxKeWImeaYr+aMh+ebtOaWueWbvueahOaoquWdkOagh+S7jjDliLAwLjjvvIznurXlnZDmoIfku44wLjU15YiwMe+8jOS5n+WNs+ebtOaWueWbvuWcqOeUu+W4g+S4reeahOWFt+S9k+S9jee9ruOAguWHveaVsG10ZXjooajnpLrliqDlnKjnlLvluIPkuIrnmoTmoIfpopjlkI3jgIINCmBgYHtyIGRpc3BsYXkxLTF9DQpwYXIoZmlnPWMoMCwwLjgsMC41NSwxKSxuZXc9VFJVRSkNCmhpc3QocGVuZ3VpbnMkYm9keV9tYXNzX2cpDQptdGV4dCgiaGlzdG9ncmFtIiwgc2lkZT0zLG91dGVyPVRSVUUsIGxpbmU9LTMpDQpgYGANCg0KDQojIyDmlrnms5XkuozvvJpsYXlvdXQoKeWHveaVsA0KLSDms6jmhI/kvb/nlKjor6Xlh73mlbDml7bvvIzph4zpnaLnmoTnrKzkuIDkuKrlj4LmlbDkuLrkuIDkuKrnn6npmLXvvIznlKjkuo7mjIflrprlm77niYfnmoTkvY3nva7vvIENCi0g5L6L5aaC5LiL6Z2i5omA5Yib5bu655qE57uY5Zu+56ys5LiA6KGM5YyF5ZCr5LiA5byg5Zu+54mH77yM6ICM56ys5LqM6KGM5YyF5ZCr5Lik5byg5Zu+54mH77yM6L+Y5Y+v5Lul55Sod2lkdGhz5ZKMaGVpZ2h0c+adpeaOp+WItuWbvueJh+Wkp+Wwjw0KYGBge3IgZGlwbGF5Mn0NCmxheW91dChtYXRyaXgoYygxLCAxLA0KICAgICAgICAgICAgICAgIDIsIDMpLCBucm93PTIsIGJ5cm93PVRSVUUpKQ0KbGF5b3V0LnNob3cobj0zKQ0KaGlzdChwZW5ndWlucyRiaWxsX2xlbmd0aF9tbSkNCmhpc3QocGVuZ3VpbnMkYmlsbF9kZXB0aF9tbSkgDQpoaXN0KHBlbmd1aW5zJGZsaXBwZXJfbGVuZ3RoX21tKQ0KDQoj6KGo56S65bGV56S65LiJ5byg5Zu+54mH77yM5aaC5p6cbuS4ujLliJnlj6rlsZXnpLrkuKTlvKDlm77vvIzkuZ/lsLHmmK/kuI3mmL7npLpiaWxsX2xlbmd0aF9tbeeahOWbvueJh++8jOWmguaenOS4ujHliJnlj6rmmL7npLpmbGlwcGVyX2xlbmd0aF9tbeeahOWbvueJh++8jOS5n+WwseaYr+S7juS4i+W+gOS4iueahOS7o+eggei/m+ihjOe8luWPt+eahO+8jOS9huaYr+WcqOS9v+eUqG1hdHJpeOaKiueUu+W4g+WIhuijguaIkDIqMueahGNlbGznmoTml7blgJnvvIzmmK/mjInnu5jlm77ku6PnoIHnmoTku47kuIrlvoDkuIvnvJblj7fvvIzkuZ/lsLHmmK9iaWxsX2xlbmd0aF9tbeeahOWbvuS8muWhq+WFhei/m+e8luWPt+S4ujHnmoRjZWxs55qE5L2N572u5Lit77yMYmlsbF9kZXB0aF9tbeeahOWbvuS8muWhq+WFhei/m+e8luWPt+S4ujLnmoRjZWxs55qE5L2N572u5Lit77yI5Lmf5bCx5piv56ys5LqM6KGM55qE5bem6L6577yJDQpgYGANCg0KIyMg5pa55rOV5LiJ77yaY293cGxvdOWMhQ0KLSDms6jmhI/pkojlr7nnmoTmmK9nZ3Bsb3TnmoTlr7nosaHvvIENCi0g5YW35L2T5pWZ56iLW+ingeatpF0oaHR0cHM6Ly93aWxrZWxhYi5vcmcvY293cGxvdC9hcnRpY2xlcy9hbGlnbmluZ19wbG90cy5odG1sKSjms6jmhI/ku47pobbpg6joj5zljZXmoI9hcnRpY2xlc+WkhOWPr+S7pemAieaLqeS4jeWQjOaWuemdouWKn+iDveafpeeciykNCg0KIyDooajmoLznmoTlsZXnpLoNCg0KKirkuLvopoHkvb/nlKjnmoTljIXmmK9rYWJsZUV4dHJhKioNCg0KMS4g5YWz5LqO5ZyocGRm5Lit5bGV56S66KGo5qC86KeBW+atpOWkhF0oaHR0cHM6Ly9jcmFuLnItcHJvamVjdC5vcmcvd2ViL3BhY2thZ2VzL2thYmxlRXh0cmEvdmlnbmV0dGVzL2F3ZXNvbWVfdGFibGVfaW5fcGRmLnBkZikNCg0KMi4g5YWz5LqO5ZyoaHRtbOS4reWxleekuuihqOagvOingVvmraTlpIRdKGh0dHBzOi8vY3Jhbi5yLXByb2plY3Qub3JnL3dlYi9wYWNrYWdlcy9rYWJsZUV4dHJhL3ZpZ25ldHRlcy9hd2Vzb21lX3RhYmxlX2luX2h0bWwuaHRtbCkNCg0KIyMg5YeG5aSH5pWw5o2uDQpgYGB7ciBwcmVwYXJlLWRhdGF9DQpzZXR3ZCgiRTovYWNhZGVtaWNfcmVzb3VyY2VzL1R1dG9yaWFscy9hbmFseXNpcyIpDQphbnRkYXQgPC0gcmVhZC5jc3YoIi4uL2RhdGEvZGF0YS5jc3YiLGhlYWRlciA9IFQpDQpzdHIoYW50ZGF0KQ0KYW50ZGF0JHRyZWU8LWFzLmZhY3RvcihhbnRkYXQkdHJlZSkNCmFudGRhdCRoYWJpdGF0PC1hcy5mYWN0b3IoYW50ZGF0JGhhYml0YXQpDQphbnRkYXQkb2JzZXJ2ZXI8LWFzLmZhY3RvcihhbnRkYXQkb2JzZXJ2ZXIpDQphbnRkYXQkZ3JvdXA8LWFzLmZhY3RvcihhbnRkYXQkZ3JvdXApDQphbnRkYXQyIDwtIHJlYWQuY3N2KCcuLi9kYXRhL2RhdGFwc3RheS5jc3YnKQ0Kc3VtbWFyeShhbnRkYXQyKQ0KYW50ZGF0MiRoYWJpdGF0IDwtIGFzLmZhY3RvcihhbnRkYXQyJGhhYml0YXQpDQphbnRkYXQyJGdyb3VwIDwtIGFzLmZhY3RvcihhbnRkYXQyJGdyb3VwKQ0KYW50ZGF0MiRvYnNlcnZlciA8LSBhcy5mYWN0b3IoYW50ZGF0MiRvYnNlcnZlcikNCmxpYnJhcnkoY2FyKSNmb3IgZmFtaWx5PWJpbm9taWFsKGxnb2l0KQ0KbGlicmFyeShsbWU0KSNmb3IgZ2xtZXIgbW9kZWwNCmxpYnJhcnkoZW1tZWFucykgI2ZvciBwYWlyd2lzZSBjb21wYXJpc29ucw0KDQptb2QucnVuPC0gZ2xtZXIoY2JpbmQobmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlLA0KICAgICAgICAgICAgICAgICAgICAgICBUb3RhbC5udW1iZXIub2YuYW50cy5iZWZvcmUuZGlzdHVyYmFuY2UtbmV3LlRvdGFsLm51bWJlci5vZi5hbnRzLmFmdGVyLmRpc3R1cmJhbmNlDQogICAgICAgICAgICAgICAgICAgICAgICkgfmhhYml0YXQqZ3JvdXAgKyAoMXxvYnNlcnZlciksICBkYXRhID0gYW50ZGF0LCBmYW1pbHk9Ymlub21pYWwobG9naXQpLCBuYS5hY3Rpb249bmEub21pdCkNCmxpYnJhcnkoa2FibGVFeHRyYSkNCmBgYA0KDQoqKuazqOaEj+eUn+aIkOihqOagvOeahOagvOW8j+aYr2h0bWzvvIzpgILlkIjnlKjkuo5ybWTmlofku7bnmoTnlKjkuo5odG1s6L6T5Ye65Lit5oiW6ICF5LuF5LuF55So5LqO6aKE6KeI77yM5aaC5p6c5piv5Zyocm1k55qEcGRm6L6T5Ye65Lit5bqU6K+l5pS55Li6bGF0ZXgqKg0KDQojIyBBbm92YeeahOWxleekug0KYGBge3Igc2hlZXQtYW5vdmEsIHJlc3VsdHM9InNob3cifQ0KI3NjaWVudGlmaWMgPSBUUlVF6KGo56S65L2/55So56eR5a2m6K6h5pWw5rOV77ybZGlnaXRzID0gMuihqOekuuS/neeVmeS4pOS9jeWwj+aVsOOAgg0KI2Jvb3RzdHJhcF9vcHRpb25z6KGo56S6572R6aG15Lit6KGo5qC855qE5LiA5Lqb5b2i5byP77yM5L6L5aaCInN0cmlwZWQi6KGo56S657uZ6KGo5qC85Yqg5LiK5paR6ams57q5LCAiaG92ZXIi6KGo56S657uZ6KGo5qC85Yqg5LiK5oKs5rWu5pWI5p6cLCAiY29uZGVuc2VkIuihqOekuuS9v+W+l+avj+ihjOS4jemCo+S5iOWuve+8jOabtOe0p+WHkeeCuSwgInJlc3BvbnNpdmUi6KGo56S66K6p6KGo5qC85qC35byP6ZqP5bGP5bmV5a695bqm5Y+Y5YyW77yM5pu06YCC5ZCI5omL5py65bGP44CCDQojZnVsbF93aWR0aCA9IEbmmK/kuLrkuobpmLLmraLooajmoLzov4flrr3jgIINCiNwb3NpdGlvbiA9ICJjZW50ZXIi6KGo56S66KGo5qC85Zyo572R6aG15oiW5paH5pys5Lit55qE5L2N572u77yM5Lmf5bCx5piv5bGF5LitDQojbGF0ZXhfb3B0aW9ucyA9IGMoImhvbGRfcG9zaXRpb24iKeihqOekuuS9v+W+l+ihqOagvOWwseWcqOWbuuWumuS9jee9ru+8jOWmguaenOS4jeWGmei/meS4qu+8jOmCo+S5iOWcqHJtZOeUn+aIkHBkZuaWh+S7tuaXtu+8jOihqOagvOS8muiiq+e7n+S4gOaUvuWIsOWbvueJh+WQjumdog0KI+WPpuWklui/mOWPr+S7peWcqGthYmxl5Lit5YaZ5YWlZm9udF9zaXplID0gN+adpeiwg+aVtOihqOagvOS4reeahOWtl+S9k+Wkp+Wwj+OAgg0Ka2FibGUoQW5vdmEobW9kLnJ1biksZm9ybWF0LmFyZ3MgPSBsaXN0KHNjaWVudGlmaWMgPSBUUlVFKSxkaWdpdHMgPSAyLCAiaHRtbCIpICU+JQ0KICBrYWJsZV9zdHlsaW5nKGJvb3RzdHJhcF9vcHRpb25zID0gYygic3RyaXBlZCIsICJob3ZlciIsICJjb25kZW5zZWQiLCAicmVzcG9uc2l2ZSIpLCBmdWxsX3dpZHRoID0gRiwgcG9zaXRpb24gPSAiY2VudGVyIiwgbGF0ZXhfb3B0aW9ucyA9IGMoImhvbGRfcG9zaXRpb24iKSkNCmBgYA0KDQojIyBTdW1tYXJ555qE5bGV56S6DQpgYGB7ciBzaGVldC1zdW1tYXJ5LCByZXN1bHRzPSJzaG93In0NCiPlm6DkuLrlj6rpnIDopoHlsZXnpLpzdW1tYXJ55Lit6KGo56S65Zu65a6a5Zug5a2Q5piv5ZCm5pi+6JGX55qE5L+h5oGv77yM5Zug5q2k5L2/55SoY29lZuWHveaVsO+8jOWmguaenOebtOaOpeaKinN1bW1hcnnmlL7ov5vljrvmmK/ml6Dms5XlsZXnpLrnmoTjgIINCmthYmxlKGNvZWYoc3VtbWFyeShtb2QucnVuKSksZm9ybWF0LmFyZ3MgPSBsaXN0KHNjaWVudGlmaWMgPSBUUlVFKSxkaWdpdHMgPSAyLCAiaHRtbCIpICU+JQ0KICBrYWJsZV9zdHlsaW5nKGJvb3RzdHJhcF9vcHRpb25zID0gYygic3RyaXBlZCIsICJob3ZlciIsICJjb25kZW5zZWQiLCAicmVzcG9uc2l2ZSIpLCBmdWxsX3dpZHRoID0gRiwgcG9zaXRpb24gPSAiY2VudGVyIiwgbGF0ZXhfb3B0aW9ucyA9IGMoImhvbGRfcG9zaXRpb24iKSkNCmBgYA0KDQojIyDlpJrph43mr5TovoPnmoTlsZXnpLoNCmBgYHtyIGNvbXBhcmlzaW9uLCByZXN1bHRzPSJzaG93In0NCiPlm6DkuLrlj6rpnIDopoHlsZXnpLplbW1lYW5z5Lit6KGo56S65Zu65a6a5Zug5a2Q5LiL5ZCE5Liq5rC05bmz55qE5beu5byC5piv5ZCm5pi+6JGX55qE5L+h5oGv77yM5Zug5q2k5L2/55SoW1tdXei/m+ihjOWvuee7k+aenOS/oeaBr+eahOmAieaLqe+8jOWmguaenOebtOaOpeaKimVtbWVhbnPmlL7ov5vljrvmmK/ml6Dms5XlsZXnpLrnmoTjgIINCmthYmxlKGVtbWVhbnMobW9kLnJ1biwgcGFpcndpc2V+Z3JvdXAsYnk9ImhhYml0YXQiLCBhZGp1c3Q9InR1a2V5IilbWzJdXSxmb3JtYXQuYXJncyA9IGxpc3Qoc2NpZW50aWZpYyA9IFRSVUUpLGRpZ2l0cyA9IDIsICJodG1sIikgJT4lDQogIGthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKCJzdHJpcGVkIiwgImhvdmVyIiwgImNvbmRlbnNlZCIsICJyZXNwb25zaXZlIiksIGZ1bGxfd2lkdGggPSBGLCBwb3NpdGlvbiA9ICJjZW50ZXIiLCBsYXRleF9vcHRpb25zID0gYygiaG9sZF9wb3NpdGlvbiIpKQ0KYGBgDQoNCg0KIyDlj4zlnZDmoIfovbTlkozpmo/mnLrmlbDnlJ/miJDvvJoNCmBgYHtyIGRvdWJsZUF4aXN9DQojc2V0LnNlZWTnlKjmnaXorr7nva7pmo/mnLrnp43lrZAg5aaC6L+H6K6+572u5LqG6ZqP5py656eN5a2Q77yM6YKj5LmI5q+P5qyh55qE6ZqP5py65pWw55u45ZCM77yM5L6/5LqO6YeN5aSN44CCDQpzZXQuc2VlZCgxMjMpDQoj5L2/55Soc2FtcGxl5Ye95pWw5piv5Li65LqG55Sf5oiQMS0xMOiMg+WbtOWGhTE15Liq5pW05pWw77yM5b2TcmVwbGFjZT1U5pe25piv5ZyoW2EsYl3lhoXmnInmlL7lm57nmoTpmo/mnLrmir3lh7pu5Liq5pW05pWw44CCDQphIDwtIHNhbXBsZSgxOjEwMCwxNSxyZXBsYWNlPVQpDQoj5L2/55SocnVuaWblh73mlbDmmK/kuLrkuobnlJ/miJAxLTEw6IyD5Zu05YaF77yM56ym5ZCI5Z2H5YyA5YiG5biD55qEMTXkuKrlsI/mlbANCmIgPC0gcnVuaWYoMTUsMSwxMCkNCiPkvb/nlKhybm9ybeWHveaVsOaYr+eUn+aIkOespuWQiOato+aAgeWIhuW4g++8jOWdh+WAvOS4ujfvvIzmoIflh4blt67kuLoy55qEMTXkuKrmlbDmja7vvIjlpoLmnpzpu5jorqTliJnmmK9tZWFuPTDvvIxzZD0x55qE5qCH5YeG5q2j5oCB5YiG5biD77yJDQpjIDwtIHJub3JtKDE1MCwgbWVhbiA9IDcsIHNkID0gMikNCmQgPC0gcm5vcm0oMTUwLCBtZWFuID0gNCwgc2QgPSAyKQ0KI+S9v+eUqHJlcOWHveaVsOS6p+eUnzXkuKoyMO+8jDTkuKo0MO+8jDbkuKo3MC4NCmUgPC0gcmVwKGMoMjAsNDAsNzApLHRpbWVzPWMoNSw0LDYpKQ0KI+S9v+eUqGNiaW5k6KGo56S65oqK5ZCR6YePYWJjZGXmjInliJflkIjlubbmiJDmlbDmja7moYYs5aaC5p6c5pyJ5ZCR6YeP5YW25Lit5pWw5a2X55qE5Liq5pWw5LiN5LiA5qC355qE77yM5Lya5L2/55So6YeN5aSN5p2l5ZCR5pyA6ZW/55qE6YKj5Liq5a+56b2QDQoj5YGa54K55Zu+5ZKM57q/5Zu+5Y+g5Yqg77yM5Y+R546w5Z2Q5qCH6L206IyD5Zu05beu5byC5b6I5aSn5Zug5q2k5pyJ6K645aSa6Zeu6aKY77yM6L+Z5pe25bCx6ZyA6KaB5YGa5Y+M5Z2Q5qCH5LqGDQpkYXRmIDwtIGFzLmRhdGEuZnJhbWUoY2JpbmQoYSxiLGMsZCxlKSkNCmRhdGYNCmdncGxvdChkYXRhPWRhdGYpKw0KICAgIGdlb21fbGluZShhZXMoeD1jLHk9ZCkpKyAj5Y+v5Lul55yL5Ye65YGa57q/55qE5pWw5o2u5p2l5rqQeOWSjHnnmoTojIPlm7Tpg73mmK/lnKgxLTEwDQogICAgZ2VvbV9wb2ludChhZXMoeD1hLHk9ZSksY29sb3I9InJlZCIsc2l6ZT02KSPku6XnnIvlh7rlgZrngrnnmoTmlbDmja7mnaXmupB45ZKMeeeahOiMg+WbtOmDveaYr+WcqDEtMTAwDQoNCiPkuLrlm77niYfmt7vliqDlj4x46L205ZKM5Y+Meei9tOOAgg0KZ2dwbG90KGRhdGE9ZGF0ZikrDQogICAgc2NhbGVfeV9jb250aW51b3VzKG5hbWUgPSAiRSIsIGxpbWl0cyA9IGMoMSwxMDApLCBzZWMuYXhpcyA9IHNlY19heGlzKH4oMTAvMTAwKSouLCBuYW1lID0gIkQiKSkrICPlgZrlj4x56L2077yM5rOo5oSP6IyD5Zu05Li6MS0xMDDnmoRl5Zyo5Li76L2077yM6IyD5Zu0MS0xMOeahGTlnKjmrKHovbQNCiAgICBzY2FsZV94X2NvbnRpbnVvdXMobmFtZSA9ICJBIiwgbGltaXRzID0gYygxLDEwMCksIHNlYy5heGlzID0gc2VjX2F4aXMofigxMC8xMDApKi4sIG5hbWUgPSAiQyIpKSsgI+WBmuWPjHjovbTvvIzms6jmhI/ojIPlm7TkuLoxLTEwMOeahGHlnKjkuLvovbTvvIzojIPlm7QxLTEw55qEY+WcqOasoei9tA0KICAgIGdlb21fbGluZShhZXMoeD1jKigxMDAvMTApLHk9ZCooMTAwLzEwKSkpKyAj5Y+v5Lul55yL5Ye65YGa57q/55qE5pWw5o2u5p2l5rqQeOWSjHnnmoTojIPlm7Tpg73mmK/lnKgxLTEwICPms6jmhI/lm6DkuLpj77yMZOWcqOasoei9tO+8jOWboOatpOaVsOaNrua6kOWkp+Wwj+S5n+imgeagueaNrui9tOeahOavlOS+i+WBmuabtOaUueS6hu+8jOWQpuWImeWwhuaXoOazleaYvuekuuWcqOWbvueJh+S4ig0KICAgIGdlb21fcG9pbnQoYWVzKHg9YSx5PWUpLGNvbG9yPSJyZWQiLHNpemU9NikrICPms6jmhI/lm6DkuLph77yMZeWcqOasoei9tO+8jOWboOatpOaVsOaNrua6kOWkp+Wwj+S4jemcgOimgeagueaNrui9tOeahOavlOS+i+WBmuabtOaUueS6huOAgg0KICAgIHRoZW1lKGF4aXMudGV4dC55PWVsZW1lbnRfdGV4dChzaXplPXJlbCgwLjUpKSxheGlzLnRleHQueS5yaWdodD1lbGVtZW50X3RleHQoc2l6ZT1yZWwoNCkpKSPov5nkuKrmmK/osIPmlbR55Z2Q5qCH6L205Yi75bqm5pWw5a2X55qE5aSn5bCP77yMeOaYr+WQjOagt+eahO+8jOWJjeiAhWF4aXPosIPnmoTmmK/kuLvovbTnmoTvvIzlkI7ogIVheGlz6LCD55qE5piv5qyh6L2055qE44CCDQpgYGANCg0KDQojIOWwj+aPkOeQtOWbvuWSjOaYvuiRl+aAp+agh+etvg0KDQojIyDmlrnms5XkuIDvvJoNCmBgYHtyIHNpZ05vdGUtd2F5MX0NCnNldHdkKCJFOi9hY2FkZW1pY19yZXNvdXJjZXMvVHV0b3JpYWxzL2FuYWx5c2lzIikNCmxpYnJhcnkoY2FyKSNmb3IgZmFtaWx5PWJpbm9taWFsKGxnb2l0KQ0KbGlicmFyeShsbWU0KSNmb3IgZ2xtZXIgbW9kZWwNCmxpYnJhcnkodGlkeXZlcnNlKSNmb3IgICU+JSANCmxpYnJhcnkoZW1tZWFucykgI2ZvciBwYWlyd2lzZSBjb21wYXJpc29ucw0KbGlicmFyeShnZ3Bsb3QyKSMgZm9yIHBsb3R0aW5nDQpsaWJyYXJ5KHJzdGF0aXgpI2ZvciBmdW5jdGlvbiBvZiBhZGRfeHlfcG9zaXRpb24oKQ0KbGlicmFyeShnZ3B1YnIpI2ZvciBmdW5jdGlvbiBvZiBzdGF0X3B2YWx1ZV9tYW51YWwoKQ0KDQoj5YeG5aSH5pWw5o2uDQphbnRkYXQgPC0gcmVhZC5jc3YoIi4uL2RhdGEvZGF0YS5jc3YiLGhlYWRlciA9IFQpDQpzdHIoYW50ZGF0KQ0KYW50ZGF0JHRyZWU8LWFzLmZhY3RvcihhbnRkYXQkdHJlZSkNCmFudGRhdCRoYWJpdGF0PC1hcy5mYWN0b3IoYW50ZGF0JGhhYml0YXQpDQphbnRkYXQkb2JzZXJ2ZXI8LWFzLmZhY3RvcihhbnRkYXQkb2JzZXJ2ZXIpDQphbnRkYXQkZ3JvdXA8LWFzLmZhY3RvcihhbnRkYXQkZ3JvdXApDQphbnRkYXQyIDwtIHJlYWQuY3N2KCcuLi9kYXRhL2RhdGFwc3RheS5jc3YnKQ0Kc3VtbWFyeShhbnRkYXQyKQ0KYW50ZGF0MiRoYWJpdGF0IDwtIGFzLmZhY3RvcihhbnRkYXQyJGhhYml0YXQpDQphbnRkYXQyJGdyb3VwIDwtIGFzLmZhY3RvcihhbnRkYXQyJGdyb3VwKQ0KYW50ZGF0MiRvYnNlcnZlciA8LSBhcy5mYWN0b3IoYW50ZGF0MiRvYnNlcnZlcikNCg0KI+W7uueri+aooeWeiw0KbW9kLnJ1bjwtIGdsbWVyKGNiaW5kKG5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZSwNCiAgICAgICAgICAgICAgICAgICAgICAgVG90YWwubnVtYmVyLm9mLmFudHMuYmVmb3JlLmRpc3R1cmJhbmNlLW5ldy5Ub3RhbC5udW1iZXIub2YuYW50cy5hZnRlci5kaXN0dXJiYW5jZQ0KICAgICAgICAgICAgICAgICAgICAgICApIH5oYWJpdGF0Kmdyb3VwICsgKDF8b2JzZXJ2ZXIpLCAgZGF0YSA9IGFudGRhdCwgZmFtaWx5PWJpbm9taWFsKGxvZ2l0KSwgbmEuYWN0aW9uPW5hLm9taXQpDQogICAgICAgICAgICAgICAgICAgICAgIA0KDQoj5b6X5YiwZ2xtbeaooeWei+eahOmihOa1i+WAvA0KIyPliJvlu7rlkKvmnIl455qE5paw5pWw5o2u6ZuGcHJlZGRhdA0KcHJlZGRhdCA8LSBleHBhbmQuZ3JpZChoYWJpdGF0PWMoJ2Vjb19mb3Jlc3QnLCAnZnJ1aXRfZ2FyZGVuJywncmFpbmZvcmVzdCcpLA0KICAgICAgICAgICAgICAgICAgICAgICAgZ3JvdXA9YygnY29udHJvbCcsICd0cmVhdG1lbnQnKSwNCiAgICAgICAgICAgICAgICAgICAgICAgIG9ic2VydmVyID1jKCdscHknLCAnd2cnLCAnd3lkJywgJ3p5eCcpKQ0Kc3VtbWFyeShwcmVkZGF0KQ0KcHJlZGRhdCANCiMj5qOA5p+l5bm256Gu5L+d5ZCr5pyJeOeahOaWsOaVsOaNrumbhnByZWRkYXTkuI7ljp/mlbDmja7pm4bkuK3nmoTlkI3lrZflkozmlbDph4/kuIDmoLcNCmxldmVscyhwcmVkZGF0JGhhYml0YXQpDQpsZXZlbHMoYW50ZGF0JGhhYml0YXQpDQpsZXZlbHMocHJlZGRhdCRncm91cCkgDQpsZXZlbHMoYW50ZGF0JGdyb3VwKSANCmxldmVscyhwcmVkZGF0JG9ic2VydmVyKSANCmxldmVscyhhbnRkYXQkb2JzZXJ2ZXIpDQojI+aKiuS9v+eUqHByZWRpY3Tlh73mlbDmoLnmja7mqKHlnovliJvlu7rlh7rmnaXnmoTmlrB577yI5Y+X5LqG5Zu65a6a5Zug5a2Q5ZKM6ZqP5py65Zug5a2Q55qE5b2x5ZON77yJ5pS+5YWl5paw5pWw5o2u6ZuGcHJlZGRhdOW9k+S4reOAgg0KcHJlZGRhdCRwcmVkLmZpeDEgPC0gcHJlZGljdChtb2QucnVuLCBuZXdkYXRhPXByZWRkYXQsIHJlLmZvcm09TlVMTCwgdHlwZT0gJ3Jlc3BvbnNlJykgDQpoZWFkKHByZWRkYXQsbj0xMikNCnByZWRkYXQkcHJlZC5maXgxDQoNCiPlvpfliLDnlKjkuo7nu5jliLbmmL7okZfmgKfmoIfnrb7nmoTkv6Hmga/vvIjljIXmi6zlnKjlm77kuK3lupTor6XnmoTkvY3nva7vvIzmmJ/lj7fnrYnvvIkNCiMj5Y+q5piv5Li65LqG5b6X5Yiw55So5LqO57uY5Yi25qCH562+55qE5pWw5o2u5qGG77yM5L2G5YW25Lit6K6h566X55qE5pa55rOVcOWAvOaYr+mUmeeahA0KYTFfc3RlcDwtIHByZWRkYXQgJT4lIGdyb3VwX2J5KGdyb3VwKSAlPiUNCiAgdHVrZXlfaHNkKHByZWQuZml4MSB+aGFiaXRhdCkgJT4lDQogIGFkZF94eV9wb3NpdGlvbih4ID0gImhhYml0YXQiLCBkb2RnZSA9IDAuOCkgDQojI+W+l+WIsOecn+ato+eahHDlgLws5bm25LiU5o+Q5Y+W5omA6ZyA6KaB55qE5L+h5oGvDQpiMV9zdGVwPC0gZW1tZWFucyhtb2QucnVuLCBwYWlyd2lzZX5oYWJpdGF0LGJ5PSJncm91cCIsIGFkanVzdD0idHVrZXkiKQ0KcHZhbDEgPC0gYXMuZGF0YS5mcmFtZShiMV9zdGVwJGNvbnRyYXN0cykkcC52YWx1ZQ0KZ3JvdXBuYW1lMSA8LSBhcy5kYXRhLmZyYW1lKGIxX3N0ZXAkY29udHJhc3RzKSAkY29udHJhc3QNCiMj5oqK5o+Q5Y+W55qE5L+h5oGv5ZCI5oiQ5Y+m5LiA5Liq5ZCr5pyJ55yf5q2jcOWAvOS/oeaBr+eahOaVsOaNruahhg0KYzFfc3RlcCA8LSBkYXRhLmZyYW1lKGdyb3VwbmFtZTEscHZhbDEpDQojI+WinuWKoOaYn+WPt+ihqOekuuaYvuiRl+aAp+eahOS/oeaBrw0KZDFfc3RlcDwtIGMxX3N0ZXAgJT4lIGFkanVzdF9wdmFsdWUocC5jb2wgPSAicHZhbDEiLCBtZXRob2QgPSAiYm9uZmVycm9uaSIpICU+JQ0KICBhZGRfc2lnbmlmaWNhbmNlKHAuY29sID0gInB2YWwxLmFkaiIpDQojI+aKiuS4pOS4quaVsOaNruahhuWQiOW5tg0KZTFfc3RlcDwtY2JpbmQoYTFfc3RlcCxkMV9zdGVwJHB2YWwxLGQxX3N0ZXAkcHZhbDEuYWRqLnNpZ25pZikNCg0KI+e7mOWItuWwj+aPkOeQtOWbvu+8jOacgOWQjuWGjeWKoOS4iuaYvuiRl+aAp+eahOagh+etvg0KIyPliJvlu7rlm77lsYLkvb/nlKhnZ3Bsb3QoKSzlnKjov5nlhbbkuK3kuI3lg4/kuIDoiKzpgqPmoLfliqDlhaXkuobmlbDmja7mnaXmupDlkox4eei9tOeahOS/oeaBr++8jOaYr+WboOS4uuS4i+mdouS9v+eUqOS6huWbvuWxguWPoOWKoOeahOaWueW8j++8jOWQhOS4quWbvuWxgueahOaVsOaNruadpea6kOmDveacieWPr+iDveS4jeS4gOagtw0KIyMg5L2/55SoZ2VvbV9qaXR0ZXLogIzkuI3mmK9nZW9t4oCU4oCUcG9pbnTmiorljp/lp4vmlbDmja7nu5jkuIrljrvmmK/lm6DkuLrliY3ogIXog73lpJ/kuLrmr4/kuKrljp/lp4vmlbDmja7ngrnnmoTkvY3nva7lop7liqDkuoblsJHph4/nmoTpmo/mnLrlj5jljJbvvIzmmK/lpITnkIbovoPlsI/mlbDmja7pm4bnmoTnprvmlaPmgKfpgKDmiJDnmoTov4fluqbnu5jlm77nmoTkuIDkuKrmnInnlKjmlrnms5XjgIINCiMjZ2VvbV92aW9saW7mmK/nlKjmnaXnu5jliLblsI/mj5DnkLTlm77nmoTvvIzlroPmr5TnrrHnur/lm77mm7TngbXmtLvmmK/lm6DkuLrlroPov5jlsZXnjrDkuobmlbDmja7liIbluIPlr4bluqbmm7Lnur/jgIINCiMjc3RhdF9zdW1tYXJ55piv55So5p2l57uY5Yi2ZXJyb3IgYmFy55qE44CCDQojI3RoZW1lX2J3KGJhc2Vfc2l6ZSA9IDI1KeihqOekuuWbvueJh+iDjOaZr+aYr+WMheWQq+e6v+adoeeahOeZveiJsu+8jOi/mOacieWFtuS7lumAieaLqe+8jOmHjOmdoueahOWPguaVsGJhc2Vfc2l6ZSA9IDI15piv55So5p2l6LCD5pW05Li76KaB5Zu+5Lit5YyF5ous54K55ZKM57q/5ZKM5bCP5o+Q55C0562J5Zu+54mH5L+h5oGv5LiO5Zu+5rOo5L+h5oGv55qE5aSn5bCP5q+U5L6L55qE44CCDQojIw0KIyNmYWNldF93cmFwKC5+Z3JvdXAsbnJvdz0xKeaYr+ihqOekuuWbvueJh+aMieeFp2dyb3Vw6L+Z5Liq5Zu65a6a5Zug5Zyo5YiG6Z2i77yM5YiG5oiQ5LqG5Lik5byg5Zu+54mH5pS+5Zyo5LiA6LW377yM5L6L5aaCZ3JvdXDkuIvmnInkuKTkuKrmsLTlubPvvIzmmK90cmVhdG1lbnTlkoxjb250cm9s77yM5Zug5q2k5piv5Lik5byg5Zu+54mH5YyF5ZCr6L+Z5Lik57uE5LitaGFiaXRhdOWSjHBzdGF555qE5YWz57O75L+h5oGv77yMbnJvd+WwseihqOekuui/meS4pOW8oOWbvueJh+mDveWcqOS4gOihjO+8jOWmguaenOaYr25yb3c9Mu+8jOmCo+S5iOWwhuS8muaOkuWcuuS4gOWIl+OAguWmguaenOWGjW5yb3fnmoTlj4LmlbDlkI7pnaLlnKjmt7vliqDlj4LmlbBgc2NhbGVzID0gImZyZWVfeCJg6YKj5LmI5bCG5L2/5b6X5YiG6Z2i55qE5Zu+55qEeOWdkOagh+aYr+abtOeBtea0u+abtOmAguW6lOmCo+e7hOS/oeaBr+acrOi6q++8jOWQpuWImeWHoOS4qumdoueahHjovbTpg73mmK/lm7rlrprkuIDoh7TnmoTvvIzmnInml7blgJnkvJrlj5HnlJ945L+h5oGv5oul5oyk5Zyo5LiA6LW355qE54q25Ya144CCDQojc2NhbGVfeV9jb250aW51b3Vz5piv55So5p2l6LCD5pW0eei9tOeahOS/oeaBr++8jOS+i+WmguaVsOWAvOiMg+WbtOWSjOaVsOWAvOmXtOmalOetiQ0KIyNzdGF0X3B2YWx1ZV9tYW51YWzlsLHmmK/nlKjmnaXnu5jliLbmmL7okZfmgKfmoIfnrb7nmoTkuobvvIzlhbbkuK1icmFja2V0LnNpemXooajnpLrmoIfnrb7nur/mnaHnmoTlpKflsI/vvIxoaWRlLm5zID0gRuihqOekuuS4jeWboOatpOmdnuaYvuiRl+eahOS/oeaBrw0KZ2dwbG90KCkrDQogICAgZ2VvbV9qaXR0ZXIoZGF0YT1hbnRkYXQyLGFlcyh4PWhhYml0YXQseSA9IHBzdGF5LGZpbGw9aGFiaXRhdCxncm91cD1ncm91cCxhbHBoYT0wLjYsY29sb3I9aGFiaXRhdCksc2l6ZT01KSsNCiAgICBnZW9tX3Zpb2xpbihkYXRhPWFudGRhdDIsYWVzKHg9aGFiaXRhdCx5ID0gcHN0YXkpLGNvbG91cj0iIzIwMDgwOGYwIixmaWxsPU5BKSsNCiAgICBzdGF0X3N1bW1hcnkoZGF0YT1hbnRkYXQyLGFlcyh4PWhhYml0YXQseSA9IHBzdGF5KSxmdW4uZGF0YSA9ICJtZWFuX3NkIixwb3NpdGlvbj1wb3NpdGlvbl9kb2RnZSgwLjE1KSxnZW9tID0gImVycm9yYmFyIix3aWR0aCA9IC4xKSsNCiAgICBzdGF0X3N1bW1hcnkoZGF0YT1hbnRkYXQyLGFlcyh4PWhhYml0YXQseSA9IHBzdGF5KSxmdW4gPSAibWVhbiIsIGdlb20gPSAicG9pbnQiLCBwb3NpdGlvbj1wb3NpdGlvbl9kb2RnZSgwLjE1KSxzaG93LmxlZ2VuZCA9IEYpKw0KICAgIHNjYWxlX3NpemVfY29udGludW91cyhyYW5nZT1jKDEsMTApKSsNCiAgICB0aGVtZV9idyhiYXNlX3NpemUgPSAyNSkrDQogICAgZmFjZXRfd3JhcCgufmdyb3VwLG5yb3c9MSkrDQogICAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gIm5vbmUiKSArDQogICAgc2NhbGVfeV9jb250aW51b3VzKG5hbWUgPSAiUHN0YXkiLCBsaW1pdHMgPSBjKDAsMS41MCksIGJyZWFrcz1jKDAsMC4yNSwwLjUsMC43NSwxLjAsMS4yNSwxLjUwKSkrDQogICAgc3RhdF9wdmFsdWVfbWFudWFsKGUxX3N0ZXAsbGFiZWw9ImQxX3N0ZXAkcHZhbDEuYWRqLnNpZ25pZiIsDQogICAgICAgICAgICAgICAgICAgICAgICAgeS5wb3NpdGlvbiA9YygxLjIsMS4zLDEuNCksDQogICAgICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSAiIzAxMDEwMSIsIGxhYmVsLnNpemU9OCxicmFja2V0LnNpemU9MC41LGhpZGUubnMgPSBGKQ0KYGBgDQoNCg0KIyMg5pa55rOV5LqM77yaIA0KYGBge3Igc2lnTm90ZS13YXkyfQ0KbGlicmFyeShpbnRyb2RhdGF2aXopI2ZvciBmdW5jdGlvbiBvZiBnZW9tX3NwbGl0X3Zpb2xpbg0KbGlicmFyeShnZ3RleHQpI2ZvciBmdW5jdGlvbiBvZiBnZW9tX3RleHQoKQ0KbGlicmFyeShnZ3ByaXNtKSNmb3IgYGd1aWRlID0gInByaXNtX29mZnNldF9taW5vciJgDQoj5pWw5o2u5ZKM5YW25LuW5YyF5o6l5LiK5LiA5LiqY2h1bmsNCiPkuI7kuIrkuIDnu4Tkvb/nlKhmYWNldF93cmFwKC5+Z3JvdXAsbnJvdz0xKeadpeWIhumdoue7mOWItuWbvueJh++8jOi/meS4quWIhuijguWwj+aPkOeQtOihqOekuueahOS/oeaBr+S5n+aYr+S4gOagt+eahO+8jOS5n+aYr+eUqOadpeWIhue7hOadpeWPjeW6lOS/oeaBr+eahO+8jOS9huaYr+WPquiDveaYr+S4pOS4pOeahOWvueavlO+8jOWboOatpOi/memHjOaYr+agueaNruWbuuWumuWboOWtkGhhYml0YXTmnaXliIbpnaLvvIzogIzkuJTlnKjov5nph4zvvIzkuI3nlKhmYWNldF93cmFw5LqG77yM6ICM5piv55SoZ3JvdXBfYnnmj5DliY3lhYjmiormlbDmja7liIblpb3nsbvlho3nu5jlm77vvIHvvIENCiPlnKjov5nph4zmt7vliqDmmL7okZfmgKfkv6Hmga/nmoTmlrnms5XmmK9nZW9tX3RleHTvvIzmm7TngbXmtLvvvIzmmK/lm6DkuLrlj6/ku6Xoh6rlt7Hop4Tlrpp4eeeahOS9jee9ruS7peWPiuWGheWuue+8jOS9huaYr+ayoeeUqOaoquedgOeahOS4reaLrOWPt+S6hu+8jOS7heaciWxhYmVs55qE5L+h5oGv77yM5Zug5Li65Y2V5Liq55qE5YiG6KOC5bCP5o+Q55C05pys5LqL5bCx5YyF5ZCr5LqG5piv5Lik57uE5L+h5oGv55qE5a+55q+U77yM5Zug5q2k5Y+q6KaB5oqK6L+Z5Lik57uE55qE5pi+6JGX5oCn5L+h5oGv5qCH5LqO5YW25LiK5bCx5Y+v5Lul5LqG44CCDQojI+S9huaYr+e8uueCueaYr+imgeaPkOWJjeWFiOi3keS4gOS4i2BlbW1lYW5zKG1vZC5ydW4sIHBhaXJ3aXNlfmdyb3VwLGJ5PSJoYWJpdGF0IiwgYWRqdXN0PSJ0dWtleSIpYOadpeafpeeci+S4gOS4i3DlgLzvvIznhLblkI7lnKjlnKhnZW9tX3RleHTkuK3oh6rlrprkuYkNCmFudGRhdDJfdCA8LSBhbnRkYXQyICU+JSBncm91cF9ieShoYWJpdGF0KSANCmdncGxvdChhbnRkYXQyX3QsYWVzKHggPSBoYWJpdGF0LCB5ID0gcHN0YXksZmlsbD0gZ3JvdXApKSsNCiAgZ2VvbV9zcGxpdF92aW9saW4odHJpbSA9Rixjb2xvciA9IE5BLGFkanVzdCA9IDEuNSxhbHBoYT0wLjcpKw0KICBndWlkZXMoZmlsbD1ndWlkZV9sZWdlbmQodGl0bGU9Imdyb3VwIikpKw0KICBzY2FsZV9maWxsX21hbnVhbCh2YWx1ZXMgPSBjKCIjYWJkMWY3IiwiI2Y3OTQ4OWY3IikpKw0KICBzdGF0X3N1bW1hcnkoZnVuLmRhdGEgPSAibWVhbl9zZCIscG9zaXRpb249cG9zaXRpb25fZG9kZ2UoMC4xNSksZ2VvbSA9ICJlcnJvcmJhciIsd2lkdGggPSAuMSkrDQogIHN0YXRfc3VtbWFyeShmdW4gPSAibWVhbiIsIGdlb20gPSAicG9pbnQiLCBwb3NpdGlvbj1wb3NpdGlvbl9kb2RnZSgwLjE1KSxzaG93LmxlZ2VuZCA9IEYpKw0KICBzY2FsZV95X2NvbnRpbnVvdXMobGltaXRzID0gYygwLDEuNTApLCBicmVha3M9YygwLDAuMjUsMC41LDAuNzUsMS4wLDEuMjUsMS41MCksZ3VpZGUgPSAicHJpc21fb2Zmc2V0X21pbm9yIikrDQogIHRoZW1lX2J3KGJhc2Vfc2l6ZSA9IDI1KSsNCiAgZ2VvbV90ZXh0KGxhYmVsPSIqKioiLCB4PSJlY29fZm9yZXN0IiwgeT0xLjQsIHNpemU9MTApKw0KICBnZW9tX3RleHQobGFiZWw9IioqKiIsIHg9ImZydWl0X2dhcmRlbiIsIHk9MS40LCBzaXplPTEwKSsNCiAgZ2VvbV90ZXh0KGxhYmVsPSIqKioiLCB4PSJyYWluZm9yZXN0IiwgeT0xLjQsIHNpemU9MTApDQpgYGANCg0KIyMg5pa55rOV5LiJ77yaDQpgYGB7ciBzaWdOb3RlLXdheTN9DQpzZXR3ZCgiRTovYWNhZGVtaWNfcmVzb3VyY2VzL1R1dG9yaWFscy9hbmFseXNpcyIpDQpsaWJyYXJ5KGxtZTQpI2ZvciBsbW0gbW9kZWwNCmxpYnJhcnkoZGF0YS50YWJsZSkjIGZvciBmdW5jdGlvbiBvZiBtZWx0DQpsaWJyYXJ5KGVtbWVhbnMpICNmb3IgIGNvbXBhcmlzb25zDQpsaWJyYXJ5KGdncGxvdDIpIyBmb3IgcGxvdHRpbmcNCmxpYnJhcnkoZ2dwdWJyKSNmb3IgZnVuY3Rpb24gb2Ygc3RhdF9wdmFsdWVfbWFudWFsKCkNCmxpYnJhcnkoU09mdW4pI2ZvciBmdW5jdGlvbiBvZiBtY190cmliYmxlKCkNCmxpYnJhcnkodGlkeXZlcnNlKSNmb3IgZnVuY3Rpb24gb2YgdHJpYmJsZSgpDQpsaWJyYXJ5KFJtaXNjKSNmb3IgZnVuY3Rpb24gb2Ygc3VtbWFyeVNFDQoNCiPlh4blpIfmlbDmja4NCnBlc3RzIDwtIHJlYWQuY3N2KCcuLi9kYXRhL1Blc3RpY2lkZS5jc3YnKQ0KcGVzdHMkc3RhdGlvbiA8LSBhcy5mYWN0b3IocGVzdHMkc3RhdGlvbikNCnBlc3RzJHRydCA8LSBhcy5mYWN0b3IocGVzdHMkdHJ0KQ0KDQoj5bu656uL5qih5Z6LDQpMTU0uZml0PC0gZ2xtZXIoTn50cnQrKDF8c3RhdGlvbikscGVzdHMsZmFtaWx5PXBvaXNzb24oKSkNCg0KI+WHhuWkh+S4uue7mOWItuaYvuiRl+aAp+agh+etvueahOS/oeaBrw0KIyPlvpfliLDlkKvmnIlw5YC85L+h5oGv55qE5pWw5o2u5qGGDQpwLnZhbC50ZXN0PC1wd3BtKGVtbWVhbnMoTE1NLmZpdCwgIH4gdHJ0KSxtZWFucyA9IEZBTFNFLCBmbGlwID0gVFJVRSxyZXZlcnNlID0gVFJVRSkNCnAudmFsLnRlc3Q8LXN1YigiWzw+XSIsICIiLCBwLnZhbC50ZXN0KQ0KcC5tYXR4PC1tYXRyaXgoYXMubnVtZXJpYygocC52YWwudGVzdCkpLG5yb3cgPSBsZW5ndGgocC52YWwudGVzdFssMV0pLG5jb2wgPSBsZW5ndGgocC52YWwudGVzdFssMV0pKSAjaWYgeW91ciBmYWN0b3IgaGFzIDUgbGV2ZWxzIG5jb2wgYW5kIG5yb3c9NQ0Kcm93bmFtZXMocC5tYXR4KSA8LSBjb2xuYW1lcyhwLm1hdHgpIDwtY29sbmFtZXMocC52YWwudGVzdCkNCnAubWF0eFt1cHBlci50cmkocC5tYXR4LCBkaWFnPUZBTFNFKV0gPC0gTkENCnN0YXQudGVzdDwtc3Vic2V0KG1lbHQocC5tYXR4KSwhaXMubmEodmFsdWUpKQ0KbmFtZXMoc3RhdC50ZXN0KTwtYygiZ3JvdXAxIiwiZ3JvdXAyIiwicC5hZGoiKQ0KIyPmt7vliqBw5YC85aSn5bCP5LiO5pif5Y+35Liq5pWw55u45a+55bqU55qE5L+h5oGvDQpzdGF0LnRlc3Rbc3RhdC50ZXN0JHAuYWRqPD0wLjAwMSwicC5hZGouc2lnbmlmIl08LSIqKioiDQpzdGF0LnRlc3Rbc3RhdC50ZXN0JHAuYWRqPjAuMDAxICYgc3RhdC50ZXN0JHAuYWRqPD0wLjAxLCJwLmFkai5zaWduaWYiXTwtIioqIg0Kc3RhdC50ZXN0W3N0YXQudGVzdCRwLmFkaj4wLjAxICYgc3RhdC50ZXN0JHAuYWRqPD0wLjA1LCJwLmFkai5zaWduaWYiXTwtIioiDQpzdGF0LnRlc3RbIHN0YXQudGVzdCRwLmFkaj4wLjA1LCJwLmFkai5zaWduaWYiXTwtIm5zIg0KDQojI+i/kOihjOS4i+mdoui/meesrOS4gOihjOS7o+eggeW3suW+l+WIsOecn+ato+eahOaVsOaNruahhuW9ouW8j+eahOaVsOaNrumbhu+8jOWGjeaKiue7k+aenOeymOi0tOWQjuaKiue7k+aenOi/kOihjOS4gOmBjQ0Kc3RhdC50ZXN0PC1tY190cmliYmxlKHN0YXQudGVzdCkgIyBjb3B5ICYgcGFzdGUgdGhlIHJlc3VsdCBvZiB0aGlzIGxpbmUgYmVmb3JlIHRoZSBsaW5lIG9mIGdnYm94cGxvdCEhDQpzdGF0LnRlc3QgPC0gdHJpYmJsZSgNCiAgICAgICAgfmdyb3VwMSwgfmdyb3VwMiwgfnAuYWRqLCB+cC5hZGouc2lnbmlmLA0KICAgICAgICAiZnVuZ2ljaWRlIiwiY29udHJvbCIsMWUtMDQsIioqKiIsDQogICAgICAgICJpbnNlY3RpY2lkZSIsImNvbnRyb2wiLDFlLTA0LCIqKioiLA0KICAgICAgICAiaW5zZWN0aWNpZGUiLCJmdW5naWNpZGUiLDFlLTA0LCIqKioiKQ0KDQoj57uY5Yi2566x57q/5Zu+5bm25LiU5Yqg5LiK5pi+6JGX5oCn55qE5L+h5oGvDQojI+atpOWkhOaYr+e7mOWItueusee6v+Wbvg0KYnhwPC1nZ2JveHBsb3QocGVzdHMsIHggPSAidHJ0IiwgeSA9ICJOIixjb2xvciA9ICJ0cnQiLCBwYWxldHRlID0gImpjbyIsYWRkID0gImppdHRlciIsYnhwLmVycm9yYmFyPVQpIA0KIyPmraTlpITmmK/kuLrkuoblvpfliLDnu5jliLbmmL7okZfmgKfmoIfnrb7nmoTkvY3nva7kv6Hmga8NCnBlc3RzX2NvdW50IDwtIHN1bW1hcnlTRShwZXN0cyxtZWFzdXJldmFyID0gIk4iLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgZ3JvdXB2YXJzID0gYygidHJ0IiksDQogICAgICAgICAgICAgICAgICAgICAgICAgICBuYS5ybSA9IFRSVUUpDQojI+atpOWkhOaYr+e7meeusee6v+WbvuWKoOS4iuaYvuiRl+aAp+S/oeaBrw0KYnhwICsgc3RhdF9wdmFsdWVfbWFudWFsKHN0YXQudGVzdCx4bWluPSJncm91cDIiLHhtYXg9Imdyb3VwMSIsDQogICAgICAgICAgICAgICAgICAgICAgICAgeS5wb3NpdGlvbiA9IG1heChwZXN0cyROKStwZXN0c19jb3VudCRzZCwNCiAgICAgICAgICAgICAgICAgICAgICAgICBjb2xvciA9ICJtaWRuaWdodGJsdWUiKQ0KYGBgDQoNCg0KIyDml63ml6Xlm74NCmBgYHtyIGRvbnV0fQ0KDQpgYGANCg0KDQoNCiMg55u45YWz5oCn54Ot5Zu+DQpgYGB7ciBoZWFkbWFwMX0NCmBgYA0KDQoNCiMg55u45YWz5oCn5rCU5rOh5Zu+DQoNCmBgYHtyIGJ1YmJsZTF9DQoj5pWw5o2u5YeG5aSHDQpsaWJyYXJ5KHRpZHl2ZXJzZSkj5Li65LqG5L2/55SoICU+JSANCmxpYnJhcnkoY29ycnBsb3QpI+S4uuS6huWBmuawlOazoeWbvg0KbGlicmFyeShjYXIpI+S4uuS6huWxleekuuaVsOaNrumbhg0KbXRjYXJzDQoNCiPnu5jliLbooajnpLrnm7jlhbPmgKflpKflsI/nmoTmsJTms6Hlm74NCiMjbWV0aG9kID0gImNpcmNsZe+8muihqOekuueUqOWchuWciOihqOekuuebuOWFs+aAp+Wkp+Wwj++8myAic3F1YXJlIuihqOekuueUqOaWueW9ouihqOekuu+8myAiZWxsaXBzZSLooajnpLrnlKjmpK3lnIblvaLvvJsibnVtYmVyIuihqOekuueUqOebuOWFs+ezu+aVsOWkp+Wwj++8myAic2hhZGUi6KGo56S655So5pa55Z2X5ZKM6Zi05b2x77ybICJjb2xvciLooajnpLrnlKjmlrnlnZfpqazotZvlhYvmlYjmnpzvvJsicGllIuihqOekuueUqOmlvOWbvg0KIyNvcmRlcuS4re+8midvcmlnaW5hbCfooajnpLrljp/lp4vpobrluo/vvIjpu5jorqTvvInjgIJBT0Un6KGo56S654m55b6B5ZCR6YeP55qE6KeS5bqm6aG65bqP44CCJ0ZQQyfkuLrnrKzkuIDkuLvmiJDliIbpobrluo/jgIInaGNsdXN0J+S4uuWIhuWxguiBmuexu+eahOmhuuW6j+OAgidhbHBoYWJldCfkuLrlrZfmr43pobrluo/jgIINCiMjdHlwZSA9ICJmdWxsIuihqOekuuWbvuWFqOWxleekuu+8jOWFtuWunuaYr+WvueensOeahO+8jOWboOatpOWPr+S7pemAieaLqeWPquWxleekuuS4gOiIrO+8jOWGmeWFpeWPguaVsHVwcGVy5oiWbG93ZXINCiMjdGwuY29sID0gImJsYWNrIuihqOekuueUqOadpeeci+ebuOWFs+aAp+avlOi+g+W6j+WIl+eahOWPmOmHj+eahOWQjeensOeahOminOiJsg0KY29yKG10Y2FycykgJT4lIGNvcnJwbG90KG1ldGhvZCA9ICJwaWUiLG9yZGVyID0gImhjbHVzdCIsDQp0eXBlID0gInVwcGVyIix0bC5zcnQgPSA0NSx0bC5jb2wgPSAiYmxhY2siKQ0KDQoNCiPogZTlkIjnm7jlhbPmgKfnmoTmmL7okZfmgKfnu5PmnpzkuIDotbfmmL7npLoNCiMj5YWI5a+555u45YWz5oCn5piv5ZCm5pi+6JGX6L+b6KGM6K6h566XDQpyZXMxIDwtIGNvci5tdGVzdChtdGNhcnMpDQoNCiMjc2lnLmxldmVsID0gLTHvvIzooajnpLrmmL7npLrmiYDmnIlw5YC877yb5aaC5p6cPS4wNe+8jOWImeS8muWwhuaJgOacieWcqHDlgLw+IDAuMDXnmoTlnIblnIjkuIrmiZNY77yb5aaC5p6cPS4wMe+8jOmCo+S5iOWcqHDlgLw+IDAuMDHnmoTngrnkuIrmiZNYDQpjb3IobXRjYXJzKSU+JSBjb3JycGxvdCh0eXBlPSJsb3dlciIsIG9yZGVyPSJoY2x1c3QiLHRsLnNydCA9IDQ1LA0KICAgICAgICAgICAgICAgICAgICAgICAgdGwuY29sID0gImJsYWNrIiwNCiAgICAgICAgICAgICAgICAgICAgICAgIHAubWF0ID0gcmVzMSRwLGluc2lnID0gInAtdmFsdWUiLHNpZy5sZXZlbCA9IC0xKQ0KDQojI2luc2lnID0gInAtdmFsdWUi77yM5pi+56S65LiN5pi+6JGX54K555qEcOWAvO+8jOWmguaenOaYr2luc2lnID0gImJsYW5rIuWImeihqOekuuWwhuS4jeaYvuiRl+eahOeCueeUqOepuuihqOekug0KY29yKG10Y2FycyklPiUgY29ycnBsb3QodHlwZT0ibG93ZXIiLCBvcmRlcj0iaGNsdXN0IiwgDQogICAgICAgICAgICAgICAgICAgICAgICBwLm1hdCA9IHJlczEkcCxpbnNpZyA9ICJibGFuayIpDQoNCiMj5bCGcOWAvOWkp+Wwj+i9rOWMluS4uuaYn+WPt+WPoOWKoOWcqOWbvuS4ig0KY29yKG10Y2FycykgJT4lIGNvcnJwbG90KHR5cGU9Imxvd2VyIiwgb3JkZXI9ImhjbHVzdCIsDQpwLm1hdCA9IHJlczEkcCxpbnNpZyA9ICJsYWJlbF9zaWciLA0KICAgICAgICAgICBzaWcubGV2ZWwgPSBjKC4wMDEsIC4wMSwgLjA1KSwNCiAgICAgICAgICAgcGNoLmNleCA9IC45LCBwY2guY29sID0gIndoaXRlIiwNCiAgICAgICAgICAgdGwuc3J0ID0gNDUsdGwuY29sID0gImJsYWNrIikNCmBgYA0KDQojIOWcsOWbvueahOe7mOWItioNCg0KDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("R-visualisation.rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
